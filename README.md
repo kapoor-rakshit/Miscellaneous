@@ -2,7 +2,7 @@
 Some frequently used codes
 <html>
 <head>
-<title>"Calculator for you"</title>
+<title></title>
 </Head>
 <body>
 <img src="https://raw.githubusercontent.com/kapoor-rakshit/Miscellaneous/master/calc.PNG">
