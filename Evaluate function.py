@@ -1,5 +1,5 @@
 x,k=map(int,input().split())            
-p=eval(input())
+p=eval(input())                           #expression must have x or k or both as a variable
 print(p==k)
 
 ''' NOTE : The variables in expression must be available ie must be defined for input in expression '''
