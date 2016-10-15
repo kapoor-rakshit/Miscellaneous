@@ -1,3 +1,6 @@
+/*Approach is to stop at the total overlap node and return, simulataneously maintain a lazy tree.
+  Use the lazy tree in both update and query functions to optimize segment tree where we need to traverse till the leaf node*/
+
 #include<bits/stdc++.h>
 using namespace std;
 int a[1000010];
