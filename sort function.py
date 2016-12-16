@@ -12,6 +12,9 @@ b=sorted(a,key=len)
 a.sort(key=str.lower)           #sort by treating all elements as lower case
 b=sorted(a,key=str.lower)              #a similar is str.upper
 
+a.sort(key=abs)
+print(*sorted(a,key=abs))       #sort according to absolute values
+
 a.sort(key=func)                #key can accept any user defined function
 b=sorted(a,key=func)              #this func must return a value to guide sorting
 
