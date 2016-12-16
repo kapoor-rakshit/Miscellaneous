@@ -21,3 +21,6 @@ b=sorted(a,key=func)              #this func must return a value to guide sortin
         #Eg: def func(s):
         #        return s[-3]     #returns third last character of string 
                                   #sorts acc to third last character
+         
+'''sort() function does not work with strings, use sorted()'''
+print("".join(sorted(string)))
