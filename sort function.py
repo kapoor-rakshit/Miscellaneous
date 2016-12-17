@@ -24,3 +24,11 @@ b=sorted(a,key=func)              #this func must return a value to guide sortin
          
 '''sort() function does not work with strings, use sorted()'''
 print("".join(sorted(string)))
+print(*sorted(string),sep='')        #sep is the separator parameter of print
+
+'''sorted() function with key having parameters'''
+a=input()
+print(*(sorted(a,key=lambda character:(character.isdigit() and int(character)%2==0,character.isdigit(),character.isupper(),character.islower(),character))),sep='')
+#sorts acc to key values where parametrs to lambda are: first param is given higher priority,then second param and so on.
+#higher the priority means it will be placed at last ie here first will be lower,upper,odd digit,even digit.
+#the last argument is a variable which specifies that sort acc to caracters of string.
