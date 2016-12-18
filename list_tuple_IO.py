@@ -1,3 +1,5 @@
+a=map(int,input().split())      #In map first argument(int here) is function to be applied on second argument(input().split() here)
+
 m,o=b.split(',')                #splits the string according to character in ' ' ,args before = must be same as splits reqd 
 m,o=b.split()                   #default value is space
 
