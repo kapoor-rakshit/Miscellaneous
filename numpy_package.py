@@ -37,3 +37,18 @@ print(numpy.transpose(t))         # transposition of an array using the tool num
     
 print(numpy.array(t).flatten())   # The tool flatten() creates a copy of the input array flattened to one dimension.
                                   # does not effect original array
+'''concatenate'''
+import numpy
+n,m,c=map(int,input().split())
+fa=[]
+fe=[]
+for i in range(0,n,1):
+    a=list(map(int,input().split()))
+    fa.append(a)
+for i in range(0,m,1):
+    a=list(map(int,input().split()))
+    fe.append(a)
+print(numpy.concatenate((fa,fe),axis=0))   #axis = 0,no. of rows increases   #axis = 1 ,no. of columns increases
+
+# it is possible to specify the axis along which multiple arrays are concatenated.By default, it is along the first dimension(1).
+# all the input array dimensions except for the concatenation axis must match exactly
