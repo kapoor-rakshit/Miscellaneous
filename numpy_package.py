@@ -35,4 +35,5 @@ for i in range(0,n,1):
 print(numpy.transpose(t))         # transposition of an array using the tool numpy.transpose. 
                                   # It will not affect the original array, but it will create a new array.
     
-print(numpy.array(t).flatten())   # The tool flatten creates a copy of the input array flattened to one dimension.
+print(numpy.array(t).flatten())   # The tool flatten() creates a copy of the input array flattened to one dimension.
+                                  # does not effect original array
