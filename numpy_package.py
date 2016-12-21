@@ -77,3 +77,12 @@ print(a*b)                           # numpy.multiply(a,b)
 print(a//b)                          # numpy.divide(a,b) in float type
 print(numpy.mod(a,b))                # a%b
 print(numpy.power(a,b))              # a**b
+'''ceil, floor and rint'''
+import numpy
+a=list(map(float,input().split()))
+print(numpy.array(numpy.floor(a),int))
+print(numpy.array(numpy.ceil(a),int))
+print(numpy.array(numpy.rint(a),int))
+# ceil ,floor, rint(to nearest integer) functions results in float values.
+# dtype=numpy.int does not work with it
+# converted to int using numpy.array(a,int)
