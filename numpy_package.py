@@ -52,3 +52,13 @@ print(numpy.concatenate((fa,fe),axis=0))   #axis = 0,no. of rows increases   #ax
 
 # it is possible to specify the axis along which multiple arrays are concatenated.By default, it is along the first dimension(1).
 # all the input array dimensions except for the concatenation axis must match exactly
+'''zeros and ones'''
+import numpy
+a=list(map(int,input().split()))
+print(numpy.zeros((a),dtype=numpy.int))
+print(numpy.ones((a),dtype=numpy.int))
+
+#a is a list of dimensions to array to be generated. It can be two,three,... dimensional
+#The zeros and ones tool returns a new array with a given shape and type filled with 0's and 1's.
+#Default type is float                    #Type changes to int using dtype= arg
+
