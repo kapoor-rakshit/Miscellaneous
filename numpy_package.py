@@ -86,3 +86,16 @@ print(numpy.array(numpy.rint(a),int))
 # ceil ,floor, rint(to nearest integer) functions results in float values.
 # dtype=numpy.int does not work with it
 # converted to int using numpy.array(a,int)
+'''sum and prod'''
+import numpy
+n,m=map(int,input().split())
+a=[]
+for i in range(0,n,1):
+    tp=list(map(int,input().split()))
+    a.append(tp)
+s=numpy.sum(a,axis=0)          
+p=numpy.prod(s)
+print(p)
+#The sum tool returns the sum of array elements over a given axis.
+#The prod tool returns the product of array elements over a given axis.
+#By default,the axis=None.Therefore,it performs a sum over all the dimensions of the input array.
