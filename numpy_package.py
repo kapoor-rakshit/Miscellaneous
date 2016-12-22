@@ -73,8 +73,8 @@ a=numpy.array(a)
 b=numpy.array(b)
 print(a+b)                           # numpy.add(a,b)
 print(numpy.subtract(a,b))           # a-b   not reqd to convert to numpy.array if using functions
-print(a*b)                           # numpy.multiply(a,b)
-print(a//b)                          # numpy.divide(a,b) in float type
+print(a*b)                           # numpy.multiply(a,b)     '''corresponding multiply, not matrix product'''
+print(a//b)                          # numpy.divide(a,b) in float type    '''corresponding divide'''
 print(numpy.mod(a,b))                # a%b
 print(numpy.power(a,b))              # a**b
 '''ceil, floor and rint'''
@@ -96,6 +96,34 @@ for i in range(0,n,1):
 s=numpy.sum(a,axis=0)          
 p=numpy.prod(s)
 print(p)
-#The sum tool returns the sum of array elements over a given axis.
+#The sum tool returns the sum of array elements over a given axis. #axis=0, gives array of size=no of columns  #axis=1, size=no. of rows
 #The prod tool returns the product of array elements over a given axis.
-#By default,the axis=None.Therefore,it performs a sum over all the dimensions of the input array.
+#By default,the axis=None.Therefore,it performs a sum/product over all the dimensions of the input array.
+'''min and max'''
+import numpy
+n,m=map(int,input().split())
+a=[]
+for i in range(0,n,1):
+    tp=list(map(int,input().split()))
+    a.append(tp)
+mn=numpy.min(a,axis=1)
+print(numpy.max(mn,axis=None))
+#The tool min returns the minimum value along a given axis.
+#The tool max returns the maximum value along a given axis.
+'''mean, std and var'''
+import numpy
+import numpy
+n,m=map(int,input().split())
+a=[]
+for i in range(0,n,1):
+    tp=list(map(int,input().split()))
+    a.append(tp)
+print(numpy.mean(a,axis=1))
+print(numpy.var(a,axis=0))
+print(numpy.std(a,axis=None))
+#The mean tool computes the arithmetic mean along the specified axis.
+#The std tool computes the arithmetic standard deviation along the specified axis.
+'''Standard Deviation is a measure of how spread out numbers are.It is the square root of the Variance.'''
+#The var tool computes the arithmetic variance along the specified axis.
+'''Variance:average of squared differences.'''
+'''(squared difference):(subtract the Mean and individual no.s) square the result.'''
