@@ -1,0 +1,120 @@
+The base table.                              
+select * from history;
+
++--------+----------+-----------+
+| hostid | itemname | itemvalue |
++--------+----------+-----------+
+|      1 | A        |        10 |
+|      1 | B        |         3 |
+|      2 | A        |         9 |
+|      2 | C        |        40 |
++--------+----------+-----------+
+This will be our goal.
+select * from history_itemvalue_pivot;
+
++--------+------+------+------+
+| hostid | A    | B    | C    |
++--------+------+------+------+
+|      1 |   10 |    3 |    0 |
+|      2 |    9 |    0 |   40 |
++--------+------+------+------+
+Values in the history.hostid column will become y-values in the pivot table. 
+Values in the history.itemname column will become x-values (for obvious reasons).
+
+A three-step process:
+select the columns of interest, i.e. y-values and x-values
+extend the base table with extra columns -- one for each x-value
+group and aggregate the extended table -- one group for each y-value
+
+Step 1: select columns of interest. In the desired result, hostid provides the y-values and itemname provides the x-values.
+Step 2: extend the base table with extra columns.We typically need one column per x-value.Recall that our x-value column is itemname:
+
+create view history_extended as (
+  select
+    history.*,
+    case when itemname = "A" then itemvalue end as A,
+    case when itemname = "B" then itemvalue end as B,
+    case when itemname = "C" then itemvalue end as C
+  from history
+);
+
+select * from history_extended;
++--------+----------+-----------+------+------+------+
+| hostid | itemname | itemvalue | A    | B    | C    |
++--------+----------+-----------+------+------+------+
+|      1 | A        |        10 |   10 | NULL | NULL |
+|      1 | B        |         3 | NULL |    3 | NULL |
+|      2 | A        |         9 |    9 | NULL | NULL |
+|      2 | C        |        40 | NULL | NULL |   40 |
++--------+----------+-----------+------+------+------+
+Note that we didn't change the number of rows-we just added extra columns. 
+Also note the pattern of NULLs -- a row with itemname = "A" has a non-null value for new column A, and null values for the other new columns.
+
+Step 3: group and aggregate the extended table. We need to group by hostid, since it provides the y-values:
+
+create view history_itemvalue_pivot as (
+  select
+    hostid,
+    sum(A) as A,
+    sum(B) as B,
+    sum(C) as C
+  from history_extended
+  group by hostid
+);
+
+select * from history_itemvalue_pivot;
++--------+------+------+------+
+| hostid | A    | B    | C    |
++--------+------+------+------+
+|      1 |   10 |    3 | NULL |
+|      2 |    9 | NULL |   40 |
++--------+------+------+------+
+(Note that we now have one row per y-value.) Okay, we're almost there! We just need to get rid of those ugly NULLs.
+
+Step 4: prettify. We're just going to replace any null values with zeroes so the result set is nicer to look at:
+
+create view history_itemvalue_pivot_pretty as (
+  select 
+    hostid, 
+    coalesce(A, 0) as A, 
+    coalesce(B, 0) as B, 
+    coalesce(C, 0) as C 
+  from history_itemvalue_pivot 
+);
+
+select * from history_itemvalue_pivot_pretty;
++--------+------+------+------+
+| hostid | A    | B    | C    |
++--------+------+------+------+
+|      1 |   10 |    3 |    0 |
+|      2 |    9 |    0 |   40 |
++--------+------+------+------+
+And we're done -- we've built a nice, pretty pivot table using MySQL.
+
+Considerations when applying this procedure:
+what value to use in the extra columns. I used itemvalue in this example
+what "neutral" value to use in the extra columns. I used NULL, but it could also be 0 or "", depending on your exact situation
+what aggregate function to use when grouping. I used sum, but count and max are also often used (max is often used when building one-row "objects" that had been spread across many rows)
+using multiple columns for y-values. This solution isn't limited to using a single column for the y-values -- just plug the extra columns into the group by clause (and don't forget to select them)
+
+Known limitations:
+This solution doesn't allow n columns in the pivot table -- each pivot column needs to be manually added when extending the base table. 
+So for 5 or 10 x-values, this solution is nice. For 100, not so nice. There are some solutions with stored procedures generating a query, but they're ugly and difficult to get right.
+I currently don't know of a good way to solve this problem when the pivot table needs to have lots of columns.
+
+Another Example :
+set @r1=0, @r2=0, @r3=0, @r4=0;
+select min(Doctor), min(Professor), min(Singer), min(Actor)
+from(
+  select case when Occupation='Doctor' then (@r1:=@r1+1)
+            when Occupation='Professor' then (@r2:=@r2+1)
+            when Occupation='Singer' then (@r3:=@r3+1)
+            when Occupation='Actor' then (@r4:=@r4+1) end as RowNumber,
+    case when Occupation='Doctor' then Name end as Doctor,
+    case when Occupation='Professor' then Name end as Professor,
+    case when Occupation='Singer' then Name end as Singer,
+    case when Occupation='Actor' then Name end as Actor
+  from OCCUPATIONS
+  order by Name
+) Temp
+group by RowNumber;
