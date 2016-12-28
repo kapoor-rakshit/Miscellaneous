@@ -1,5 +1,0 @@
-
-
-
-      To check for whether a number(n) is a Fibonacii number or not , check if    5*n*n-4 or 5*n*n+4    is a perfect square or not .
-      if the condition is true , it is a fibonacci number , else not.  
