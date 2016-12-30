@@ -9,7 +9,7 @@ while n:
             s+=(i+m//i)
         
     if sq*sq==m:
-        print(s-m)
+        print(s-sq)
     else:
         print(s)
     
