@@ -3,22 +3,22 @@
 
 #include<bits/stdc++.h>
 using namespace std;
-int a[1000010];
-int tree[1000010];
-int lazy[1000010];
+long long a[1000010];
+long long tree[1000010];
+long long lazy[1000010];
 void build(int low,int high,int pos)
 {
 	if(low==high) {tree[pos]=a[high];return;}
 	int mid=(low+high)/2;
 	build(low,mid,2*pos+1);
 	build(mid+1,high,2*pos+2);
-	tree[pos]=min(tree[2*pos+1],tree[2*pos+2]);
+	tree[pos]=min(tree[2*pos+1],tree[2*pos+2]);          //here the operation is equal to query operation (here min)
 }
-void update(int low,int high,int l,int r,int val,int pos)
+void update(int low,int high,int l,int r,long long val,int pos)
 {
 	if(lazy[pos]!=0)                                       //check for lazy tree node, if not zero then first operate that value on segtree node 
 	{
-		tree[pos]+=lazy[pos];
+		tree[pos]+=lazy[pos];                //here the operation is equal to update operation (here val is to be added,so + )
 		if(low!=high)
 		{
 			lazy[2*pos+1]+=lazy[pos];                    //operate the lazy node value to its children, indicating that the children are not uptodate
@@ -30,7 +30,7 @@ void update(int low,int high,int l,int r,int val,int pos)
   
 	if(low>=l&&high<=r)                          //complete overlap so, stop here and operate value to segtree 
 	{
-		tree[pos]+=val;                           
+		tree[pos]+=val;                    //here the operation is equal to update operation (here val is to be added,so + )
 		if(low!=high)
 		{
 			lazy[2*pos+1]+=val;                    //operate the value to children in lazy tree, so that can be referred in future
@@ -41,16 +41,16 @@ void update(int low,int high,int l,int r,int val,int pos)
 	int mid=(low+high)/2;
 	update(low,mid,l,r,val,2*pos+1);
 	update(mid+1,high,l,r,val,2*pos+2);               
-	tree[pos]=min(tree[2*pos+1],tree[2*pos+2]);
+	tree[pos]=min(tree[2*pos+1],tree[2*pos+2]);   //here the operation is equal to query operation (here min)
 }
-int query(int low,int high,int l,int r,int pos)
+long long query(int low,int high,int l,int r,int pos)
 {
 	if(lazy[pos]!=0)
 	{
-		tree[pos]+=lazy[pos];
+		tree[pos]+=lazy[pos];              //here the operation is equal to update operation (here val is to be added,so + )
 		if(low!=high)
 		{
-			lazy[2*pos+1]+=lazy[pos];
+			lazy[2*pos+1]+=lazy[pos];  //here the operation is equal to update operation (here val is to be added,so + )
 			lazy[2*pos+2]+=lazy[pos];
 		}
 		lazy[pos]=0;
@@ -58,13 +58,13 @@ int query(int low,int high,int l,int r,int pos)
 if(high<l||low>r) return INT_MAX;
 if(low>=l&&high<=r) return tree[pos];
 int mid=(low+high)/2;
-return min(query(low,mid,l,r,2*pos+1),query(mid+1,high,l,r,2*pos+2));
+return min(query(low,mid,l,r,2*pos+1),query(mid+1,high,l,r,2*pos+2)); //here the operation is equal to query operation (here min)
 }
 main()
 {
 	int n,q;
 	scanf("%d%d",&n,&q);
-	for(int i=0;i<n;i++) scanf("%d",&a[i]);
+	for(int i=0;i<n;i++) scanf("%lld",&a[i]);
 
 	build(0,n-1,0);
 
@@ -76,15 +76,15 @@ main()
 		r=r-1;
 		if(t==1)
 		{
-			int val;
-			scanf("%d",&val);
+			long long val;
+			scanf("%lld",&val);
 			update(0,n-1,l,r,val,0);
 		}
 		else
 		{
-			int mn;
+			long long mn;
 			mn=query(0,n-1,l,r,0);
-			printf("%d\n",mn);
+			printf("%lld\n",mn);
 		}
 	}
 }
