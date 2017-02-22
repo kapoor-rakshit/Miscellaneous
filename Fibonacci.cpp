@@ -1,7 +1,10 @@
 /*NOTE : To check for whether a number(n) is a Fibonacii number or not , 
          check if    5*n*n-4 or 5*n*n+4    is a perfect square or not .
          if the condition is true , it is a fibonacci number , else not.*/
+
 /*NOTE : GCD of nth, kth, ith..... fibonacci no.s is fibonacci(gcd(n,k,i,...))*/  
+
+/*NOTE : Number of ways to write a number as sum of 1's and 2's is fibo(number+1)*/
 
 Methods to get nth fibonacci no.
 Method 1 : Memoization
