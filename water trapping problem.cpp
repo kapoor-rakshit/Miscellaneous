@@ -28,6 +28,7 @@ int main() {
 	        if(a[i]>temp) temp=a[i];       //traverse from starting to index
 	        else ans+=temp-a[i];          //add the difference of (max_till_now-current_height)
 	    }
+	    temp=INT_MIN;
 	    for(int i=m-1;i>mx_height_index;i--)
 	    {
 	        if(a[i]>temp) temp=a[i];      //traverse from last to index
