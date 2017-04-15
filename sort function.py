@@ -45,5 +45,16 @@ mat.sort(key=lambda element:element[k])    #lambda returns the kth element of ea
 for i in range(0,n,1):                     #it is applied to every row to get kth element as a key
     print(*mat[i])
 
-    
-    
+"""Sort a dictionary"""
+d={'j':12,'z':13,'e':458,'f':89}
+
+keys_acctovalues=sorted(d,key=d.__getitem__,reverse=True)
+#sort dict ie (keys(default)) by using numbers class method for retrieving values, returns keys
+
+values_acctokeys=[value for (key,value) in sorted(d.items(),reverse=True)]
+#sort acc to keys, returns values
+
+print(sorted(d))             #sorts dict acc. to keys (default), returns keys
+print(keys_acctovalues)
+print(values_acctokeys)
+
