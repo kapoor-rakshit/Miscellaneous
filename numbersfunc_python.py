@@ -22,3 +22,26 @@ for i in range(8):
     print(randrange(0,9,3))
     #randrange(start,stop,step)
     #generates a number from list [0,3,6]...upper limit (stop) not included (9 here)
+    
+    print(random())
+    #The random() method returns a random floating point number in the range [0.0, 1.0].
+
+print()
+
+seed(0)
+print(random())
+seed(0)
+print(random())
+
+seed(1)
+print(random())
+#The seed() method initializes the basic random number generator.
+#To repeat the same random number we have seeded it to a number OR a string.
+
+a=[12,56,8,63,.058]            #can be a tupple also
+shuffle(a)
+print(a)
+#The shuffle() method randomizes the items of a list/tupple in place.
+
+print(uniform(2,4))
+#The uniform() method returns a random float r, such that x <= r < y
