@@ -1,0 +1,27 @@
+The code can be converted to Python 3.x code via 2to3 on the command line:
+$ 2to3 example.py
+A diff against the original source file is printed on the command line and not on source file.
+
+
+2to3 can also write the needed modifications right back to the source file with the -w flag:
+$ 2to3 -w example.py
+Changes applied to original and backup of the original is also made (example.py.bak)
+
+
+To prevent backup of original file, -n flag also used:
+$ 2to3 -w -n example.py
+Changes applied to original and No backup file of original made
+
+
+The -l flag lists all available fixers
+$ 2to3 -l
+
+
+An explicit set of fixers to run can be given with -f flag:
+$ 2to3 -f imports -f has_key example.py
+It runs only the imports and has_key fixers
+
+
+the -x flag explicitly disables a fixer:
+$ 2to3 -x apply example.py
+It runs every fixer except the apply fixer
