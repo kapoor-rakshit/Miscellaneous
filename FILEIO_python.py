@@ -45,6 +45,11 @@ It is a good practice to use the close() method to close a file."""
 fileptr.close()
 print(fileptr.closed)
 
+#get words in a newline, from a file which are ending with <anything here>
+for line in open("testfile.txt"):
+	for word in line.split():
+		if word.endswith("ion"):
+			print(word)
 
 #Some Py hacks
 os.rename('test.py','flasktest.py')    #rename(currentname,newname)
