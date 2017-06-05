@@ -10,6 +10,17 @@
 
 #example:-
 
+def first(msg):
+    print(msg)    
+
+first("Hello")                          #first func called
+
+second = first                          #second also becomes a func with same defn as first
+
+second("Hello")                         #second func called
+
+#example:-
+
 def print_msg(msg):                       # This is the outer enclosing function (scope)
 
     def printer():                        # This is the nested function
