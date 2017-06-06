@@ -60,7 +60,7 @@ s3.printdata()
 delattr(student,'section')
 print(hasattr(student,'section'))
 print(student.name)                #class variables get overriden
-print(student.age)                 #So result is Rohit 16
+print(student.age)                 #So result is adhkkrak 1589
 
 #print(self.marks)                 #Invalid as self is not a class defined
 #print(student.marks)              Invalid as marks are not class variable
