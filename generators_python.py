@@ -93,12 +93,14 @@ for char in rev_str("hello"):
 """
 
 #Python Generator Expression
+# list comprehension produces the entire list, generator expression produces one item at a time.
+# They are kind of lazy, producing items only when asked for. For this reason, a generator expression is much more memory efficient than list comprehension.
 
-# square each term using list comprehension
+# square each term using list comprehension, [] bracket
 # Output: [1, 9, 36, 100]
 [x**2 for x in my_list]
 
-# square each term using generator expression, which returns generator object
+# square each term using generator expression, () bracket, which returns generator object
 a=(x**2 for x in my_list)
 print(next(a)).....so on
 
