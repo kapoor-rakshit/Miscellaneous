@@ -3,6 +3,23 @@ a=map(int,input().split())      #In map first argument(int here) is function to 
 m,o=b.split(',')                #splits the string according to character in ' ' ,args before = must be same as splits reqd 
 m,o=b.split()                   #default value is space
 
+str.rsplit(separator , maxsplit)
+'''The rsplit() method splits string from the right at the specified separator and returns a list of strings.'''
+#Example:
+grocery = 'Milk, Chicken, Bread, Butter'
+print(grocery.rsplit(', ', 5))
+#OUTPUT
+#['Milk', 'Chicken', 'Bread', 'Butter']
+
+'''separator (optional)- The is a delimiter. The rsplit() method splits string starting from the right at the specified separator.
+If the separator is not specified, any whitespace (space, newline etc.) string is a separator.
+
+maxsplit (optional) - The maxsplit defines the maximum number of splits.
+The default value of maxsplit is -1, meaning, no limit on the number of splits.
+
+NOTE : If maxsplit is specified, the list will have the maximum of maxsplit+1 items.'''
+
+
 a.find("CONTEST_WON")           #finds substring in a and Returns -1 if not found else return first index where character match
 
 '''Tuples are like lists, except they are immutable and do not change size (tuples are not strictly immutable since one of the contained elements could be mutable).
