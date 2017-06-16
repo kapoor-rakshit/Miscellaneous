@@ -4,6 +4,7 @@ m,o=b.split(',')                #splits the string according to character in ' '
 m,o=b.split()                   #default value is space
 
 str.rsplit(separator , maxsplit)
+
 '''The rsplit() method splits string from the right at the specified separator and returns a list of strings.'''
 #Example:
 grocery = 'Milk, Chicken, Bread, Butter'
@@ -19,6 +20,8 @@ The default value of maxsplit is -1, meaning, no limit on the number of splits.
 
 NOTE : If maxsplit is specified, the list will have the maximum of maxsplit+1 items.'''
 
+str.strip()                     #strip() removes the whitespace at beginning and end of str
+str.strip().title()             #removes whitespace at beginning and end, also converts to title case
 
 a.find("CONTEST_WON")           #finds substring in a and Returns -1 if not found else return first index where character match
 
