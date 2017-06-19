@@ -52,9 +52,21 @@ for line in open("testfile.txt"):
 			print(word)
 
 #Some Py hacks
+
 os.rename('test.py','flasktest.py')    #rename(currentname,newname)
 print(os.getcwd())                     #get_current_working _directory
 os.remove('abc.text')                  #deletes a file
 os.mkdir("newfolder")                  #new directory created
 os.rmdir("newfolder")                  #deletes the directory.Before removing a directory,all the contents in it should be removed.
 os.chdir("/home/newfolder")            #moves to specified directory and make it current dirctory 
+os.path.isdir("/checkfile")            #boolean if it is a directory(folder) or not
+
+cur=os.getcwd()
+for i in os.listdir(cur):              #traverse the directory specified
+	print(i)
+	
+os.path.exists("pathname")             #boolean check if this path (directory path) exists or not 
+
+os.makedirs("pathname")                #creates path ie multiple directories created eg:- C:/Users/R6000670/Documents/Neo4j/
+
+
