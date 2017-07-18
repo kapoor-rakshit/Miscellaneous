@@ -8,9 +8,16 @@ while n:
     except ValueError as v:
         print("Error Code:",v)
     n=n-1
- --------------------------------------OR------------------------------------
+    
+ #--------------------------------------OR------------------------------------
  try:
      print(int(a)//int(b))
  except (ZeroDivisionError, ValueError, NameError, TypeError, RuntimeError) as v:
      print("Error Code:",v)
  
+#----------------------------------------OR------------------------------------
+try:
+    print(a/b)
+except Exception as e:
+    print(str(e))
+        
