@@ -1,0 +1,55 @@
+Create a new repository on GitHub. 
+To avoid errors, do not initialize the new repository with README, license, or gitignore files. 
+You can add these files after your project has been pushed to GitHub.
+
+Open Git Shell on Windows platform      (can be downloaded from official site)
+
+Change the current working directory to your local project.
+
+Initialize the local directory as a Git repository.
+$ git init
+
+Add the files in your new local repository. This stages them for the first commit. Mind the '.'
+$ git add .
+
+Commit the files that you've staged in your local repository.
+$ git commit -m "First commit"
+
+In the Command prompt, add the URL for the remote repository where your local repository will be pushed.
+$ git remote add origin remote <--repository URL-->
+
+Verifies the new remote URL
+$ git remote -v
+
+Push the changes in your local repository to GitHub.
+$ git push origin master
+
+
+
+
+
+Adding a file to a repository.
+On your computer, move the file you'd like to upload to GitHub into the local directory that was created when you cloned the repository.
+
+Open Git Bash.
+
+Change the current working directory to your local repository.
+
+Stage the file for commit to your local repository. Mind the '.'
+$ git add .
+
+Commit the file that you've staged in your local repository.
+$ git commit -m "Add existing file"
+
+Push the changes in your local repository to GitHub.
+$ git push origin master
+
+
+
+
+Cloning a repository
+Change the current working directory to the location where you want the cloned directory to be made.
+
+Use git clone
+$ git clone <--https://github.com/YOUR-USERNAME/YOUR-REPOSITORY-->
+
