@@ -1,5 +1,4 @@
 # EXAMPLE 1
-
 # XOR from 1 to n
 
 #  Find the remainder of n by moduling it with 4.
@@ -13,7 +12,6 @@
 
 
 # EXAMPLE 2
-
 # XOR from L to R
 
 # Find XOR val 1 to R     as above
@@ -45,3 +43,35 @@ while q:
 
     print(chk(l-1)^chk(r))
     q=q-1
+
+
+
+# EXAMPLE 4
+# Given two ranges ( L1 R1 , L2 R2 ) find the XOR of each elem in first range with each elem of second range.
+
+# Method 1 : O(n^2) complexity
+
+# Method 2
+
+def chk(n):
+    if n%4==0:
+        return n
+    if n%4==1:
+        return 1
+    if n%4==2:
+        return n+1
+    if n%4==3:
+        return 0
+        
+        
+l1,r1,l2,r2=map(int,input().split())
+
+ans1=0
+ans2=0
+if (r1-l1+1)%2==1:                         # odd no. of times series second XORed
+    ans1=chk(l2-1)^chk(r2)
+if (r2-l2+1)%2==1:                         # odd no. of times series first XORed
+    ans2=chk(l1-1)^chk(r1)
+    
+print(ans1^ans2)
+
