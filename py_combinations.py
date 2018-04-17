@@ -27,3 +27,5 @@ l[1]=int(l[1])
 b=list(combinations_with_replacement(l[0],l[1]))
 for i in range(0,len(b),1):
     print(*b[i],sep="")
+
+    
