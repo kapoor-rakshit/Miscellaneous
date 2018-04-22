@@ -1,26 +1,66 @@
 import os
 #Using Python's built-in open('filename','accessmode','buffering') function. This function creates a file object
-#w+ opens for read and write mode but overwrites existing file and creates if not exists
-#r+ opens for read and write
+#r  : read mode     (default)
+#a  : append mode
+#w  : write mode
+#b  : binary mode
+#+  : read write mode
+#w+ : opens for read and write mode but overwrites existing file or creates if not exists
+#r+ : opens for read and write
+
 fileptr=open('test.txt',"w+")
 
+# readline() , readlines()
+#1
+for line in fileptr:
+	print(line)
+	
+#2
+lines = fileptr.read()              # file contents as a string
+print(lines)
+
+#3	
+while True:
+	line = fileptr.readline()   # one line at a time
+	if not line:
+		break
+	else:
+		print(line)
+		
+#4		
+lines = fileptr.readlines()          # lines as a list
+for line in lines:
+	print(line)
+
+	
 """Once a file is opened and you have one file object.
 file.closed	    Returns true if file is closed, false otherwise.
 file.mode	    Returns access mode with which file was opened.
 file.name	    Returns name of the file.
 file.softspace	Returns false if space explicitly required with print, true otherwise."""
+
 print(fileptr.closed)
 print(fileptr.mode)
 print(fileptr.softspace)
 print(fileptr.name)
 
+
 """The write() method writes any string to an open file. 
 It is important to note that Python strings can have binary data and not just text.
 The write() method does not add a newline character ('\n') to the end of the string"""
+#1
 a="Hello this is my python.\nMy file handling\nusing Python3\n"
 fileptr.write(a)
 a="Check to overwrite or will continue\n\nGreat it continues to append untill fileptr is closed\n"
 fileptr.write(a)
+
+#2
+fileptr.writelines(listoflines)     # append list of lines , eg:  ['great this is\n', 'now ready\n', 'yeah.']
+
+#3
+print >> fileptr , "Naam"           # redirect print command to file pointer
+print >> fileptr , "City"
+
 
 """The read() method reads a string from an open file. 
 It is important to note that Python strings can have binary data. apart from text data.
@@ -34,23 +74,29 @@ The from argument specifies the reference position from where the bytes are to b
 If from is set to 0, it means use the beginning of the file as the reference position and 
 1 means use the current position as the reference position and 
 if it is set to 2 then the end of the file would be taken as the reference position."""
+
 fileptr.seek(0,0)
 position=fileptr.tell()
 print("Start reading from position:",position)
 st=fileptr.read(26)
 print(st)
 
+
 """Python automatically closes a file when the reference object of a file is reassigned to another file. 
 It is a good practice to use the close() method to close a file."""
+
 fileptr.close()
 print(fileptr.closed)
 
-#get words in a newline, from a file which are ending with <anything here>
+
+#get words/lines from a file which are ending with/begin with <anything here>
+# startswith()   # endswith()
 for line in open("testfile.txt"):
 	for word in line.split():
 		if word.endswith("ion"):
 			print(word)
 
+			
 #Some Py hacks
 
 os.rename('test.py','flasktest.py')    #rename(currentname,newname)
@@ -68,5 +114,4 @@ for i in os.listdir(cur):              #traverse the directory specified
 os.path.exists("pathname")             #boolean check if this path (directory path) exists or not 
 
 os.makedirs("pathname")                #creates path ie multiple directories created eg:- C:/Users/R6000670/Documents/Neo4j/
-
 
