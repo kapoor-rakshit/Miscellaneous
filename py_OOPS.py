@@ -30,6 +30,8 @@ name=input()
 age=int(input())
 mk=int(input())
 
+
+
 """Add, remove, or modify Attributes of classes and objects.
 emp1.age = 7  # Add an 'age' attribute.
 emp1.age = 8  # Modify 'age' attribute.
@@ -65,6 +67,22 @@ print(student.age)                 #So result is adhkkrak 1589
 #print(self.marks)                 #Invalid as self is not a class defined
 #print(student.marks)              Invalid as marks are not class variable
 
+
+
+"""STATIC METHODS
+decorate a method with keyword 'staticmethod' """
+class test:
+    
+    @staticmethod
+    def mthd(self):
+        print("static method")
+
+test.mthd()                         # call to static method using class name
+obj = test()
+obj.mthd()                          # call to static method using object
+        
+
+        
 """Python class keeps built-in attributes and can be accessed like any other attribute
 CLASSNAME.__doc__: Class documentation string or none, if undefined.
 
@@ -83,9 +101,13 @@ CLASSNAME.__dict__: {'__module__': '__main__', 'displayCount':
 
 print(s3.__class__.__name__)       #return classname for object
 
+
+
 """a class can implement the special method __del__(), called a destructor.
 That is invoked when the instance is about to be destroyed."""
 del s1
+
+
 
 """Class INHERITANCE
 class A:        # define your class A
@@ -97,16 +119,70 @@ class B:         # define your class B
 class C(A, B):   # subclass of A and B
 ....."""
 """
+NOTE : Constructor of parent class is not called.
 The issubclass(sub, sup) boolean function returns true if the given subclass sub is indeed a subclass of the superclass sup.
 The isinstance(obj, Class) boolean function returns true if obj is an instance of class Class or is an instance of a subclass of Class"""
 
+
+"""SUPER keyword in MULTIPLE INHERITANCE
+using super(CLASSNAME, self).METHODNAME()       # here METHODNAME can be __init__() too ie we can call constructor of parentclass 
+
+class C(A,B):
+   def __init__(self):
+       super(C, self).__init__()               # constructor of A called first then of B """            
+
+
+
 """OVERRIDING METHODS
 When parent class and child class have same name of methods then child class methods get preferece.
-ie it overrides the parent class methods."""
+ie it overrides the parent class methods (overridden methods).
+To call method of parent class from within overriding method use : ParentClassName.methodname(self,args,args) """
 
-"""DATA HIDING
-An object's attributes may or may not be visible outside the class definition. Name attributes with a double underscore prefix.
-Those attributes then are not be directly visible to outsiders.
+"""OVERLOADING METHODS
+Python does not support overloading methods"""
+
+"""OPERATOR OVERLOADING
+It can be performed using specific keywords only
+__add__ : call for + operator
+__sub__ : call for - operator
+__mul__ : call for * operator
+__div__ : call for / operator
+__str__ : output that is supposed to be human readable
+__repr__: representation readable for the Python interpreter
+
+eg:-
+class RationalNumber():
+     n = 0
+     d = 0
+     def __init__(self,n,d):
+        self.n = n
+        self.d = d
+        
+     def __mul__(self,other):
+         if not isinstance(other, RationalNumber):
+            other = RationalNumber(other)
+            
+         n1,d1 = self.n  , self.d
+         n2,d2 = other.n , other.d
+         return RationalNumber(n1*n2 , d1*d2)
+         
+     def __str__(self):
+         return '%s/%s' % (self.n,self.d) 
+         
+     __repr__ = __str__ 
+     
+a = RationalNumber(5,6)
+b = RationalNumber(4,2)
+print(a/b)                  # overloaded  __div__  called       # output : 20/12 """
+
+
+
+"""DATA HIDING (ACCESS SPECIFIERS)
+An object's attributes may or may not be visible outside the class definition.
+public    : varmethodname , (default)
+private   : __varmethodname , Name attributes with a double underscore prefix.
+protected : _varmethodname , (it's a convention not a rule as py does not support protected data. 
+                             They are public but must be treated as protected and should not be accessed from outside.)
 
 Example :-
 class JustCounter:
@@ -115,6 +191,10 @@ class JustCounter:
    def count(self):
       self.__secretCount += 1
       print self.__secretCount
+      JustCounter.__mymethod(self)
+      
+   def __mymethod(self):
+      print("private method")
 
 counter = JustCounter()
 counter.count()
