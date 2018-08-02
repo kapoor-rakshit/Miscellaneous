@@ -1,0 +1,4 @@
+This Pc ---> Properties ---> Advanced system settings ---> Environment variables
+Edit PATH
+Add <path to dir of software> in PATH variable
+
