@@ -5,8 +5,11 @@ Add <path to dir of software> in PATH variable     ...   eg:- D:/ProgramFiles/Ja
 
 
 For other softwares to use some other software
-Add new variables (DO NOT EDIT IN PATH)           ...    eg:- varname : JAVA_HOME      value : D:/ProgramFiles/Java/jdk1.8
-                                                              varname : JRE_HOME       value : D:/ProgramFiles/Java/jre1.8
-                                                              
-                                                              
+Add new variables (DO NOT EDIT IN PATH)    
+
+eg:- varname : JAVA_HOME      value : D:/ProgramFiles/Java/jdk1.8
+     varname : JRE_HOME       value : D:/ProgramFiles/Java/jre1.8
+                                                             
+               CATALINA_HOME                                     ...    ‪ variable for TOMCAT
+               GRADLE_HOME                                       ...     variable for GRADLE
                                                             
