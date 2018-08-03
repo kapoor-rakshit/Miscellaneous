@@ -1,4 +1,12 @@
 This Pc ---> Properties ---> Advanced system settings ---> Environment variables
-Edit PATH
-Add <path to dir of software> in PATH variable
 
+Edit PATH (for making software accessible via terminal)
+Add <path to dir of software> in PATH variable     ...   eg:- D:/ProgramFiles/Java/jdk1.8/bin
+
+
+For other softwares to use some other software
+Add new variables (DO NOT EDIT IN PATH)           ...    eg:- varname : JAVA_HOME      value : D:/ProgramFiles/Java/jdk1.8
+                                                              varname : JRE_HOME       value : D:/ProgramFiles/Java/jre1.8
+                                                              
+                                                              
+                                                            
