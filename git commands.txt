@@ -53,6 +53,9 @@ Change the current working directory to the location where you want the cloned d
 Use git clone
 $ git clone <--https://github.com/YOUR-USERNAME/YOUR-REPOSITORY-->
 
+NOTE : Git’s design includes everything in each copy of a repository, every clone gets not only the files but every revision of every          file ever committed. Fortunately, Git supports the notion of a “shallow clone”, which is a more succinctly meaningful way of            describing a local repository with history truncated to a particular depth during the clone operation.
+
+$ git clone --depth 1 <--https://github.com/jq/jq.git-->        // will copy only the latest revision of everything in the repository.
 
 
 
