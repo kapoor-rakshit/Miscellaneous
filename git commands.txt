@@ -16,12 +16,13 @@ Commit the files that you've staged in your local repository.
 $ git commit -m "First commit"
 
 In the Command prompt, add the URL for the remote repository where your local repository will be pushed.
-$ git remote add origin <--remote repository URL-->
+This command will map remote repository at <remote_repo_url> to a ref in your local repo under <remote_name> (eg:- origin)
+$ git remote add <--remote_name--> <--remote repository URL-->
 
 Verifies the new remote URL
 $ git remote -v
 
-Push the changes in your local repository to GitHub.
+Push the changes in your local repository to GitHub.   eg:- $ git push <remote_name> <local_branch_name>
 $ git push origin master
 
 
@@ -49,6 +50,9 @@ $ git push origin master
 
 Cloning a repository
 Change the current working directory to the location where you want the cloned directory to be made.
+
+NOTE : git clone will automatically configure your repo with a remote pointed to the Git URL you cloned it from. 
+This means that once you make changes to a file and commit them, you can git push those changes to the remote repository.
 
 Use git clone
 $ git clone <--https://github.com/YOUR-USERNAME/YOUR-REPOSITORY-->
