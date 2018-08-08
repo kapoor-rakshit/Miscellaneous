@@ -1,4 +1,4 @@
-Create a new repository on GitHub. 
+Create a new repository on GitHub.   (github.com) 
 To avoid errors, do not initialize the new repository with README, license, or gitignore files. 
 You can add these files after your project has been pushed to GitHub.
 
@@ -17,13 +17,15 @@ $ git commit -m "First commit"
 
 In the Command prompt, add the URL for the remote repository where your local repository will be pushed.
 This command will map remote repository at <remote_repo_url> to a ref in your local repo under <remote_name> (eg:- origin)
+use the <remote_name> on the command line in lieu of the whole URL.
+
 $ git remote add <--remote_name--> <--remote repository URL-->
 
 Verifies the new remote URL
 $ git remote -v
 
-Push the changes in your local repository to GitHub.   eg:- $ git push <remote_name> <local_branch_name>
-$ git push origin master
+Push the changes in your local repository to GitHub.   eg:- $ git push origin master
+$ git push <remote_name> <branch_name>
 
 
 
@@ -43,7 +45,7 @@ Commit the file that you've staged in your local repository.
 $ git commit -m "Add existing file"
 
 Push the changes in your local repository to GitHub.
-$ git push origin master
+$ git push <remote_name> <branch_name>
 
 
 
@@ -51,8 +53,9 @@ $ git push origin master
 Cloning a repository
 Change the current working directory to the location where you want the cloned directory to be made.
 
-NOTE : git clone will automatically configure your repo with a remote pointed to the Git URL you cloned it from. 
+NOTE : 'git clone' will automatically configure your repo with a remote pointed to the Git URL you cloned it from. 
 This means that once you make changes to a file and commit them, you can git push those changes to the remote repository.
+'git clone' command implicitly adds the <remote_name> 'origin'
 
 Use git clone
 $ git clone <--https://github.com/YOUR-USERNAME/YOUR-REPOSITORY-->
@@ -66,10 +69,60 @@ $ git clone --depth 1 <--https://github.com/jq/jq.git-->        // will copy onl
 
 
 
+
+Working with branches
+Each time that you want to commit a bug or a feature, you need to create a branch for it, which will be a copy of your master branch.
+
+Create the branch on your local machine and switch in this branch
+$ git checkout -b [name_of_your_new_branch]
+
+Change working branch
+$ git checkout [name_of_your_new_branch]
+
+Push the branch on github. When you want to commit something in your branch, be sure to be in your branch.
+$ git push <remote_name> [name_of_your_new_branch]
+
+see all branches created. (* shows current branch on local machine)
+$ git branch
+
+Delete a branch on your local filesystem
+$ git branch -d [name_of_your_new_branch]
+
+To force the deletion of local branch on your filesystem
+$ git branch -D [name_of_your_new_branch]
+
+Delete the branch on github.  Mind the ':' for deletion
+$ git push <remote_name> :[name_of_your_new_branch]
+
+
+
+
+
+Working with remotes
+
+list the shortnames of each remote handle you’ve specified.
+If you’ve cloned your repository, you should at least see origin — that is the default name Git gives to the server you cloned from
+$ git remote
+
+use param -v which shows you the URLs that Git has stored for the shortname to be used when reading and writing to that remote
+$ git remote -v
+
+Inspecting a Remote
+$ git remote show <remote_name>
+
+Renaming remote
+$ git remote rename <remote_name> <new_remote_name>
+
+Removing remote
+$ git remote remove <remote_name>
+
+
+
+
 Update local repo
 to fetch and merge remote changes to local repository
 
-$ git pull origin master
+$ git pull <remote_name> <branch_name>
 
 
 
