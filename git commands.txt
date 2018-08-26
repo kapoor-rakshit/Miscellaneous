@@ -1,3 +1,7 @@
+
+NOTE  :  PLEASE MAKE SURE THAT PATH var is having value for git ((eg:- D:\Git\cmd)) in ACCOUNT or SYSTEM VARIABLES
+
+
 Create a new repository on GitHub.   (github.com) 
 To avoid errors, do not initialize the new repository with README, license, or gitignore files. 
 You can add these files after your project has been pushed to GitHub.
@@ -124,6 +128,24 @@ to fetch and merge remote changes to local repository
 
 $ git pull <remote_name> <branch_name>
 
+
+
+GIT CONFIG
+configure username and email with which user want to push commits as The Git username is not the same as GitHub username.
+GitHub uses the email address set in local Git configuration to associate commits pushed from the command line with GitHub account.
+
+$ git config --global user.name "kapoor-rakshit"
+$ git config --global user.email "email@example.com"      // --global  , setting(s) for every repository on your computer
+
+$ git config user.name "SOPHO"
+$ git config user.email "email@example.com"              //              setting(s) for cur dir repo
+
+$ git config --global user.name
+$ git config user.name                                  // NO arg passed , check setting(s)
+
+$ git config --global --unset user.name                 // REMOVE key-value from .config file
+
+$ git config --list                                     // Describes the .config file
 
 
 
