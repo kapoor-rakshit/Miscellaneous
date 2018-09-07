@@ -17,7 +17,7 @@ Add the files in your new local repository. This stages them for the first commi
 $ git add .
 
 Commit the files that you've staged in your local repository.
-$ git commit -m "First commit"
+$ git commit -m "First commit"            // -m   :  message
 
 In the Command prompt, add the URL for the remote repository where your local repository will be pushed.
 This command will map remote repository at <remote_repo_url> to a ref in your local repo under <remote_name> (eg:- origin)
