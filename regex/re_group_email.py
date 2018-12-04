@@ -44,6 +44,12 @@ print(mdict.groupdict())
 # This allows us to apply different quantifiers to that group.
 # These parenthesis also create a numbered capturing. 
 # It stores the part of string matched by the part of regex inside parentheses.
-# These numbered capturing can be used for backreferences
+# These numbered capturing can be used for backreferences as shown below
+
+# \groupNumber
+# This tool (eg: \1 references the first capturing group) matches the same text as previously matched by the FIRST capturing group.
+# Similarly  :  \1\2\3\4\5\6\7\8\9\10   will match respective () group numbers  (\w)(\d)([a-z])()()....
+
+# Alterations (  |  |  |  ) use of |
 
 
