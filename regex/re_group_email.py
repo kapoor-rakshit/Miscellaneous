@@ -36,4 +36,14 @@ reg_patterndict = r"(?P<username>\w+.*)@(?P<website>\w+.*)\.(?P<domain>\w+.*)"
 
 mdict = re.match(reg_patterndict, s5)
 
-print(mdict.groupdict())             
+print(mdict.groupdict())
+
+
+
+# Parenthesis ( ) around a regular expression can group that part of regex together. 
+# This allows us to apply different quantifiers to that group.
+# These parenthesis also create a numbered capturing. 
+# It stores the part of string matched by the part of regex inside parentheses.
+# These numbered capturing can be used for backreferences
+
+
