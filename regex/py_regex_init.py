@@ -46,12 +46,20 @@ $     = matches at the end of string, eg:- r"123$"  --> 12345..123
 
 
 White Space Charts:
-\n = new line
-\s = space
-\t = tab
-\e = escape
-\f = form feed
-\r = carriage return
+- \n = new line
+- \s = space
+- \t = tab
+- \e = escape
+- \f = form feed        ,  eg:- printf("stackoverflow\fnine\fgreat")
+                              stackoverflow
+                                           nine
+                                               great
+                         insert a page break or used for giving indentation
+
+- \r = carriage return  ,  eg:-  printf("stackoverflow\rnine")
+                               ninekoverflow
+                         shifted the cursor to the beginning of "stackoverflow" and overwrites the starting four characters since "nine" is four character long.
+
 
 
 re.match  : attempts to match a pattern at the beginning of the string.
