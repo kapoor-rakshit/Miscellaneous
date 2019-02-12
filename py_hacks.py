@@ -26,8 +26,13 @@ sys.modules                   # all loaded modules
 os.name                      # name of operating system (not for Windows)
 os.environ                   # dict for env variables
 os.getcwd()
+os.rename('test.py','flasktest.py')    #rename(currentname,newname)
 os.listdir()
 os.mkdir()
+os.makedirs("pathname")                #creates path ie multiple directories created eg:- C:/Users/R6000670/Documents/Neo4j/
+os.chdir("/home/newfolder")            #moves to specified directory and make it current dirctory
+os.path.isdir("/checkfile")            #boolean if it is a directory(folder) or not
+os.path.exists("pathname")             #boolean check if this path (directory path) exists or not
 os.rmdir()
 os.remove()
 os.system('notepad')        # execute command from terminal , os.system('calc')
