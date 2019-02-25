@@ -8,8 +8,8 @@ Identifiers:
 \D = anything but a number
 \s = space
 \S = anything but a space
-\w = any letter
-\W = anything but a letter
+\w = any alphanumeric character including underscore, equivalent to [A-Za-z0-9_]
+\W = anything but an alphanumeric letter
 .  = any character, except for a new line
 \b = space around whole words
 \. = period.    NOTE : Mind use of \(backslash), because . normally means any character.
@@ -38,6 +38,8 @@ $     = matches at the end of string, eg:- r"123$"  --> 12345..123
 # NOTE : 
 # Above will give x chars from a string which is more than x length, along with exact x len
 # to get away from these issues use LOOKAROUND
+# asserts regex_1 with regex_2
+# LOOKAROUND is excluded from the match, but only assert whether a match is possible or not.
 #    Lookahead to match something not-followed / followed by something else
 #                          Negative : (?!text) / Positive : (?=u)
 #
