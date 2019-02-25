@@ -4,16 +4,17 @@
 
 """
 Identifiers:
-\d = any number
-\D = anything but a number
-\s = space
-\S = anything but a space
-\w = any alphanumeric character including underscore, equivalent to [A-Za-z0-9_]
-\W = anything but an alphanumeric letter
-.  = any character, except for a new line
-\b = space around whole words
-\. = period.    NOTE : Mind use of \(backslash), because . normally means any character.
-[] = range, or "variance" , of values written in it
+\d   = any number
+\D   = anything but a number
+\s   = space
+\S   = anything but a space
+\w   = any alphanumeric character including underscore, equivalent to [A-Za-z0-9_]
+\W   = anything but an alphanumeric letter
+(?i) = case insensitive match , eg: r"(?i)TEXT"
+.    = any character, except for a new line
+\b   = space around whole words
+\.   = period.    NOTE : Mind use of \(backslash), because . normally means any character.
+[]   = range, or "variance" , of values written in it
 
 NOTE:
 ^regex_pattern$ =  use ^ and $ for match at start and end respectively 
