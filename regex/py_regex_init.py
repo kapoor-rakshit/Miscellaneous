@@ -65,8 +65,9 @@ White Space Charts:
 
 
 
-re.match  : attempts to match a pattern at the beginning of the string.
-re.search : attempts to match the pattern throughout the string until it finds a match
+re.match   : attempts to match a pattern at the beginning of the string.
+re.search  : attempts to match the pattern throughout the string until it finds a match
+re.findall : returns a list of all the matches in a single step
 """
 
 
