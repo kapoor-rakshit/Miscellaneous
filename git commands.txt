@@ -120,6 +120,11 @@ $ git push <remote_name> [name_of_your_new_branch]
 see all branches created. (* shows current branch on local machine)
 $ git branch
 
+rename a branch
+$ git branch -m [old-name] [new-name]          # Rename your local branch
+$ git push origin :[old_name]                  # Delete old-name remote branch
+$ git push origin -u [new-name]                # Reset the upstream branch for the new-name local branch
+
 Delete a branch on your local filesystem
 $ git branch -d [name_of_your_new_branch]
 
@@ -150,6 +155,14 @@ $ git remote rename <remote_name> <new_remote_name>
 
 Removing remote
 $ git remote remove <remote_name>
+
+
+
+
+GIT stash
+Use git stash when you want to record the current state of the working directory and the index,
+but want to go back to a clean working directory.
+The command saves your local modifications away and reverts the working directory to match the HEAD commit.
 
 
 
