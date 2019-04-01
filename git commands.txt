@@ -102,6 +102,12 @@ a local repository with history truncated to a particular depth during the clone
 $ git clone --depth 1 <--https://github.com/jq/jq.git-->        // will copy only the latest revision of everything in the repository.
 
 
+Clone only specific BRANCH
+$ git clone -b <branch> <remote_repo>
+
+$ git clone -b <branch> --single-branch <remote_repo>         // add --single-branch to prevent fetching of all branches
+
+
 
 
 
