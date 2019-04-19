@@ -211,3 +211,13 @@ $ git log --pretty = oneline                     //only commits
 $ git log --name-status                          //shows file names changed along with commits
 
 
+
+Status
+Show the working tree status
+Displays paths that have differences between the index file and the current HEAD commit
+
+$ git status
+
+$ git status -v                                 // verbose output
+
+
