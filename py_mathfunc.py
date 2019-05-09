@@ -1,21 +1,29 @@
+
 from math import *
 from random import *
-import cmath           # complex math lib for handling complex number operations, eg: cmath.sqrt(-4) = 2i
+import cmath                          # complex math lib for handling complex number operations, eg: cmath.sqrt(-4) = 2i
+from fractions import Fraction        # fractions package
 
 a=156
 b=84454
 
-del a,b                #delete the reference to a number object by using the del statement.
+del a,b                 #delete the reference to a number object by using the del statement.
 
 a=0x57a7                #hexadecimal (0 to F digits)
 b=0o77                  #octal       (0 to 7 digits)
 print(a)
 print(b)
 
+print(bin(7), oct(7), hex(7))     # binary, octal, hexadecimal representation
+
 print(pi)              #math module
 print(e)
+print(gcd(a, b))       #math module
 
-                      #random module
+
+
+
+                       #random module
 for i in range(8):
     print(choice([1,5,9,89]),choice("Hello kapoor-rakshit"),choice(range(2)))
     #returns random element from list,string,range(0 to arg-1) ie (0 to 1 here)
@@ -46,3 +54,18 @@ print(a)
 
 print(uniform(2,4))
 #The uniform() method returns a random float r, such that x <= r < y
+
+
+
+
+                               #fractions module
+  
+Fraction(16, -10)              # >> Fraction(-8, 5)
+Fraction(123)                  # >> Fraction(123, 1)
+Fraction()                     # >> Fraction(0, 1)
+Fraction('3/7')                # >> Fraction(3, 7)                                   # NOTE : use of ''
+Fraction('-3/7')               # >> Fraction(-3, 7)
+Fraction('-.125')              # >> Fraction(-1, 8)
+Fraction(1.1)                  # >> Fraction(2476979795053773, 2251799813685248)     # NOTE : without ''
+float(Fraction(355, 113))      # >> 3.1415929203539825                               # typecasting to float, else will show Fraction(355, 113)
+
