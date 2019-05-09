@@ -61,6 +61,11 @@ print(uniform(2,4))
                                #fractions module
   
 Fraction(16, -10)              # >> Fraction(-8, 5)
+
+k = Fraction(16, -10)
+k.numerator                    # -8
+k.denominator                  # 5
+
 Fraction(123)                  # >> Fraction(123, 1)
 Fraction()                     # >> Fraction(0, 1)
 Fraction('3/7')                # >> Fraction(3, 7)                                   # NOTE : use of ''
