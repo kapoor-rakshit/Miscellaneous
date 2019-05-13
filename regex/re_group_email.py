@@ -48,7 +48,10 @@ print(mdict.groupdict())
 
 # \groupNumber
 # This tool (eg: \1 references the first capturing group) matches the same text as previously matched by the FIRST capturing group.
-# Similarly  :  \1\2\3\4\5\6\7\8\9\10   will match respective () group numbers  (\w)(\d)([a-z])()()....
+# NOTE : If (\w) group matches 'A' then \1 will also try to match 'A' only and not any of [A-Za-z0-9_]
+# Similarly  :  \1\2\3\4\5\6\7\8\9\10   will match respective () group numbers  (\w)(\d)([a-z])\1\w\2....
+
+
 
 # Alterations (  |  |  |  ) use of |
 
