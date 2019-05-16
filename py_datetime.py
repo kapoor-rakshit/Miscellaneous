@@ -76,7 +76,7 @@ secs = time.mktime(t)
 # 1
 import datetime
 x = datetime.datetime(2018, 6, 1)
-print(x.strftime("%B"))
+print(x.strftime("%B"))                                         # June
 
 # 2
 import time
@@ -87,9 +87,14 @@ print time.strftime("%b %d %Y %H:%M:%S", t)                     # Feb 17 2009 17
 
 # time.strptime(str,fmt='%a %b %d %H:%M:%S %Y')
 # Parses str according to format string fmt and returns the instant in time-tuple format.
-
+# 1
 import time
 struct_time_tuple = time.strptime("30 Nov 00", "%d %b %y")       # (2000, 11, 30, 0, 0, 0, 3, 335, -1)
+
+# 2
+a = datetime.datetime.strptime(t1, "%a %d %b %Y %H:%M:%S %z")
+b = datetime.datetime.strptime(t2, "%a %d %b %Y %H:%M:%S %z")
+return(str(int(abs((a-b).total_seconds()))))                     # total number of seconds in a timedelta object
 
 
 
