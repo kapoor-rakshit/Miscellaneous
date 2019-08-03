@@ -99,13 +99,12 @@ NOTE : Git’s design includes everything in each copy of a repository, every cl
 file ever committed. Fortunately, Git supports the notion of a “shallow clone”, which is a more succinctly meaningful way of describing
 a local repository with history truncated to a particular depth during the clone operation with "--depth" argument.
 
-$ git clone --depth 1 <--https://github.com/jq/jq.git-->        // will copy only the latest revision of everything in the repository.
-
+$ git clone --depth 1 <--https://github.com/jq/jq.git-->       // clone with a history truncated to the specified number of commits of all branches
 
 Clone only specific BRANCH
-$ git clone -b <branch> <remote_repo>
+$ git clone -b <branch> <remote_repo_URL>                     // clone a branch with history/commits of all branches
 
-$ git clone -b <branch> --single-branch <remote_repo>         // add --single-branch to prevent fetching of all branches
+$ git clone -b <branch> --single-branch <remote_repo_URL>     // add --single-branch to prevent fetching history/commits of all branches
 
 
 
@@ -140,6 +139,11 @@ $ git branch -D [name_of_your_new_branch]
 Delete the branch on github.  Mind the ':' for deletion
 $ git push <remote_name> :[name_of_your_new_branch]
 
+shows remote tracking branches that appear in red.
+These are read-only copies of the code as it appears on the remote.
+Every time we execute git pull or git fetch commands, we update remote tracking branches.
+$ git branch --all
+
 
 
 
@@ -173,10 +177,42 @@ The command saves your local modifications away and reverts the working director
 
 
 
-Update local repo
-to fetch and merge remote changes to local repository
+GIT fetch
+On its own, git fetch updates all the remote tracking branches in local repository. 
+No changes are actually reflected on any of the local working branches.
+$ git fetch
 
+For purposes of reviewing, PRs (Pull Request) in remote should be fetched to the local repo.
+ID is the pull request id and BRANCHNAME is the name of the branch that we want to create. 
+Once the branch has been created we can switch to that brach.
+$ git fetch <remote_name> pull/ID/head:BRANCHNAME
+
+
+
+GIT merge
+Without any arguments, git merge will merge the corresponding remote tracking branch to the local working branch.
+$ git merge
+
+
+
+GIT pull
+git pull is a combination command, equal to git fetch + git merge.
+If you have uncommitted changes, the merge part of the git pull command will fail and your local branch will be untouched.
+Thus, you should always commit your changes in a branch before pulling new commits from a remote repository.
+
+                                            A---B---C    branch on remoteURL
+	                                         /
+                                      D---E---F---G      branch in local repository
+                                      
+"git pull" will fetch and replay the changes from the remote branch since it diverged from the local branch (i.e. E) 
+until its current commit (C) on top of branch and record the result in a new commit along with the names of the two parent commits (A, B)
+and a log message from the user describing the changes.
+
+                                         A---B---C       branch on remoteURL
+	                                      /         \
+                                   D---E---F---G---H     branch in local repository
 $ git pull <remote_name> <branch_name>
+
 
 
 
