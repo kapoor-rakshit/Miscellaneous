@@ -149,7 +149,6 @@ $ git branch --all
 
 
 Working with remotes
-
 list the shortnames of each remote handle you’ve specified.
 If you’ve cloned your repository, you should at least see origin — that is the default name Git gives to the server you cloned from
 $ git remote
@@ -170,17 +169,57 @@ $ git remote remove <remote_name>
 
 
 GIT stash
-Use git stash when you want to record the current state of the working directory and the index,
-but want to go back to a clean working directory.
-The command saves your local modifications away and reverts the working directory to match the HEAD commit.
+Git has an area called the stash where you can temporarily store a snapshot of your changes without committing them to the repository.
+It’s separate from the working directory, the staging area, or the repository.
+This functionality is useful when you’ve made changes to a branch that you aren’t ready to commit,
+but you need to switch to another branch.
+The command saves your local modifications away and reverts the working directory to match the HEAD commit (latest) for that branch.
+$ git stash save "optional message for yourself"
+
+a list of your saved snapshots in the format stash@{ID}: BRANCH-FOR-WHICH-STASHED: MESSAGE
+the latest stash made is in the top, id value is {0}
+$ git stash list
+
+see a summary of stash made, If you forgot what changes were made in the stash
+$ git stash show                               // latest stash, {0}
+$ git stash show -p                            // see the typical diff-style patch layout (-p)
+                                                  // -What this line looks like on branch
+                                                  // +What this line looks like with stashed changes
+$ git stash show -p stash@{1}                 // specific stash
+
+apply changes to current branch and leaves a copy in the stash
+$ git stash apply                             // latest stash, {0}
+$ git stash apply stash@{1}                   // specific stash
+
+creates a new branch with stash, and then deletes the latest stash (like stash pop)
+$ git stash branch <branch_name>             // latest stash, {0}
+$ git stash branch <branch_name> stash@{1}   // specific stash
+
+applies the changes and removes the files from the stash
+$ git stash pop                              // latest stash, {0}
+$ git stash pop stash@{1}                    // specific stash
+
+remove stashed changes without applying them
+$ git stash drop                            // latest stash, {0}
+$ git stash drop stash@{1}                  // specific stash
+
+clear the entire stash
+$ git stash clear
 
 
 
 
 GIT fetch
-On its own, git fetch updates all the remote tracking branches in local repository. 
-No changes are actually reflected on any of the local working branches.
-$ git fetch
+On its own, git fetch updates all the remote tracking branches in local repository
+No changes are actually reflected on any of the local working branches
+This makes fetching a safe way to review commits before integrating them with your local repository
+$ git fetch <remote_name>                       // Fetch all branches, commits, files from <remote_name>
+$ git fetch <remote_name> <branch_name>         // Fetch only the specified <branch_name> from <remote_name>
+$ git fetch --all                               // Fetch all remotes
+
+Fetched content has to be explicitly checked out using the git checkout command
+$ git branch --all                              // check names of remote tracking branch
+$ git checkout <remote_name>/<branch_name>      // switch to remote tracking branch, NOTE : use of /
 
 For purposes of reviewing, PRs (Pull Request) in remote should be fetched to the local repo.
 ID is the pull request id and BRANCHNAME is the name of the branch that we want to create. 
@@ -189,9 +228,42 @@ $ git fetch <remote_name> pull/ID/head:BRANCHNAME
 
 
 
+
 GIT merge
 Without any arguments, git merge will merge the corresponding remote tracking branch to the local working branch.
 $ git merge
+$ git merge <branch_name>                     // merge changes on a seperate branch to current branch
+
+
+
+
+GIT rebase
+Rebasing is an alternative to merging. 
+Instead of creating a new commit that combines the two branches, it moves the commits of one of the branches on top of the other.
+
+                                             A---B---C        // <branch>
+                                           /
+                                      D---E---F---G           // <upstream>
+				      
+All changes made by commits in the current branch but that are not in <upstream> are saved to a temporary area.
+The commits that were previously saved into the temporary area are then reapplied to the current branch, one by one, in order.		     
+
+				       A'--B'--C'             // <branch>
+                                      /
+                         D---E---F---G                        // <upstream>
+			 
+Note that any commits in HEAD which introduce the same textual changes as a commit in HEAD..<upstream> are omitted.
+(i.e a patch already accepted upstream with a different commit message or timestamp will be skipped)
+(eg: if A and F introduce same set of changes but have different committer information)
+
+                                       B'--C'                 // <branch>
+                                      /
+                         D---E---F---G                        // <upstream>
+
+$ git rebase <upstream> <branch>      // eg : git rebase master topic
+                                      // git checkout <branch> followed by git rebase <upstream>.
+				      // When rebase exits, <branch> will remain the checked-out branch.
+
 
 
 
@@ -201,7 +273,7 @@ If you have uncommitted changes, the merge part of the git pull command will fai
 Thus, you should always commit your changes in a branch before pulling new commits from a remote repository.
 
                                             A---B---C    branch on remoteURL
-	                                         /
+	                                   /
                                       D---E---F---G      branch in local repository
                                       
 "git pull" will fetch and replay the changes from the remote branch since it diverged from the local branch (i.e. E) 
@@ -209,9 +281,28 @@ until its current commit (C) on top of branch and record the result in a new com
 and a log message from the user describing the changes.
 
                                          A---B---C       branch on remoteURL
-	                                      /         \
+	                                /         \
                                    D---E---F---G---H     branch in local repository
 $ git pull <remote_name> <branch_name>
+
+You can pull using rebase instead of merge.
+That takes your commits that are not on the remote version of your branch and 
+reworks/rebases them so that they're ahead of (on top of) the new commits you pull in with your pull.
+$  git pull --rebase <remote_name> <branch_name>
+
+To set it up so every branch you ever create on any repository is set to pull with rebase
+$ git config --global branch.autosetuprebase always
+
+Limit pull to specified commit history
+$ git pull --depth 1 <remote_name> <branch_name>
+
+
+
+
+Unstage a file
+If you moved a file into the staging area with git add ,  but no longer want it to be part of a commit,
+you can use git reset to unstage that file:
+$ git reset HEAD <FILE-NAME>
 
 
 
@@ -237,13 +328,9 @@ $ git config --list                                     // Describes the .config
 
 Log
 study repository history using
-
 $ git log                                         //no file name displayed
-
 $ git log --author = <--AUTHOR-->                 //particular author
-
 $ git log --pretty = oneline                     //only commits
-
 $ git log --name-status                          //shows file names changed along with commits
 
 
@@ -251,9 +338,10 @@ $ git log --name-status                          //shows file names changed alon
 Status
 Show the working tree status
 Displays paths that have differences between the index file and the current HEAD commit
-
 $ git status
-
 $ git status -v                                 // verbose output
+$ git status -s                                 // short-format output
+
+$ git diff                                      // review changes
 
 
