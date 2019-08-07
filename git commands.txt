@@ -114,10 +114,16 @@ Working with branches
 Each time that you want to commit a bug or a feature, you need to create a branch for it, which will be a copy of your master branch.
 
 Create the branch on your local machine and switch in this branch
-$ git checkout -b [name_of_your_new_branch]
+This will give you a new branch with the same state as branch currently we are on.
+$ git checkout -b [new_branch]
+$ git checkout -b [new_branch] [old_branch]                   // new_branch will be copy of old_branch
 
 Change working branch
 $ git checkout [name_of_your_new_branch]
+
+Create new branch without switching
+$ git branch [new_branch]
+$ git branch [new_branch] [old_branch]
 
 Push the branch on github. When you want to commit something in your branch, be sure to be in your branch.
 $ git push <remote_name> [name_of_your_new_branch]
