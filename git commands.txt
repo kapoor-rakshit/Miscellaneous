@@ -349,6 +349,21 @@ If you omit the <COMMIT>, it defaults to HEAD.
 
 
 
+GIT revert
+Git revert is a safer alternative to git reset in regards to losing work.
+    git reset , removes the commit from the commit history, 
+    git revert, appends a new commit with the resulting inverse content.
+    git reset , can only work backward from the current commit, 
+    git revert, is able to target an individual commit at an arbitrary point in the history.
+This prevents Git from losing history, which is important for the integrity of your revision history and for reliable collaboration.
+git revert undoes a single commit to it's parent.
+it does NOT "revert" back to the previous state of a project by removing all subsequent commits.
+
+$ git revert HEAD                       // passed in the HEAD ref.  or  any commit SHAid
+
+
+
+
 GIT CONFIG
 configure username and email with which user want to push commits as The Git username is not the same as GitHub username.
 GitHub uses the email address set in local Git configuration to associate commits pushed from the command line with GitHub account.
