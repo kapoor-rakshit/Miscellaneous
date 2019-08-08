@@ -2,6 +2,22 @@
 NOTE  :  PLEASE MAKE SURE THAT PATH var is having value for git ((eg:- D:\Git\cmd)) in ACCOUNT or SYSTEM VARIABLES
 
 
+GIT ENV  or  Git's "three trees"
+WORKING TREE is what is actually in the files that you are currently working on.
+     It is representative of the immediate changes made to content in files and directories.
+INDEX is a staging area where the new commit is prepared.
+     Essentially, the contents of the index are what will go into the new commit.
+       $ git ls-files            // a list of file names with paths that are currently part of the index
+       $ git ls-files --stage    // staged contents' mode bits | object name (SHAid) | and stage number | file names with paths
+HEAD is a pointer to the branch or commit that you last checked out, and which will be the parent of a new commit.
+     so when you commit, you are updating HEAD to your new commit, which matches the index (STAGING AREA).
+     
+NOTE : $ git add <path>      , updates the index from the working tree.
+     : $ git checkout <path> , updates working tree from index.
+
+
+
+
 Create a new repository on GitHub.   (github.com) 
 To avoid errors, do not initialize the new repository with README, license, or gitignore files. 
 You can add these files after your project has been pushed to GitHub.
@@ -13,7 +29,7 @@ Change the current working directory to your local project.
 Initialize the local directory as a Git repository.
 $ git init
 
-Add the files in your new local repository. This stages them for the first commit. Mind the '.'
+Add the files in your new local repository. This stages them for the first commit. Mind the '.' for staging/unstaging all files
 $ git add .
 
 Commit the files that you've staged in your local repository.
@@ -305,10 +321,30 @@ $ git pull --depth 1 <remote_name> <branch_name>
 
 
 
+GIT reset
 Unstage a file
 If you moved a file into the staging area with git add ,  but no longer want it to be part of a commit,
 you can use git reset to unstage that file:
 $ git reset HEAD <FILE-NAME>
+$ git reset HEAD .                             // unstage all files from index (staging area), NOTE : use of '.'
+
+Reset a branch to a prior commit
+It basically rewinds the state of your branch.  git reset <MODE> <COMMIT>
+$ git reset 
+$ git reset --mixed HEAD
+
+--soft : does not reset staging index or working tree, but resets HEAD to commit.
+         Changes all files to “Changes to be commited” in '$ git status'.
+--mixed: resets staging index but not the working tree.
+--hard : resets staging index and working tree. 
+--merge: resets the index and updates the files in the working tree that are different between commit and HEAD,
+         but keeps those which are different between the index and working tree
+--keep : resets index entries and updates files in the working tree that are different between commit and HEAD.
+         If a file that is different between commit and HEAD has local changes, the reset is aborted
+
+<COMMIT> can be HEAD or any Git SHA-1 commit hash.
+If you omit the <MODE>, it defaults to --mixed.
+If you omit the <COMMIT>, it defaults to HEAD.
 
 
 
@@ -332,12 +368,27 @@ $ git config --list                                     // Describes the .config
 
 
 
-Log
-study repository history using
-$ git log                                         //no file name displayed
-$ git log --author = <--AUTHOR-->                 //particular author
-$ git log --pretty = oneline                     //only commits
-$ git log --name-status                          //shows file names changed along with commits
+GIT log
+it displays all of the commits in a respository’s history
+displays each commit's    Secure Hash Algorithm (SHA) | author | date | commit message
+Navigating Git Log
+Git uses the Less terminal pager to page through the commit history. You can navigate it with the following commands:
+to scroll down by one line, use j or ↓
+to scroll up by one line, use k or ↑
+to scroll down by one page, use the spacebar or the Page Down button
+to scroll up by one page, use b or the Page Up button
+to quit the log, use q
+
+$ git log
+$ git log --all                                  // asks for the logs of all refs, basically branches and tags.
+$ git log --oneline                              // one commit per line | the first seven characters of the SHA | commit message
+$ git log --stat                                 // files modified in each commit | number of lines added/removed | summary line with total number of files and lines changed
+$ git log --patch   or   $ git log -p            // files you modified | location of lines you added/removed | specific changes you made
+$ git log --author=<--AUTHOR-->                  // particular author
+$ git log --pretty=oneline                       // prettify
+$ git log --name-status                          // shows file status in commits, just like 'git status -s'
+$ git log <SHAid>                                // display commit with <SHAid> and all the commits made before this commit.
+$ git log --graph --oneline                      // view git log as a graph
 
 
 
@@ -349,5 +400,8 @@ $ git status -v                                 // verbose output
 $ git status -s                                 // short-format output
 
 $ git diff                                      // review changes
+                                                // the @@ symbol, that means beginning of a new chunk or set of modifications
+                                                // file markers (+ -) help you to identify which file the changes belong to
+						
 
 
