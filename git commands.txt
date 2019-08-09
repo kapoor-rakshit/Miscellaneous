@@ -329,7 +329,7 @@ $ git reset HEAD <FILE-NAME>
 $ git reset HEAD .                             // unstage all files from index (staging area), NOTE : use of '.'
 
 Reset a branch to a prior commit
-It basically rewinds the state of your branch.  git reset <MODE> <COMMIT>
+It basically rewinds the state of your branch to specified <COMMIT> , synatx : $ git reset <MODE> <COMMIT>
 $ git reset 
 $ git reset --mixed HEAD
 
@@ -407,16 +407,28 @@ $ git log --graph --oneline                      // view git log as a graph
 
 
 
-Status
+GIT status
 Show the working tree status
 Displays paths that have differences between the index file and the current HEAD commit
 $ git status
 $ git status -v                                 // verbose output
 $ git status -s                                 // short-format output
 
-$ git diff                                      // review changes
-                                                // the @@ symbol, that means beginning of a new chunk or set of modifications
-                                                // file markers (+ -) help you to identify which file the changes belong to
-						
+
+
+GIT diff
+By default git diff will show you any uncommitted changes since the last commit.
+$ git diff                                         // the @@ symbol, that means beginning of a new chunk or set of modifications
+					           // @@ -34,6 +34,8 @@ , 6 lines have been extracted starting from line number 34. 8 lines have been added starting at line number 34.
+                                                   // file markers (+ -) help you to identify which file the changes belong to
+Comparing files between two different commits
+$ git diff <SHAid1> <SHAid2>                       // SHAid can be found using  $ git log
+
+Comparing two branches
+$ git diff <branch1> <branch2>
+
+Compare a specific file across branches
+$ git diff <branch1> <branch2> <path_of_file>      // pass path of the file as the third argument to git diff
+
 
 
