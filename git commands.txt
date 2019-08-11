@@ -231,6 +231,21 @@ $ git stash clear
 
 
 
+GIT PULL REQUEST (PR)
+Contributions are made by developer community through pull requests,
+which request that a project accept changes you have made to its code repository.
+     Create a copy of the repository on Github/Bitbucket/Gitlab ie Fork the Repository
+     Clone the repository that you have Forked to have local copy
+     Create a New Branch
+     Make Changes Locally and push to repo that you have Forked on Github/Bitbucket/Gitlab
+     Navigate to repo that you have Forked, and press the “New pull request” button.
+     Select the appropriate repository from the drop-down menu and the appropriate branch. 
+          Left side is where TO send request and right side is FROM where to send request.
+     Make sure to update and rebase your local code with Original repository (from where forked) while waiting to have PR reviewed.
+
+
+
+
 GIT fetch
 On its own, git fetch updates all the remote tracking branches in local repository
 No changes are actually reflected on any of the local working branches
@@ -255,6 +270,23 @@ GIT merge
 Without any arguments, git merge will merge the corresponding remote tracking branch to the local working branch.
 $ git merge
 $ git merge <branch_name>                     // merge changes on a seperate branch to current branch
+
+Fast Forward merge
+     A fast-forward merge can occur when there is a linear path from the current branch tip to the target branch.
+Three way merge
+     When there is not a linear path to the target branch, Git has no choice but to combine them via a 3-way merge. 
+     3-way merges use a dedicated commit to tie together the two histories. 
+     The nomenclature comes from fact that Git uses three commits to generate merge commit: the two branch tips and their common ancestor.
+$ git merge --no-ff <branch_name>            // generates a merge commit (even if it was a fast-forward merge).
+
+Resolving conflict
+If the two branches you're trying to merge both changed the same part of the same file, 
+Git won't be able to figure out which version to use.
+When such a situation occurs, it stops right before the merge commit so that you can resolve the conflicts manually.
+When you encounter merge conflict, running '$ git status' command shows you which files need to be resolved.
+When Git encounters conflict during a merge, It will edit content of affected files with visual indicators that mark both sides of conflicted content. 
+These visual markers are: <<<<<<<, =======, and >>>>>>>. Content before ======= marker is receiving branch and part after is merging branch.
+Once identified conflicting sections, fix up the merge to your liking and exact same process as committing an ordinary snapshot. ie '$ git add' , '$ git commit'
 
 
 
@@ -404,6 +436,25 @@ $ git log --pretty=oneline                       // prettify
 $ git log --name-status                          // shows file status in commits, just like 'git status -s'
 $ git log <SHAid>                                // display commit with <SHAid> and all the commits made before this commit.
 $ git log --graph --oneline                      // view git log as a graph
+
+
+
+GIT blame
+examine specific points of a file's history and get context as to who the last author was that modified the line.
+git blame only operates on individual files. A file-path is required for any useful output.
+$ git blame <file_path>                          // Id | Author | Timestamp | Line Number | Line Content
+
+$ git blame -L 1,5 <file_path>                   // -L option will restrict the output to the requested line range (here 1 to 5)
+
+$ git blame -e <file_path>                       // -e option shows the authors email address instead of username
+
+$ git blame -w <file_path>                       // -w option ignores whitespace changes
+
+$ git blame -M <file_path>                       // -M option detects moved or copied lines within in the same file. 
+                                                 // This will report original author of lines instead of last author that moved or copied lines
+						 
+$ git blame -C <file_path>                       // -C option detects lines that were moved or copied from other files. 
+                                                 // This will report original author of lines instead of last author that moved or copied lines.
 
 
 
