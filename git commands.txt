@@ -50,7 +50,6 @@ $ git push <remote_name> <branch_name>
 
 
 
-
 Adding a file to a repository.
 On your computer, move the file you'd like to upload to GitHub into the local directory that was created when you cloned the repository.
 
@@ -69,19 +68,25 @@ $ git push <remote_name> <branch_name>
 
 
 
+GIT add
+$ git add .
+$ git add -A
+$ git add --all                                  // Stage All (modified, new, deleted) files
+
+$ git add -u
+$ git add --update                               // Stage (modified, deleted) files only
+
+$ git add --ignore-removal                       // Stage (modified, new) files only
+
+
 
 GIT IGNORE
 # Reference : https://git-scm.com/docs/gitignore
 
-
 # A gitignore file specifies intentionally untracked files that Git should ignore. Files already tracked by Git are not affected.
-
 # Each line in a gitignore file specifies a pattern. 
-
 # A line starting with # serves as a comment. Put a backslash ("\#") in front of the first hash for patterns that begin with a hash.
-
 # Trailing spaces are ignored unless they are quoted with backslash ("\ ")
-
 # An optional prefix "!" which negates the pattern
 
 # If the pattern ends with a slash, it will find match with directory but NOT match a regular file.
@@ -291,6 +296,33 @@ Once identified conflicting sections, fix up the merge to your liking and exact 
 
 
 
+GIT cherry-pick
+Cherry picking is the act of picking a commit from a branch and applying it to another.
+It enables arbitrary Git commits to be picked by reference and appended to the current working HEAD.
+Usage : 
+      It can be useful for undoing changes.
+      There may be some shared code between product sectors. Like backend and frontend, which can be picked from other and applied.
+      The new patch commit of a bug can be cherry-picked directly to master branch to fix the bug before it effects more users.
+
+$ git checkout <TARGET_BRANCH>                       // First checkout to branch , where to apply cherry picked commit.
+
+                                a - b - c - d        <TARGET_BRANCH>
+                                    \
+                                     e - f - g       <Feature_BRANCH>
+
+$ git cherry-pick <SHAid>                             // Find a commit reference <SHAid> by using   $ git log
+
+                                a - b - c - d - f     <TARGET_BRANCH>
+                                    \
+                                     e - f - g        <Feature_BRANCH>
+
+$ git cherry-pick -edit <SHAid>                      // Prompt for a commit message before applying the cherry-pick operation
+
+$ git cherry-pick --no-commit <SHAid>                // Instead of making new commit it will move contents of target commit into working directory of current branch.
+
+
+
+
 GIT rebase
 Rebasing is an alternative to merging. 
 Instead of creating a new commit that combines the two branches, it moves the commits of one of the branches on top of the other.
@@ -415,6 +447,7 @@ $ git config --list                                     // Describes the .config
 
 
 
+
 GIT log
 it displays all of the commits in a respository’s history
 displays each commit's    Secure Hash Algorithm (SHA) | author | date | commit message
@@ -436,6 +469,42 @@ $ git log --pretty=oneline                       // prettify
 $ git log --name-status                          // shows file status in commits, just like 'git status -s'
 $ git log <SHAid>                                // display commit with <SHAid> and all the commits made before this commit.
 $ git log --graph --oneline                      // view git log as a graph
+
+
+
+
+GIT bisect
+Use a binary search algorithm to find which commit in your project’s history introduced a bug.
+You use it by first telling it a "bad" commit that is known to contain the bug, and a "good" commit that is known to be before the bug was introduced.
+Then git bisect picks a commit between those two endpoints and asks you whether the selected commit is "good" or "bad".
+It continues narrowing down the range until it finds the exact commit that introduced the change.
+
+$ git bisect start
+$ git bisect bad                           // Current version is bad
+$ git bisect good <SHAid-of-good-commit>   // Commit that is known to be good
+
+You should now compile the checked-out version and test it. If that version works correctly, type
+$ git bisect good
+
+If that version is broken, type
+$ git bisect bad
+
+Keep repeating the process: compile the tree, test it, and depending on whether it is good or bad 
+run git bisect good or git bisect bad to ask for the next commit that needs testing.
+
+After a bisect session, to clean up the bisection state and return to the original HEAD, issue the following command:
+$ git bisect reset
+
+By default, this will return your tree to the commit that was checked out before git bisect start.
+With an optional argument, you can return to a different commit instead:
+$ git bisect reset <SHAid>
+
+Sometimes you are not looking for the commit that introduced a breakage,
+but rather for a commit that caused a change between some other "old" state and "new" state. 
+For example, you might be looking for the commit that introduced a particular fix
+You can use the terms "old" and "new", respectively, in place of "good" and "bad".
+(But note that you cannot mix "good" and "bad" with "old" and "new" in a single session.)
+
 
 
 
