@@ -1,0 +1,160 @@
+
+Developer's     : job is to add new features.
+Operations's    : job is to keep site stable and fast.
+Tester's           : job is to reduce risk.
+
+
+
+DevOps
+            It solves customer problems
+            It is for cloud
+            It is a solution
+            It is a tool
+            It is a skill to master 
+
+Agile breaks wall between Business and Development team.
+DevOps breaks wall between Development and Operations team.
+
+
+
+- Dev           :  people involved in developing product.
+- Ops           : system engineers, administrators, operations staff, release engineers, DBA, network engineers, security engineers.
+- Agile          : collaboration of customers, product management, developers, QA
+- DevOps     : extending principles of Agile to entire delivered service.
+                      - improved deployment frequency.
+                      - faster time to market.
+                      - lower failure rate.
+                      - shortened lead time between fixes.
+                      - faster mean time to recovery in event of a new relaease crashing.
+- CD              : Continuous Delivery
+- CI               : Continuous Integration
+- Lead time                : time between identification of requirement and it's fulfillment.
+- Mean time to failure : time for which a system or application will last in operation.
+
+
+
+DevOps practice involves
+-----------------------------------
+- Version control for all
+- Automated testing
+- Proactive monitoring and metrics
+- Configuration management
+- Continuous Integration / Delivery / Deployment
+- Virtualization / Coud / Containers
+- Toolchain approach
+
+
+
+DevOps tools
+-------------------
+Development
+     Source Code Management
+           - Git
+     Continuous Integration
+           - Ant, Maven, Gradle      ( Build )
+           - Jenkins, Travis             ( Platforms for orchestration )
+           - Selenium, Cucumber    ( Testing )
+Operations
+      Configuration Management
+           - Chef, Puppet
+      Containers
+           - Docker
+      Monitoring
+           - Naglos
+
+
+
+CI workflow
+----------------
+- Checkout new branch from Git
+- Code new feature
+- Run automated build on dev machine
+- Merge with latest changes to master from Git
+- Commit
+- Run build
+
+Benefits of CI
+------------------
+- Reduced risk
+- Bugs and problems discovered in time
+- System is deployable more frequently, enabling more user feedback
+
+Best practices of CI
+-------------------------
+- Maintain single source repository
+- Automate build
+- Make build self testing
+- Everyone commits to master branch everyday
+- Fix broken builds immediately
+- Keep build fast
+- Everyone can see what's happening
+- Automate deployment
+
+
+
+CD enablers
+----------------
+- Comprehensive configuration management
+- CI
+- Continuous Testing
+
+Benefits of CD
+--------------------
+- Low risk releases
+- Faster time to market
+- Higher quality
+- Lower costs
+- Better products
+
+
+
+Deployment pipeline
+--------------------------
+- Every change in Git , triggers a process (usually in CI server) which creates deployable packages
+  and runs automated unit tests and other validations such as static code analysis.
+- If this initial commit stage fails, problem must be fixed immediately
+- Every passing commit stage triggers next step in pipeline, which consists of more comprehensive set of automated tests.
+- Versions of software that pass all automated tests can then be deployed on demand to further stages such as performace testing, staging, production.
+
+
+
+Jenkins
+---------
+- Jenkins is an orchestration and automation engine.
+- It is extremely pluggable, with a lot of plug-ins emerged.
+- The idea of CI is to merge code from individual developers into a project mulitple times per day and test continuously to avoid downstream problems.
+- CD ensures that all merged code is always in a production ready state.
+- Jenkins enables developers to automate this process as much as possible upto point of deployment
+
+
+
+CM ( Configuration Management )
+--------------------------------------------
+- To establish and maintain integrity of products of software project.
+- It refers to discipline for evaluating, coordinating, approving or disapproving and implementing changes in artifacts that are used to construct and maintain software,
+- An artifact is a piece of hardware or software or documentation.
+- It controls inevitable changes.
+- Without CM, team members can create versions without authority, use wrong version of artifact.
+
+Chef
+------
+- A CM tool
+- Recipe is a configuration script used in Chef
+- Collection of scripts is called CookBook
+- Tool with which scripts created, it is called Knife.
+- Three entities Chef Server, Workstation, Nodes.
+- Chef server is like a repository, Workstation is like development machine, Node is target system to which configuration needs to be applied.
+
+
+
+Continuous Deployment
+-------------------------------
+- It is a business specific need and might not always required to be performed.
+- Blue Green deployment method
+           - A technique to reduce downtime and risk by running two identical production environments called Blue and Green
+           - At anytime only one of environments is live , serving all production traffic.
+- Rollback also is an important part of automated deployment.
+
+
+
+
