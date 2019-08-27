@@ -276,15 +276,15 @@ Without any arguments, git merge will merge the corresponding remote tracking br
 $ git merge
 $ git merge <branch_name>                     // merge changes on a seperate branch to current branch
 
-Fast Forward merge
+- Fast Forward merge
      A fast-forward merge can occur when there is a linear path from the current branch tip to the target branch.
-Three way merge
+- Three way merge
      When there is not a linear path to the target branch, Git has no choice but to combine them via a 3-way merge. 
      3-way merges use a dedicated commit to tie together the two histories. 
      The nomenclature comes from fact that Git uses three commits to generate merge commit: the two branch tips and their common ancestor.
 $ git merge --no-ff <branch_name>            // generates a merge commit (even if it was a fast-forward merge).
 
-Resolving conflict
+- Resolving conflict
 If the two branches you're trying to merge both changed the same part of the same file, 
 Git won't be able to figure out which version to use.
 When such a situation occurs, it stops right before the merge commit so that you can resolve the conflicts manually.
@@ -292,6 +292,14 @@ When you encounter merge conflict, running '$ git status' command shows you whic
 When Git encounters conflict during a merge, It will edit content of affected files with visual indicators that mark both sides of conflicted content. 
 These visual markers are: <<<<<<<, =======, and >>>>>>>. Content before ======= marker is receiving branch and part after is merging branch.
 Once identified conflicting sections, fix up the merge to your liking and exact same process as committing an ordinary snapshot. ie '$ git add' , '$ git commit'
+
+- Merge Selective Files
+$ git merge --no-ff --no-commit <branch_name>        // --no-commit option will stage files that have been merged by Git without actually committing them.
+$ git status -v                                     // to view the status of modified files.
+$ git diff --cached <file_path>                     // Changes between the INDEX and last commit ie HEAD
+      $ git checkout HEAD <file_path>               // CASE 1 : retain version in the current branch, overwrite file automerged by Git.
+      $ git checkout <branch_name> <file_path>      // CASE 2 : retain version in <branch_name>, overwrite file automerged by Git.
+$ git commit -m "commit merged selective files"     // Commit your changes
 
 
 
