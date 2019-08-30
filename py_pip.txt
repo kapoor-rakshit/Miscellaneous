@@ -1,0 +1,41 @@
+
+# REFERENCE : https://pip.pypa.io/en/stable/user_guide/
+
+
+pip installation
+ $ sudo apt-get install python-pip                    // LINUX
+                                                      // WINDOWS , if python is installed on your system, then pip comes in handy.                                                                                            
+
+pip is a command line program which can be run from the command prompt as follows:
+ $ pip <pip arguments>
+
+
+If you cannot run the pip command directly (possibly because the location where it was installed isn’t on your operating system’s PATH)
+then you can run pip via the Python interpreter:
+ $ python -m pip <pip arguments>
+
+
+Requirements files are files containing a list of items to be installed using pip install:
+ $ pip install -r <name_of_requirements_file>
+ 
+ Generating requirements.txt
+ By default, it will generate all packages installed on system using 'pip' command ever on system.
+ To have packages only for specific project , it is recommended to have 'virtualenv' for each project.
+   $ pip freeze > <name_of_requirements_file>
+ 
+ Requirements file format
+ Each line of the requirements file indicates something to be installed, just like args to 'pip install'.
+ A line that begins with '#' is treated as a comment and ignored.
+ A line ending in an unescaped '\' is treated as a line continuation and the newline following it is effectively ignored.
+   -r <other_requirements.txt>                                 # refer to other requirements files
+   beautifulsoup4                                              # without Version Specifiers
+   docopt == 0.6.1                                             # Version Matching. Must be version 0.6.1
+   keyring >= 4.1.1                                            # Minimum version 4.1.1
+   coverage != 3.5                                             # Version Exclusion. Anything except version 3.5
+   -e git+https://git.example.com/MyProject#egg=MyProject      # cloning from VCS
+   -e git://git.example.com/MyProject.git@master#egg=MyProject   # specify branch
+   -e git://git.example.com/MyProject.git@da39709#egg=MyProject  # specify commit hash
+ 
+
+Uninstalling package
+ $ pip uninstall <SomePackage>
