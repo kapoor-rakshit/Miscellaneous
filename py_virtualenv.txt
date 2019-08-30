@@ -1,0 +1,50 @@
+
+# REFERENCE : https://www.geeksforgeeks.org/creating-python-virtual-environment-windows-linux/
+            : https://www.geeksforgeeks.org/python-virtual-environment/
+
+
+A Virtual Environment is a python environment, 
+that is an isolated working copy of Python which allows you to work on a specific project without affecting other projects.
+So basically it is a tool that enables multiple side-by-side installations of Python, one for each project.
+
+Virtual Environment should be used whenever you work on any Python based project. 
+It is generally good to have one new virtual environment for every Python based project you work on.
+It helps to keep dependencies required by different projects separate by creating isolated python virtual environments for them, isolated from the complete system.
+
+
+If pip is not in your system
+ $ sudo apt-get install python-pip                  // LINUX
+                                                    // WINDOWS , if python is installed on your system, then pip comes in handy.
+Then install virtualenv
+ $ pip install virtualenv                           // LINUX
+ > pip install virtualenv                           // WINDOWS
+ 
+Now check your installation
+ $ virtualenv --version
+ 
+Create a virtual environment
+ $ virtualenv <virtualenv_name>                     // LINUX
+ > virtualenv <virtualenv_name>                     // WINDOWS
+ 
+If you want to create a virtualenv for specific python interpreter version
+ $ virtualenv -p /usr/bin/python3 <virtualenv_name>
+     or
+ $ virtualenv -p /usr/bin/python2.7 <virtualenv_name>
+
+After this command, a folder named <virtualenv_name> will be created.
+This is where Python packages will be installed.
+ 
+Now at last we just need to activate it, using command
+ $ source <virtualenv_name>/bin/activate           // LINUX
+ > <virtualenv_name>\Scripts\activate              // WINDOWS
+ 
+Now you are in a Python virtual environment
+Once the virtual environment is activated, the name of your virtual environment will appear on left side of terminal. 
+This will let you know that the virtual environment is currently active.
+
+Once you are done with the work you can deactivate it.
+Now you will be back to system’s default Python installation.
+ $ deactivate                                      // LINUX
+ > deactivate                                      // WINDOWS
+
+
