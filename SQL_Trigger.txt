@@ -1,0 +1,15 @@
+
+/* REFERENCE : https://www.geeksforgeeks.org/sql-trigger-student-database/ */
+
+-- A trigger is a stored procedure in database which automatically invokes whenever a special event in the database occurs.
+
+-- create trigger [trigger_name] [before | after]  {insert | update | delete}  on [table_name]  [for each row]  [trigger_body];
+
+create trigger stud_marks
+before INSERT
+on
+Student
+for each row
+set Student.total = Student.subj1 + Student.subj2 + Student.subj3, Student.per = Student.total * 60 / 100;
+
+
