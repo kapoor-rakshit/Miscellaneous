@@ -1,0 +1,78 @@
+
+Before Cloud Computing
+--------------------------------
+1. Buy costly stack of servers
+2. Varied Traffic ie server may be idle for most time or too busy at other time
+3. Monitoring and Maintenance of servers
+
+
+
+Service Models
+--------------------
+1. SaaS  ( Software as a Service )          ( Eg: Gmail )
+    manage only Data by user , others like Application, Runtime, Middleware, OS, Servers, Storage etc... are maintained by vendor
+
+2. PaaS  ( Platform as a Service )           ( Eg: Heroku , Google App Engine )
+    manage Application and Data by user , others like Runtime, Middleware, OS, Servers, Storage etc... are maintained by vendor
+
+3. IaaS   ( Infrastructure as a Service )    ( Eg: AWS EC2 , Google Compute Engine (GCE) )
+    manage Application, Data, Runtime, Middleware, OS by user , others like Servers, Storage etc... are maintained by vendor
+
+
+
+Deployment Models
+-------------------------
+1. Public Cloud
+2. Private Cloud
+3. Hybrid Cloud  ( Public + Private )
+
+
+
+Cloud Providers
+---------------------
+1. GCP  ( Google Cloud Platform )
+2. AWS  ( Amazon Web Services )
+3. DigitalOcean
+4. IBM Cloud
+5. Microsoft Azure
+6. terremark
+
+
+
+Why AWS
+--------------
+1. Realtime Security insights
+2. Backups , Launch instances
+3. Tools for recovery
+4. Cost Tracking
+5. Automated Scheduling
+6. Less Downtime
+7. Global architecture , regions , availability zones
+8. Free Tier , Pay as you go ( pay for only hours used )
+
+
+
+AMI  ( Amazon Machine Image )
+------------------------------------------
+   It is an image of server, including OS and additional softwares which runs on AWS.
+   Preconfigured templates for creation of virtual servers (EC2 instances) in AWS environment.
+   Users can select AMI provided by AWS , user community or AWS marketplace.
+   It is not a virtual machine ( instance ) , it is just a template
+
+
+
+Security Group
+-------------------
+                       Eg:- SSH service needed to connect instances
+    Filters traffic
+    Controls traffic
+    Security at protocol and port access level
+    NOTE : Use public IP in source if we donot have static ip , found via "ip" on google search.
+
+
+
+
+
+
+
+
