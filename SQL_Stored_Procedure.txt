@@ -1,0 +1,62 @@
+
+/* REFERENCE : https://www.w3schools.com/sql/sql_stored_procedures.asp */
+/*           : https://www.w3resource.com/mysql/mysql-procedure.php */
+
+-- A stored procedure is a prepared SQL code that you can save, so the code can be reused over and over again.
+-- We can pass parameters to a stored procedure, so that the stored procedure can act based on the parameter value(s) that is passed.
+
+-- CREATE PROCEDURE procedure_name() [sql_statement];          /* Create STORED PROCEDURE */
+-- CALL procedure_name();                                      /* Execute STORED PROCEDURE */
+
+-- By default, a procedure is associated with the default database (currently used database). 
+-- To associate the procedure with a given database, specify the name as database_name.stored_procedure_name when you create it.
+
+-- Pick a Delimiter
+-- The delimiter is the character or string of characters which is used to complete an SQL statement. 
+-- By default we use semicolon (;) as a delimiter. But this causes problem in stored procedure because procedure can have many statements, and everyone must end with a semicolon. 
+-- So for your delimiter, pick a string which rarely occur within statement or within procedure.
+
+-- In a procedure, each parameter is an IN parameter by default.
+
+
+/* 1 */
+DELIMITER $$ ;
+DELIMITER ; $$                    /* to resume ";" as a delimiter  */
+
+/* 2 */
+/* IN parameter passes a value into a procedure initialized by the caller */
+/* IN parameter 'var1' (type integer) which accept a number from the user */
+CREATE PROCEDURE my_proc_IN (IN var1 INT)
+BEGIN
+SELECT * FROM jobs LIMIT var1;
+END$$
+
+CALL my_proc_in(2)$$                                /* call to IN parameterized procedure */
+
+
+/* 3 */
+/* OUT parameter passes a value from the procedure back to the caller. */
+/* its initial value within the procedure is NULL */
+CREATE PROCEDURE my_proc_OUT (OUT highest_salary INT)
+BEGIN
+SELECT MAX(MAX_SALARY) INTO highest_salary FROM JOBS;
+END$$
+
+CALL my_proc_OUT(@M)$$                            /* call to OUT parameterized procedure */
+SELECT @M$$                                       /* use value of OUT var */
+
+
+/* 4 */
+/* INOUT parameter is initialized by the caller, can be modified by the procedure,
+/* The value passed by the caller is the parameter's initial value within the procedure */
+/* and any change made by the procedure is visible to the caller when the procedure returns. */
+CREATE PROCEDURE my_proc_INOUT (INOUT mfgender INT, IN emp_gender CHAR(1))
+BEGIN
+SELECT COUNT(gender)*@mfgender INTO mfgender FROM user_details WHERE gender = emp_gender;
+END$$
+
+set @c = 10
+CALL my_proc_INOUT(@C,'F')$$
+SELECT @C$$
+
+
