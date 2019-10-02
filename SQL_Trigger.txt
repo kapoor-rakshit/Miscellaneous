@@ -5,8 +5,16 @@
 
 -- create trigger [trigger_name] [before | after]  {insert | update | delete}  on [table_name]  [for each row]  [trigger_body];
 
+-- A for each row trigger is a trigger whose [trigger_body] fire for each row to be changed. Accordingly, it has [for each row]
+-- A table level trigger is a trigger whose [trigger_body] doesn't fire for each row changed but just once. Accordingly, it lacks [for each row]
+
+-- To distinguish between the value of the columns BEFORE and AFTER the DML has fired, use the NEW and OLD modifiers.
+
+-- Order of execution of triggers is undeterministic (or random) except that all BEFORE triggers fire before the AFTER triggers.
+
 
 /* 1 */
+/* use of SET in TRIGGER BODY */
 create trigger stud_marks
 before INSERT
 on
@@ -16,6 +24,7 @@ set Student.total = Student.subj1 + Student.subj2 + Student.subj3, Student.per =
 
 
 /* 2 */
+/* an example from WIPRO */
 USE rsmedb;
 delimiter #
 CREATE DEFINER=`hmiuser`@`%` TRIGGER `loginDetail_after_insert` AFTER INSERT ON `loginDetail` FOR EACH ROW
