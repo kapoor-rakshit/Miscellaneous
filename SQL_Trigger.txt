@@ -5,11 +5,32 @@
 
 -- create trigger [trigger_name] [before | after]  {insert | update | delete}  on [table_name]  [for each row]  [trigger_body];
 
+
+/* 1 */
 create trigger stud_marks
 before INSERT
 on
 Student
 for each row
 set Student.total = Student.subj1 + Student.subj2 + Student.subj3, Student.per = Student.total * 60 / 100;
+
+
+/* 2 */
+USE rsmedb;
+delimiter #
+CREATE DEFINER=`hmiuser`@`%` TRIGGER `loginDetail_after_insert` AFTER INSERT ON `loginDetail` FOR EACH ROW
+BEGIN
+IF(STRCMP(new.role, "ADMIN") = 0) THEN
+          SET @role_from_loginDetail = 'ROLE_ADMIN';
+ELSE
+          SET @role_from_loginDetail = 'ROLE_USER';
+END IF;
+INSERT INTO loginDetailTable (username, password, authority) VALUES (new.loginId, new.password, @role_from_loginDetail);
+END#
+
+
+/* 3 */
+/* Checking if trigger added */
+SELECT * FROM INFORMATION_SCHEMA.TRIGGERS;
 
 
