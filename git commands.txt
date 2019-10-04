@@ -418,6 +418,9 @@ $ git reset --mixed HEAD
 If you omit the <MODE>, it defaults to --mixed.
 If you omit the <COMMIT>, it defaults to HEAD.
 
+NOTE : if we directly use $ git push to push the changes, it will not update remote repo as remote origin still has HEAD point to other.
+       we need to add a -f option to force pushing the changes        $ git push -f
+
 
 
 
@@ -428,10 +431,12 @@ Git revert is a safer alternative to git reset in regards to losing work.
     git reset , can only work backward from the current commit, 
     git revert, is able to target an individual commit at an arbitrary point in the history.
 This prevents Git from losing history, which is important for the integrity of your revision history and for reliable collaboration.
-git revert undoes a single commit to it's parent.
-it does NOT "revert" back to the previous state of a project by removing all subsequent commits.
+git revert undoes a single commit to it's parent and keep all the original commits.
 
 $ git revert HEAD                       // passed in the HEAD ref.  or  any commit SHAid
+
+NOTE : If we revert a commit at an arbitrary point in the history it will have HEAD point to this reverted operation commit.
+       To have HEAD point to specific commit after revert use     $ git cherry-pick <commit_SHAid>
 
 
 
