@@ -1,0 +1,37 @@
+
+/* REFERENCE : https://dev.mysql.com/doc/mysql-backup-excerpt/5.7/en/mysqldump-sql-format.html
+             : https://dev.mysql.com/doc/mysql-backup-excerpt/5.7/en/reloading-sql-format-dumps.html */
+             
+
+/* 1 */
+/* dump all databases */
+shell> mysqldump --all-databases > dump.sql
+shell> mysqldump -u root -p --all-databases > dump.sql     -- prompted to enter password. After authentication, dump process will start.
+
+
+/* 2 */
+/* dump only specific databases */
+shell> mysqldump --databases db1 db2 db3 > dump.sql
+shell> mysqldump -u root -p --databases database_name > database_dump_name.sql
+
+
+/* 3 */
+/* dump only specific tables from a database , name them following the database name */
+shell> mysqldump testDB table1 table3 table7 > dump.sql
+
+
+-- NOTE : If the dump file was created by mysqldump with the --all-databases or --databases option,
+--        it contains CREATE DATABASE and USE statements and it is not necessary to specify a default database into which to load the data
+
+/* 4 */
+/* Restoring backup (dump) */
+shell> mysql < dump.sql                                 --  from shell
+mysql> source dump.sql                                  --  from within mysql
+
+shell> mysql -u root -p database_name < database_name.sql   -- -p : password parameter
+
+mysql> CREATE DATABASE IF NOT EXISTS db1;               -- create database, select it as default database, and load dump file
+mysql> USE db1;
+mysql> source dump.sql
+
+
