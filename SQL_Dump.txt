@@ -1,6 +1,7 @@
 
 /* REFERENCE : https://dev.mysql.com/doc/mysql-backup-excerpt/5.7/en/mysqldump-sql-format.html
-             : https://dev.mysql.com/doc/mysql-backup-excerpt/5.7/en/reloading-sql-format-dumps.html */
+             : https://dev.mysql.com/doc/mysql-backup-excerpt/5.7/en/reloading-sql-format-dumps.html 
+             : https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html */
              
 
 /* 1 */
@@ -20,18 +21,35 @@ shell> mysqldump -u root -p --databases database_name > database_dump_name.sql
 shell> mysqldump testDB table1 table3 table7 > dump.sql
 
 
+/* 4 */
+/* Other Options */
+/* --add-drop-database   :   Add DROP DATABASE statement before each CREATE DATABASE statement
+   --add-drop-table      :   Add DROP TABLE statement before each CREATE TABLE statemen
+   --add-drop-trigger    :   Add DROP TRIGGER statement before each CREATE TRIGGER statement
+   --all-databases       :   Dump all tables in all databases
+   --complete-insert     :   Use complete INSERT statements that include column names
+   --databases           :   Interpret all name arguments as database names
+   --routines            :   Dump stored routines (procedures and functions) from dumped databases
+*/
+
+
 -- NOTE : If the dump file was created by mysqldump with the --all-databases or --databases option,
 --        it contains CREATE DATABASE and USE statements and it is not necessary to specify a default database into which to load the data
 
-/* 4 */
+/* 1 */
 /* Restoring backup (dump) */
-shell> mysql < dump.sql                                 --  from shell
-mysql> source dump.sql                                  --  from within mysql
+shell> mysql < dump.sql                                 --  from shell         -- this command will replace all current mySQL DBs with dump.sql DBs
+mysql> source dump.sql                                  --  from within mysql  -- this command will replace current or all (as used) mySQL DBs with dump.sql DBs
 
-shell> mysql -u root -p database_name < database_name.sql   -- -p : password parameter
+shell> mysql -u root -p database_name < database_name.sql   -- -p : password parameter   -- restore dump file to database_name DB
 
 mysql> CREATE DATABASE IF NOT EXISTS db1;               -- create database, select it as default database, and load dump file
 mysql> USE db1;
 mysql> source dump.sql
+
+
+/* 2 */
+/* Restore One Database From All Database mysqldump */
+shell> mysql -p --one-database database_name < all_databases_dump.sql    --  -o or --one-database to Restore One Database
 
 
