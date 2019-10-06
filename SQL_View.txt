@@ -4,10 +4,10 @@
 
 /* In SQL, a view is a virtual table based on the result-set of an SQL statement.
    The fields in a view are fields from one or more real tables in the database.
-   NOTE : a view does not physically store the data. 
+   NOTE : a view does not physically store the data, so any DML command made to VIEW will effect original table(s).
 */
 
--- CREATE OR REPLACE VIEW view_name AS SELECT column1, column2 FROM table_name WHERE condition;
+-- Syntax : CREATE OR REPLACE VIEW view_name AS SELECT column1, column2 FROM table_name WHERE condition;
 
 
 /* 1 */
@@ -15,8 +15,14 @@
 CREATE OR REPLACE VIEW Brazil_Customers AS
 SELECT CustomerName, ContactName, City FROM Customers WHERE Country = "Brazil";
 
+
 /* 2 */
 /* Dropping a view */
 DROP VIEW view_name;
+
+
+/* 3 */
+/* Check if view created */
+SELECT * FROM INFORMATION_SCHEMA.VIEWS;
 
 
