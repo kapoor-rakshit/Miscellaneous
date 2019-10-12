@@ -1,0 +1,52 @@
+
+/* REFERENCE : https://www.geeksforgeeks.org/mysql-creating-stored-function/ */
+
+-- A stored function is a set of SQL statements that perform some operation and return a single value.
+-- Just like Mysql in-built function, it can be called from within a Mysql statement.
+
+-- By default, the stored function is associated with the default database.
+-- In order to associate routine explicitly with a specific database function name should be given as database_name.func_name
+
+-- The CREATE FUNCTION statement require CREATE ROUTINE database privilege.
+
+-- Syntax : CREATE FUNCTION function_name(func_parameter1 datatype, func_parameter2 datatype, ..)
+--            RETURN datatype [characteristics]
+--            func_body
+
+-- function_name   : It is the name by which stored function is called. The name should not be same as native(built_in) function.
+-- func_parameter  : It is the argument whose value is used by the function inside its body. You can’t specify to these parameters IN, OUT, INOUT.
+-- datatype        : It is datatype of value returned by function.
+-- characteristics : The CREATE FUNCTION statement is accepted only if at least one of the characterisitics is specified in its declaration.
+--                    DETERMINISTIC  : A routine is considered “deterministic” if it always produces the same result for the same input parameters, and “not deterministic” (default) otherwise.
+--                    NO SQL         : A routine contains no SQL statements.
+--                    READS SQL DATA : A routine contains statements that read data (for example, SELECT), but not statements that write data.
+-- func_body       : is the set of Mysql statements that perform operation. It's structure is as follows:
+--                   BEGIN
+--                    Mysql Statements
+--                    RETURN expression;                         /* The function body must contain one RETURN statement */
+--                   END
+
+
+/* 1 */
+DELIMITER //                                                                       -- change delimiter to //
+CREATE FUNCTION no_of_years(date1 DATE) RETURNS INT DETERMINISTIC
+BEGIN
+ DECLARE date2 DATE;
+ SELECT current_date() INTO date2;
+ RETURN year(date2)-year(date1);
+END//
+DELIMITER ;                                                                        -- change/restore delimiter to default (;)
+
+Select emp_id, fname, lname, no_of_years(start_date) as 'years' from employee;     -- call to storedFunction
+
+
+/* 2 */
+/* The routines table in the information_schema database contains all information on the stored procedures and stored functions of all databases in the current MySQL server */
+SELECT routine_name FROM information_schema.routines WHERE routine_type = 'FUNCTION' AND routine_schema = '<database_name>';
+
+
+/* 3 */
+/* delete function */
+DROP FUNCTION [IF EXISTS] <stored_function_name>;
+
+
