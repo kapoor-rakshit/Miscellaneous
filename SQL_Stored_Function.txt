@@ -10,7 +10,7 @@
 -- The CREATE FUNCTION statement require CREATE ROUTINE database privilege.
 
 -- Syntax : CREATE FUNCTION function_name(func_parameter1 datatype, func_parameter2 datatype, ..)
---            RETURN datatype [characteristics]
+--            RETURNS datatype [characteristics]
 --            func_body
 
 -- function_name   : It is the name by which stored function is called. The name should not be same as native(built_in) function.
