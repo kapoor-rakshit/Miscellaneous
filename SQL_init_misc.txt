@@ -1,0 +1,45 @@
+
+/* SCHEMA */
+-- In some database system schema represents a part of database or a collection of Tables, and collection of schema is a database.
+-- However in MySQL schema is synonym of database. so CREATE SCHEMA is nothing but CREATE DATABASE.
+
+
+
+/* USER, GRANTS, REVOKE */
+-- when inside mysql shell to create new user
+mysql> CREATE USER 'newusername'@'localhost' IDENTIFIED BY 'password';
+
+
+-- delete user
+-- mysql> DROP USER ‘username’@‘localhost’;
+
+-- At this point newuser created has no permissions to do anything with the databases.
+-- In fact, even if newuser tries to login (with the password, password), they will not be able to reach the MySQL shell.
+-- we need to grant permissions to user for same.
+
+/* PERMISSIONS */
+-- ALL PRIVILEGES  allow a MySQL user full access to a designated database (or if no database is selected, global access across the system)
+-- CREATE          allows them to create new tables or databases
+-- DROP            allows them to them to delete tables or databases
+-- DELETE          allows them to delete rows from tables
+-- INSERT          allows them to insert rows into tables
+-- SELECT          allows them to use the SELECT command to read through databases
+-- UPDATE          allow them to update table rows
+-- GRANT OPTION    allows them to grant or revoke other users’ privileges
+
+-- Syntax : GRANT type_of_permission ON database_name.table_name TO ‘username’@'IP_ADDRESS_OF_MACHINE’;
+mysql> GRANT ALL PRIVILEGES ON *.* TO 'username'@'localhost';        -- here ALL PRIVILEGES are granted on all databases (*) and on all tables (*)
+
+
+-- To revoke a permission
+-- Syntax : REVOKE type_of_permission ON database_name.table_name FROM ‘username’@‘localhost’;
+
+-- default "mysql" DB contain grant information in following tables
+-- user             : User accounts, static global privileges, and other nonprivilege columns.
+-- db               : Database-level privileges.
+-- tables_priv      : Table-level privileges.
+-- columns_priv     : Column-level privileges.
+-- procs_priv       : Stored procedure and function privileges.
+-- password_history : Password change history.
+
+
