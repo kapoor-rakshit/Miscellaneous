@@ -60,3 +60,13 @@ CALL my_proc_INOUT(@C,'F')$$
 SELECT @C$$
 
 
+/* 5 */
+/* The routines table in the information_schema database contains all information on the stored procedures and stored functions of all databases in the current MySQL server */
+SELECT routine_name FROM information_schema.routines WHERE routine_type = 'PROCEDURE' AND routine_schema = '<database_name>';
+
+
+/* 6 */
+/* delete procedure */
+DROP PROCEDURE [IF EXISTS] <stored_procedure_name>;
+
+
