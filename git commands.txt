@@ -12,8 +12,25 @@ INDEX is a staging area where the new commit is prepared.
 HEAD is a pointer to the branch or commit that you last checked out, and which will be the parent of a new commit.
      so when you commit, you are updating HEAD to your new commit, which matches the index (STAGING AREA).
      
-NOTE : $ git add <path>      , updates the index from the working tree.
-     : $ git checkout <path> , updates working tree from index.
+NOTE : $ git add <path> <path> <path>      , updates the index from the working tree.
+     : $ git checkout <path> <path> <path> , updates working tree from index.
+     
+     
+GIT add
+$ git add .
+$ git add -A
+$ git add --all                                  // Stage All (modified, new, deleted) files
+
+$ git add -u
+$ git add --update                               // Stage (modified, deleted) files only
+
+$ git add --ignore-removal                       // Stage (modified, new) files only
+
+
+GIT rm/mv
+$ git rm <file_path>                             // delete file from WORKING TREE and STAGE removal for commit
+
+$ git mv <current_file_path> <new_file_path>     // move file in WORKING TREE and STAGE move for commit.
 
 
 
@@ -66,17 +83,6 @@ $ git commit -m "Add existing file"
 Push the changes in your local repository to GitHub.
 $ git push <remote_name> <branch_name>
 
-
-
-GIT add
-$ git add .
-$ git add -A
-$ git add --all                                  // Stage All (modified, new, deleted) files
-
-$ git add -u
-$ git add --update                               // Stage (modified, deleted) files only
-
-$ git add --ignore-removal                       // Stage (modified, new) files only
 
 
 
@@ -296,7 +302,7 @@ Once identified conflicting sections, fix up the merge to your liking and exact 
 - Merge Selective Files
 $ git merge --no-ff --no-commit <branch_name>        // --no-commit option will stage files that have been merged by Git without actually committing them.
 $ git status -v                                     // to view the status of modified files.
-$ git diff --cached <file_path>                     // Changes between the INDEX and last commit ie HEAD
+$ git diff --cached <file_path>                     // Changes between the STAGE (INDEX) and last commit ie HEAD
       $ git checkout HEAD <file_path>               // CASE 1 : retain version in the current branch, overwrite file automerged by Git.
       $ git checkout <branch_name> <file_path>      // CASE 2 : retain version in <branch_name>, overwrite file automerged by Git.
 $ git commit -m "commit merged selective files"     // Commit your changes
@@ -541,8 +547,9 @@ $ git blame -C <file_path>                       // -C option detects lines that
 
 
 GIT status
-Show the working tree status
-Displays paths that have differences between the index file and the current HEAD commit
+Show the WORKING TREE and INDEX (staging area) status.
+Changes which have been staged, which haven’t, and which files aren’t being tracked by Git.
+git status command does not show you any information regarding the committed project history. For this, you need to use git log.
 $ git status
 $ git status -v                                 // verbose output
 $ git status -s                                 // short-format output
@@ -550,10 +557,16 @@ $ git status -s                                 // short-format output
 
 
 GIT diff
-By default git diff will show you any uncommitted changes since the last commit.
+By default git diff will show you changes since the last commit ie WORKING TREE and STAGE.
 $ git diff                                         // the @@ symbol, that means beginning of a new chunk or set of modifications
 					           // @@ -34,6 +34,8 @@ , 6 lines have been extracted starting from line number 34. 8 lines have been added starting at line number 34.
                                                    // file markers (+ -) help you to identify which file the changes belong to
+				   
+$ git diff --staged                                // View difference between STAGE and HEAD.
+$ git diff --cached                                // --cached is synonym of --staged
+
+$ git diff HEAD                                    // View difference between WORKING TREE and HEAD (or any <SHAid>).
+
 Comparing files between two different commits
 $ git diff <SHAid1> <SHAid2>                       // SHAid can be found using  $ git log
 
