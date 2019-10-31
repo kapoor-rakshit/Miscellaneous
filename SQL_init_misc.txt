@@ -5,13 +5,13 @@
 
 
 
+
 /* USER, GRANTS, REVOKE */
--- when inside mysql shell to create new user
+/* CREATE NEW USER */
 mysql> CREATE USER 'newusername'@'localhost' IDENTIFIED BY 'password';
 
-
--- delete user
--- mysql> DROP USER ‘username’@‘localhost’;
+/* DELETE USER */
+mysql> DROP USER ‘username’@‘localhost’;
 
 -- At this point newuser created has no permissions to do anything with the databases.
 -- In fact, even if newuser tries to login (with the password, password), they will not be able to reach the MySQL shell.
@@ -27,13 +27,13 @@ mysql> CREATE USER 'newusername'@'localhost' IDENTIFIED BY 'password';
 -- UPDATE          allow them to update table rows
 -- GRANT OPTION    allows them to grant or revoke other users’ privileges
 
--- Syntax : GRANT type_of_permission ON database_name.table_name TO ‘username’@'IP_ADDRESS_OF_MACHINE’;
+-- Syntax : GRANT type_of_permission,type_of_permission,type_of_permission ON database_name.table_name TO ‘username’@'IP_ADDRESS_OF_MACHINE’;
 mysql> GRANT ALL PRIVILEGES ON *.* TO 'username'@'localhost';        -- here ALL PRIVILEGES are granted on all databases (*) and on all tables (*)
 
-
--- To revoke a permission
+/* To REVOKE a PERMISSION */
 -- Syntax : REVOKE type_of_permission ON database_name.table_name FROM ‘username’@‘localhost’;
 
+/* CHECK GRANTS INFORMATION */
 -- default "mysql" DB contain grant information in following tables
 -- user             : User accounts, static global privileges, and other nonprivilege columns.
 -- db               : Database-level privileges.
@@ -41,5 +41,72 @@ mysql> GRANT ALL PRIVILEGES ON *.* TO 'username'@'localhost';        -- here ALL
 -- columns_priv     : Column-level privileges.
 -- procs_priv       : Stored procedure and function privileges.
 -- password_history : Password change history.
+
+
+
+
+/* VARIABLES */
+-- There are mainly 3 types of variables in MySQL:
+
+/* 1 */ (User-defined variables (prefixed with @))
+-- To create user-defined SESSION variables, use format @variable_name.
+-- The user-defined variables are not case-sensitive. It means that the @id and @ID are the same.
+-- A user-defined variable defined by one client is not visible by other clients 
+--   ie user-defined variable is session-specific and value is not reinitialized rather retained for operations untill session ends
+-- These variables can’t be declared, they are only initialized i.e at time of declaration they should be assigned a value.
+-- A user-defined variable can hold single value only. If SELECT statement returns multiple values, variable will take value of last row in result.
+-- Syntax : SET @variable_name := value;
+mysql> SET @start := 1, @finish := 10;                                                    -- we can use either := or = , but it's still better to have := with variables.
+mysql> SELECT @counter;                                                                   -- get value of assigned variable
+mysql> SELECT @buyPrice:=buyprice FROM products WHERE buyprice > 95 ORDER BY buyprice;    -- multiple rows in select query ,but one result in variable.
+
+/* 2 */ (Local Variables (no prefix))
+-- Local variables needs to be declared using DECLARE before accessing it.
+-- Syntax : DECLARE variable_name datatype(size) [DEFAULT default_value];
+          : SET variable_name := value;
+-- If you declare a variable without specifying a DEFAULT value, its value is NULL.
+mysql> DECLARE mystr VARCHAR(255) DEFAULT "default_value";
+mysql> DECLARE x,y INT DEFAULT 0;
+
+/* 3 */ (Server System Variables (prefixed with @@))
+-- Syntax : SELECT @@var_name;
+mysql> SELECT @@sort_buffer_size;
+
+
+
+
+/* IF-ELSEIF-ELSE */
+IF(<condition>) THEN
+   <statements>;
+ELSEIF(<elseif-condition>) THEN
+   <elseif-statements>;
+ELSE
+   <else-statements>;
+END IF;
+
+
+
+
+/* CASE statement */
+CASE <case_value>
+   WHEN <when_value1> THEN <statements>
+   WHEN <when_value2> THEN <statements>
+   ...
+   ELSE <else-statements>
+END CASE;
+
+
+
+
+/* LOOP */
+<loop_label>: LOOP
+    <SQL_statements_if_any>
+    IF <condition> THEN
+        LEAVE <loop_label>;              -- LEAVE is similar to "break" ie terminate the loop , exit flow control that has given label.
+    ELSEIF <condition> THEN
+        ITERATE <loop_label>;            -- ITERATE is similar to "continue" , SKIP remaining flow control statements after it that has given label.
+    END IF;
+    <SQL_statements_if_any>
+END LOOP;
 
 
