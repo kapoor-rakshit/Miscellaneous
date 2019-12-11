@@ -1,7 +1,7 @@
 
 Developer's     : job is to add new features.
 Operations's    : job is to keep site stable and fast.
-Tester's           : job is to reduce risk.
+Tester's        : job is to reduce risk.
 
 
 
@@ -17,18 +17,18 @@ DevOps breaks wall between Development and Operations team.
 
 
 
-- Dev           :  people involved in developing product.
-- Ops           : system engineers, administrators, operations staff, release engineers, DBA, network engineers, security engineers.
-- Agile          : collaboration of customers, product management, developers, QA
+- Dev        :  people involved in developing product.
+- Ops        : system engineers, administrators, operations staff, release engineers, DBA, network engineers, security engineers.
+- Agile      : collaboration of customers, product management, developers, QA
 - DevOps     : extending principles of Agile to entire delivered service.
                       - improved deployment frequency.
                       - faster time to market.
                       - lower failure rate.
                       - shortened lead time between fixes.
                       - faster mean time to recovery in event of a new relaease crashing.
-- CD              : Continuous Delivery
-- CI               : Continuous Integration
-- Lead time                : time between identification of requirement and it's fulfillment.
+- CD          : Continuous Delivery
+- CI          : Continuous Integration
+- Lead time   : time between identification of requirement and it's fulfillment.
 - Mean time to failure : time for which a system or application will last in operation.
 
 
@@ -51,8 +51,8 @@ Development
      Source Code Management
            - Git
      Continuous Integration
-           - Ant, Maven, Gradle      ( Build )
-           - Jenkins, Travis             ( Platforms for orchestration )
+           - Ant, Maven, Gradle    ( Build )
+           - Jenkins, Travis       ( Platforms for orchestration )
            - Selenium, Cucumber    ( Testing )
 Operations
       Configuration Management
