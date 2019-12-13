@@ -17,7 +17,7 @@ DevOps breaks wall between Development and Operations team.
 
 
 
-- Dev        :  people involved in developing product.
+- Dev        : people involved in developing product.
 - Ops        : system engineers, administrators, operations staff, release engineers, DBA, network engineers, security engineers.
 - Agile      : collaboration of customers, product management, developers, QA
 - DevOps     : extending principles of Agile to entire delivered service.
@@ -35,8 +35,9 @@ DevOps breaks wall between Development and Operations team.
 
 DevOps practice involves
 -----------------------------------
-- Version control for all
-- Automated testing
+  PLAN --> CODE --> BUILD --> TEST --> INTEGRATE --> DEPLOY --> OPERATE --> MONITOR
+- Continuous Development which needs Version control for all
+- Automated and Continuous testing
 - Proactive monitoring and metrics
 - Configuration management
 - Continuous Integration / Delivery / Deployment
@@ -48,30 +49,29 @@ DevOps practice involves
 DevOps tools
 -------------------
 Development
-     Source Code Management
+     Source Code Management or Continuous Development
            - Git
      Continuous Integration
-           - Ant, Maven, Gradle    ( Build )
+           - Ant, Maven, Gradle    ( Build ie download required dependencies )
            - Jenkins, Travis       ( Platforms for orchestration )
-           - Selenium, Cucumber    ( Testing )
+           - Selenium, TestNG      ( WebDriver + Testing )
 Operations
       Configuration Management
-           - Chef, Puppet
+           - Chef, Puppet, Ansible, Saltstack
       Containers
            - Docker
       Monitoring
-           - Naglos
+           - Nagios
 
 
 
 CI workflow
 ----------------
-- Checkout new branch from Git
-- Code new feature
-- Run automated build on dev machine
-- Merge with latest changes to master from Git
-- Commit
-- Run build
+- Commit changes to source code by developers.
+- CI server pulls that code and triggers a build depending on schedule configured in CRON format at jenkins.
+- Build application is deployed on testing server for testing.
+- After testing application is deployed on production server.
+- Concerned teams are constantly notified about build and test results.
 
 Benefits of CI
 ------------------
@@ -82,41 +82,13 @@ Benefits of CI
 Best practices of CI
 -------------------------
 - Maintain single source repository
-- Automate build
-- Make build self testing
 - Everyone commits to master branch everyday
-- Fix broken builds immediately
+- Automate build
 - Keep build fast
+- Make build self testing
+- Fix broken builds immediately
 - Everyone can see what's happening
 - Automate deployment
-
-
-
-CD enablers
-----------------
-- Comprehensive configuration management
-- CI
-- Continuous Testing
-
-Benefits of CD
---------------------
-- Low risk releases
-- Faster time to market
-- Higher quality
-- Lower costs
-- Better products
-
-
-
-Deployment pipeline
---------------------------
-- Every change in Git , triggers a process (usually in CI server) which creates deployable packages
-  and runs automated unit tests and other validations such as static code analysis.
-- If this initial commit stage fails, problem must be fixed immediately
-- Every passing commit stage triggers next step in pipeline, which consists of more comprehensive set of automated tests.
-- Versions of software that pass all automated tests can then be deployed on demand to further stages such as performace testing, staging, production.
-
-
 
 Jenkins
 ---------
@@ -128,6 +100,29 @@ Jenkins
 
 
 
+Continuous Deployment (CD)
+---------------------------
+- It is a business specific need and might not always required to be performed.
+- Blue Green deployment method
+  - A technique to reduce downtime and risk by running two identical production environments called Blue and Green
+  - At anytime only one of environments is live , serving all production traffic.
+- Rollback also is an important part of automated deployment.
+
+CD enablers
+----------------
+- Comprehensive configuration management
+- Containers
+- Continuous Testing
+
+Benefits of CD
+--------------------
+- Low risk releases
+- Faster time to market
+- Higher quality
+- Lower costs
+- Better products
+
+
 CM ( Configuration Management )
 --------------------------------------------
 - To establish and maintain integrity of products of software project.
@@ -135,6 +130,7 @@ CM ( Configuration Management )
 - An artifact is a piece of hardware or software or documentation.
 - It controls inevitable changes.
 - Without CM, team members can create versions without authority, use wrong version of artifact.
+- It allows to scale the system by having one control machine and others can be host to scale to.
 
 Chef
 ------
@@ -146,15 +142,19 @@ Chef
 - Chef server is like a repository, Workstation is like development machine, Node is target system to which configuration needs to be applied.
 
 
+Containers
+-----------
+- It packages application and it's dependencies together in form of a container.
+- Containers are used by a container engine (Docker Engine) which is there on host OS.
+- RAM consumed by containers is very less than that required by VM (virtual machine).
+- Easily run applications containers , no need to reboot entire VM.
+- Docker Images are light weight templates and shared via Docker Hub or Import/Export.
 
-Continuous Deployment
--------------------------------
-- It is a business specific need and might not always required to be performed.
-- Blue Green deployment method
-           - A technique to reduce downtime and risk by running two identical production environments called Blue and Green
-           - At anytime only one of environments is live , serving all production traffic.
-- Rollback also is an important part of automated deployment.
-
+How are containers created ?
+-----------------------------
+- Docker file (Dockerfile) which contains commands are used to create Docker image and that image will contain all project codes.
+- Docker image is used to spin "N" number of containers each with modifications to underlying image.
+- Docker image is uploaded on Docker Hub and shared with others for testing / deployment.
 
 
 
