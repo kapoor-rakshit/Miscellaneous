@@ -28,9 +28,9 @@ $ git add --ignore-removal                       // Stage (modified, new) files 
 
 
 GIT rm/mv
-$ git rm <file_path>                             // delete file from WORKING TREE and STAGE removal for commit
+$ git rm <file_path>                             // delete file from WORKING TREE and STAGE (INDEX) plus update INDEX.
 
-$ git mv <current_file_path> <new_file_path>     // move file in WORKING TREE and STAGE move for commit.
+$ git mv <current_file_path> <new_file_path>     // move file in WORKING TREE plus update INDEX.
 
 
 
