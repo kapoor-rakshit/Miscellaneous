@@ -191,8 +191,8 @@ $ git remote
 use param -v which shows you the URLs that Git has stored for the shortname to be used when reading and writing to that remote
 $ git remote -v
 
-Inspecting a Remote
-$ git remote show <remote_name>
+Change URL of remote
+$ git remote set-url <remote_name> <new_url>
 
 Renaming remote
 $ git remote rename <remote_name> <new_remote_name>
