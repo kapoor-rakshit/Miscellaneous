@@ -52,7 +52,7 @@ Development
      Source Code Management or Continuous Development
            - Git
      Continuous Integration
-           - Ant, Maven, Gradle    ( Build ie download required dependencies )
+           - Ant, Maven, Gradle    ( Build Automation tool ie download required dependencies )
            - Jenkins, Travis       ( Platforms for orchestration )
            - Selenium, TestNG      ( WebDriver + Testing )
 Operations
@@ -62,6 +62,21 @@ Operations
            - Docker
       Monitoring
            - Nagios
+
+
+Build (Maven)
+--------------
+- All dependencies are available at Maven Centralized Repo , which can be downloaded and used in our projects.
+- Maven Lifecycle
+  - Maven Compile         -> Java Classes, Compile -> (achieved by Maven Compiler plugin)
+  - Maven Test            -> Test cases            -> (achieved by Maven Surefire plugin)
+  - Maven Resource        -> JARs/WARs/EARs        -> (achieved by Maven Resource plugin)
+- Maven has a POM (Page Object Model) XML file which contains      <dependencies> <dependency></dependency> </dependencies , <properties></properties>   etc...
+  Although we have above plugins already included in project , still it's good practice to write all these plugins in POM.xml under <build> <plugins> <plugin></plugin> </plugins> </build>
+- Maven Commands
+  - $ mvn clean install        -> executes all three lifecycle procedures
+  - $ mvn test                 -> executes only test lifecycle ie all methods with @Test in project
+  - $ mvn package -DskipTests  -> skips test lifecycle
 
 
 
@@ -97,6 +112,12 @@ Jenkins
 - The idea of CI is to merge code from individual developers into a project mulitple times per day and test continuously to avoid downstream problems.
 - CD ensures that all merged code is always in a production ready state.
 - Jenkins enables developers to automate this process as much as possible upto point of deployment
+- STEPS
+  - Download jenkins.war from official website or use commands like "wget"  etc... 
+  - On terminal, cd to this dir of downloaded jenkins.war and write command, $ java -jar jenkins.war. 
+    If this is first time , it will provide a password to be entered on home screen of Jenkins
+  - open http://localhost:8080 on browser
+  - install required plugins
 
 
 
