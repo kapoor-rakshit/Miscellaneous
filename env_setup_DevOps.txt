@@ -113,11 +113,65 @@ Jenkins
 - CD ensures that all merged code is always in a production ready state.
 - Jenkins enables developers to automate this process as much as possible upto point of deployment
 - STEPS
+  ----------------------
   - Download jenkins.war from official website or use commands like "wget"  etc... 
-  - On terminal, cd to this dir of downloaded jenkins.war and write command, $ java -jar jenkins.war. 
+  - On terminal, cd to this dir of downloaded jenkins.war and write command,      $ java -jar jenkins.war --httpPort=9090
     If this is first time , it will provide a password to be entered on home screen of Jenkins
-  - open http://localhost:8080 on browser
-  - install required plugins
+  - open http://localhost:PORT on browser   (PORT = 8080 default or as specified)
+  - install required plugins   Manage Jenkins --> Manage Plugins (eg: git plugin) --> search Available for required plugin or in Advanced (upload plugin file)
+- Jenkins on TOMCAT
+  -----------------------
+  - Place jenkins.war in webapps dir of TOMCAT and start TOMCAT
+- Jenkins root/HOME dir
+  -----------------------
+  - By default jenkins root dir ( where we have logs, configs, workspace, builds etc... ) is provided by default by jenkins. 
+    Check from Manage Jenkins tab --> Configure Sysytem  once jenkins is running.
+  - Copy all files from this old dir ( it might be hidden dir ) to new desired dir.
+  - Change or add ENVIRONMENT variables JENKINS_HOME=<Path_to_new_dir>
+- Jenkins CLI
+  -----------------------
+  - Start Jenkins
+  - Manage Jenkins tab --> Configure Global Security --> Enable Security
+  - Go to browser --> http://localhost:8080/cli/    this page will provide syntax for commands as per our instance
+  - Download jenkins-cli.jar
+  - cd to this .jar location and type command       java -jar jenkins-cli.jar -s <URL_for_Jenkins> <command>
+    This will ask for a passphrase (SSH public key) which can be found under profile tab of user currently logged in --> Configure.
+- Jenkins Create Users + Manage Roles
+  ------------------------------------
+  - Manage Jenkins tab --> Manage Users --> Create User
+  - User Profile tab --> Configure
+  - Role Strategy Plugin
+    - Manage Jenkins --> Manage Plugins --> Available tab (Search for plugin and Download + install) or Advanced tab to upload plugin file
+    - Manage Jenkins --> Cofigure Global Security --> Check Enable Security option --> Authorization (check ROLE BASED STRATEGY option)
+    - Manage Jenkins --> Manage and Assign Roles --> Manage Roles
+      Global roles   : Roles at global level     (eg: admin, employee)
+      Project roles  : Roles at project level    (Define pattern (eg: Dev.* or Test.*) for which projects to assign roles) (eg: developer, tester)
+    - Manage Jenkins --> Manage and Assign Roles --> Assign Roles
+      Global roles   : Select role to assign as given in Manage Roles --> Global role tab     (eg: admin or employee)
+      Project roles  : Select role to assign as given in Manage Roles --> Project role tab    (eg: developer or tester)
+- Jenkins Configurations
+   ---------------------------
+  - Manage Jenkins --> Configure System
+    Home directory           : home dir of jenkins (this can be changed , check "Jenkins root/HOME dir" step) , advance options will provide Workspace , Builds config
+    System Message           : we can use HTML or Plain text ( as set in Manage Jenkins --> Configure Global Security --> Markup Formatter ) visible on dashboard of Jenkins
+    Quiet Period             : number of seconds to wait before triggering job
+    SCM checkout retry count : Max retry count to connect to SCM remote repo
+    Restrict project Naming  : Naming pattern for new project to create
+    Jenkins Location         : URL to use on browser for Jenkins UI, can be localhost or IP address
+- JOBS (Project/Item) in Jenkins
+  -------------------------------
+  - New Item --> Select item configurations (maven/freestyle)
+    - General         --> Project name, Description
+    - SCM             --> Integrate remote repo (git, svn) .git URL, branch
+    - Build Triggers  --> when/how to trigger job
+      Trigger builds remotely          --> Provide auth token --> use URL provided to trigger job remotely from browser
+      Build after other projects built --> Provide projects to watch (stable/unstable/fails)
+      Build Periodically               --> CRON syntax followed
+      Poll SCM                         --> Poll SCM (.git) integrated , uses CRON syntax to poll for new commit
+    - Build           --> execute shell commands on code repo/files   (eg: cd /user/ra20024024/javaProj/; javac myfile.java; java myfile;)
+    - Post Build Actions
+      Build other projects             --> Provide project to build (stable/unstable/fails)
+- 
 
 
 
