@@ -64,22 +64,6 @@ Operations
            - Nagios
 
 
-Build (Maven)
---------------
-- All dependencies are available at Maven Centralized Repo , which can be downloaded and used in our projects.
-- Maven Lifecycle
-  - Maven Compile         -> Java Classes, Compile -> (achieved by Maven Compiler plugin)
-  - Maven Test            -> Test cases            -> (achieved by Maven Surefire plugin)
-  - Maven Resource        -> JARs/WARs/EARs        -> (achieved by Maven Resource plugin)
-- Maven has a POM (Page Object Model) XML file which contains      <dependencies> <dependency></dependency> </dependencies , <properties></properties>   etc...
-  Although we have above plugins already included in project , still it's good practice to write all these plugins in POM.xml under <build> <plugins> <plugin></plugin> </plugins> </build>
-- Maven Commands
-  - $ mvn clean install        -> executes all three lifecycle procedures
-  - $ mvn test                 -> executes only test lifecycle ie all methods with @Test in project
-  - $ mvn package -DskipTests  -> skips test lifecycle
-
-
-
 CI workflow
 ----------------
 - Commit changes to source code by developers.
@@ -104,6 +88,23 @@ Best practices of CI
 - Fix broken builds immediately
 - Everyone can see what's happening
 - Automate deployment
+
+
+Build (Maven)
+--------------
+- All dependencies are available at Maven Centralized Repo , which can be downloaded and used in our projects.
+- Maven Lifecycle
+  - Maven Compile         -> Java Classes, Compile -> (achieved by Maven Compiler plugin)
+  - Maven Test            -> Test cases            -> (achieved by Maven Surefire plugin)
+  - Maven Resource        -> JARs/WARs/EARs        -> (achieved by Maven Resource plugin)
+- Maven has a POM (Page Object Model) XML file which contains      <dependencies> <dependency></dependency> </dependencies , <properties></properties>   etc...
+  Although we have above plugins already included in project , still it's good practice to write all these plugins in POM.xml under <build> <plugins> <plugin></plugin> </plugins> </build>
+- Maven Commands
+  - $ mvn clean install        -> executes all three lifecycle procedures
+  - $ mvn test                 -> executes only test lifecycle ie all methods with @Test in project
+  - $ mvn package -DskipTests  -> skips test lifecycle
+
+
 
 Jenkins
 ---------
@@ -164,14 +165,60 @@ Jenkins
     - General         --> Project name, Description
     - SCM             --> Integrate remote repo (git, svn) .git URL, branch
     - Build Triggers  --> when/how to trigger job
-      Trigger builds remotely          --> Provide auth token --> use URL provided to trigger job remotely from browser
-      Build after other projects built --> Provide projects to watch (stable/unstable/fails)
-      Build Periodically               --> CRON syntax followed
-      Poll SCM                         --> Poll SCM (.git) integrated , uses CRON syntax to poll for new commit
+       Trigger builds remotely          --> Provide auth token --> use URL provided to trigger job remotely from browser
+       Build after other projects built --> Provide projects to watch (stable/unstable/fails)
+       Build Periodically               --> CRON syntax followed
+       Poll SCM                         --> Poll SCM (.git) integrated , uses CRON syntax to poll for new commit
     - Build           --> execute shell commands on code repo/files   (eg: cd /user/ra20024024/javaProj/; javac myfile.java; java myfile;)
     - Post Build Actions
-      Build other projects             --> Provide project to build (stable/unstable/fails)
-- 
+       Build other projects             --> Provide project to build (stable/unstable/fails)
+       Deploy WAR/EAR to container      --> Available via plugin
+       Email Notifications
+- CATLIGHT
+  --------------------------------
+  - It is a status notifier for CI tools like Jenkins, Travis etc.. which provides notifications on desktop for JOBS.
+     Refer : https://catlight.io/
+- Deploy to Container Plugin
+  --------------------------------
+  - If both Jenkins and TOMCAT are running on same machine , make sure to use different ports for these.
+  - Make sure both are up and running plus configurations in case any connectionException occurs.
+  - Search for this plugin in Manage Jenkins --> Manage Plugin --> Available --> Search/Download/Install  "Deploy to Container Plugin"
+  - In Post Build actions of Item/JOB , choose Deploy WAR/EAR to container. Choose your WAR name (as in <workspace_path>/<project> of Jenkins)
+  - For TOMCAT credentials to be used with Jenkins , go to tomcat-users.xml to check and use, <user username="" password="" roles=""></user>
+- EMAIL Notifications
+  ---------------------------------
+  - Refer:    https://www.arclab.com/en/kb/email/list-of-smtp-and-pop3-servers-mailserver-list.html     for SMTP details.
+  - Manage Jenkins --> Configure System --> Email Notifications (Advanced). Provide SMTP details from where to send.
+  - Inside JOB --> Configure --> Post Build Actions --> Email notification
+- Jenkins Delivery PIPELINE
+  ---------------------------------
+  - To Visualize Chained Jobs.
+  - Download/Install Delivery Pipeline Plugin
+  - Add new View/Tab on Jenkins Dashboard and select Delivery Pipeline View.
+  - Configure this view , component and add initial job , Instances to show , Enable rebuild , Enable start , Enable Build Time   etc...
+- Jenkins Build PIPELINE
+  ---------------------------------
+  - To Visualize Chained Jobs.
+  - Download/Install Build Pipeline Plugin
+  - Add new View/Tab on Jenkins Dashboard and select Build Pipeline View.
+  - Configure this view , initial job , Instances to show , Console output  etc...
+- Jenkins Blue Ocean UI
+  ---------------------------------
+  - Works only on Jenkins version 2.7 or above.
+  - A new UI for Jenkins that provides interactive view for Jenkins pipeline and jobs.
+  - Download/Install Blue Ocean plugin.
+  - A button will appear on dashboard to switch UI to Blue Ocean UI and similarly in Blue Ocean to switch to classic view.
+- Poll Mail Box Trigger
+  ---------------------------------
+  - Trigger Build on receiving a mail
+  - Download/Install Poll Mail Box Trigger plugin
+  - Configure plugin under Build Triggers
+- Build Monitor View plugin
+  ---------------------------------
+  - Shows highly visible status of selected jobs.
+  - Download/Install Build monitor view plugin.
+  - Add new View/Tab on Jenkins Dashboard and select Build Monitor View
+  - Configure plugin.
 
 
 
@@ -198,6 +245,7 @@ Benefits of CD
 - Better products
 
 
+
 CM ( Configuration Management )
 --------------------------------------------
 - To establish and maintain integrity of products of software project.
@@ -205,10 +253,27 @@ CM ( Configuration Management )
 - An artifact is a piece of hardware or software or documentation.
 - It controls inevitable changes.
 - Without CM, team members can create versions without authority, use wrong version of artifact.
-- It allows to scale the system by having one control machine and others can be host to scale to.
+- It allows to scale the system by having one control machine and others can be remote machines to scale to.
+
+Ansible
+----------
+- Ansible uses Playbook which uses YAML (.yml) files.
+- It does not require any agents whereas Chef or Puppet does require , It is built on python , It uses SSH.
+- It uses Push based architecture whereas Chef or Puppet uses Pull based architecture.
+- YAML (.yml) files
+  - It starts with   ---  and ends with   ...
+  - Lists are also written in YAML each element in new line
+  - specific tags are specified in YAML like name, hosts, vars, tasks
+- STEPS
+  - genearte SSH key using `ssh-keygen`
+  - modify HOST inventory file located at /etc/ansible/hosts to specify group or individual HOST
+  - copy SSH key to remote machine using `ssh-copy-id -i HOSTNAME`
+  - check if remote machine or group is up and running as mentioned in HOST inventory file using `ansible -m ping test-servers`
+  - create a YAML (.yml) file
+  - run playbook with this YAML file using `ansible-playbook myfile.yml`
 
 Chef
-------
+----------
 - A CM tool
 - Recipe is a configuration script used in Chef
 - Collection of scripts is called CookBook
