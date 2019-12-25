@@ -284,17 +284,47 @@ Chef
 
 Containers
 -----------
-- It packages application and it's dependencies together in form of a container.
+- It packages application and it's dependencies together in form of a container (run time instance of docker image)
 - Containers are used by a container engine (Docker Engine) which is there on host OS.
 - RAM consumed by containers is very less than that required by VM (virtual machine).
 - Easily run applications containers , no need to reboot entire VM.
-- Docker Images are light weight templates and shared via Docker Hub or Import/Export.
+- Docker Images are light weight templates and shared via Docker Hub (online repository) or Import/Export.
+
+Virtualization vs Containerization
+------------------------------------
+- In virtualization we have a software called Hypervisor which will create multiple GUEST OS over HOST OS.
+  Each of these GUEST OS are a VM (app plus guest OS) and they donot use HOST OS which is an overhead over HOST platform.
+  Each of VM have a defined memory which does not change as per application needs resulting in wastage and redundant memory.
+- In containerization we have Container Engine (Docker Engine) which uses containers.
+  Each of continers (app plus libs) uses memory as per application needs from OS resulting in efficient use of HOST platform.
+  It can run on any machine that has Docker installed which prevents need to configure and build app multiple times on different platforms.
 
 How are containers created ?
 -----------------------------
 - Docker file (Dockerfile) which contains commands are used to create Docker image and that image will contain all project codes.
-- Docker image is used to spin "N" number of containers each with modifications to underlying image.
-- Docker image is uploaded on Docker Hub and shared with others for testing / deployment.
+- Docker image can be used to spin "N" number of containers each with modifications to underlying image.
+- Docker image is uploaded on Docker Hub and is pulled on staging env or testing env where docker containers are spun and code can run.
+
+Docker
+--------
+- Docker has a client (Command Line) - server (Docker Daemon) architecture.
+  server has containers which respond to REST API request or Command from terminal coming from either same or different machine as of server
+  client and server together form Docker Engine.
+- Install
+  sudo apt-get update
+  sudo apt-get install docker
+- Add user to docker group to avoid writing "sudo" before every command
+  sudo usermod -a -G docker <username>
+  "Relogin to system for this to take effect"
+- Start
+  sudo service docker start
+- Stop
+  sudo service docker stop
+- Misc commands
+  docker images
+  docker ps
+  docker ps -a
+  docker run <image_name>
 
 
 
