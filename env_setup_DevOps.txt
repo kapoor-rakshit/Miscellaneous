@@ -282,13 +282,22 @@ Chef
 - Chef server is like a repository, Workstation is like development machine, Node is target system to which configuration needs to be applied.
 
 
-Containers
------------
+
+Dockerfile
+------------
+
+
+
+Images + Containers
+---------------------
 - It packages application and it's dependencies together in form of a container (run time instance of docker image)
 - Containers are used by a container engine (Docker Engine) which is there on host OS.
 - RAM consumed by containers is very less than that required by VM (virtual machine).
 - Easily run applications containers , no need to reboot entire VM.
 - Docker Images are light weight templates and shared via Docker Hub (online repository) or Import/Export.
+- An unused image means that it has not been assigned or used in a container i.e. command "docker ps -a" will not show unused image.
+- A dangling image means that you've created the new build of the image, but it wasn't given a new name. 
+  So the old images you have becomes the "dangling image" and command "docker images -a" will show "<none>" as their name.
 
 Virtualization vs Containerization
 ------------------------------------
@@ -317,14 +326,43 @@ Docker
   sudo usermod -a -G docker <username>
   "Relogin to system for this to take effect"
 - Start
-  sudo service docker start
+  sudo service docker start                        // start docker service                        
 - Stop
-  sudo service docker stop
-- Misc commands
-  docker images
-  docker ps
-  docker ps -a
-  docker run <image_name>
+  sudo service docker stop                         // stop docker service
+- Misc. commands
+  docker version                                   // information of docker client-server
+  docker info                                      // information of containers + images + server
+  docker <command_name> --help                     // manual to <commandname>
+  docker login                                     // login to dockerhub
+  docker stats                                     // realtime stats of all containers
+  docker system df                                 // disk usage by docker
+  docker system prune                              // removes containers/images
+- Images
+  docker images -a                                 // list of images
+  docker pull <image_name>                         // pull image with default tag "latest" from dockerhub
+  docker pull <image_name>:<tag_name>              // pull image with tag "<tag_name>" from dockerhub
+  docker rmi <image_name>/<imageID>                // remove one or more images
+- Containers
+  docker ps                                        // lists currently running containers
+  docker ps -a                                     // list all containers
+  docker run <image_name>                          // run container from image <image_name>
+  docker run --name <customized_name> <image_name> // run container with <customized_name> from image <image_name>
+  docker start <customized_name>/<containerID>     // start container
+  docker stop <customized_name>/<containerID>      // stop container
+  docker pause <customized_name>/<containerID>     // pause running container
+  docker unpause <customized_name>/<containerID>   // resume paused container
+  docker stats <customized_name>/<containerID>     // stats for particular container
+  docker attach <customized_name>/<containerID>    // work over running container in new terminal
+  docker rm <customized_name>/<containerID>        // remove container
+  
+Jenkins + Docker
+------------------
+- Pull jenkins image from docker hub
+  $ docker pull jenkins
+- Run jenkins image and expose port 9090 , 50000 of local to 8080 of docker server and 50000 of Jenkins API plus provide persistent storage to JENKINS_HOME.
+  This will retain all data (plugins + credentials) even if Jenkins container is stopped.
+  $ docker run --name <customized_name> -p 9090:8080 -p 50000:50000 -v <PATH_to_DIR>:/var/jenkins_home jenkins
+  
 
 
 
