@@ -285,7 +285,12 @@ Chef
 
 Dockerfile
 ------------
-
+- A file (without any extension) with instructions to build image.
+- It uses   #   for comments.
+- FROM <base_image_name>                           // this can be "scratch" as per dockerhub documentation if we donot want any base image
+  MAINTAINER <name> <email_id>                     // best practice to specify maintainer
+  RUN echo "Hello World"                           // this will execute while building image
+  CMD ["echo", "Hello World"]                      // this will execute while running container from image
 
 
 Images + Containers
@@ -314,46 +319,80 @@ How are containers created ?
 - Docker image can be used to spin "N" number of containers each with modifications to underlying image.
 - Docker image is uploaded on Docker Hub and is pulled on staging env or testing env where docker containers are spun and code can run.
 
-Docker
---------
+Docker architecture + commands
+--------------------------------
+- Docker is written in Go programming language.
 - Docker has a client (Command Line) - server (Docker Daemon) architecture.
   server has containers which respond to REST API request or Command from terminal coming from either same or different machine as of server
   client and server together form Docker Engine.
 - Install
-  sudo apt-get update
-  sudo apt-get install docker
+  $ sudo apt-get update
+  $ sudo apt-get install docker
 - Add user to docker group to avoid writing "sudo" before every command
-  sudo usermod -a -G docker <username>
+  $ sudo usermod -a -G docker <username>
   "Relogin to system for this to take effect"
 - Start
-  sudo service docker start                        // start docker service                        
+  $ sudo service docker start                        // start docker service                        
 - Stop
-  sudo service docker stop                         // stop docker service
+  $ sudo service docker stop                         // stop docker service
 - Misc. commands
-  docker version                                   // information of docker client-server
-  docker info                                      // information of containers + images + server
-  docker <command_name> --help                     // manual to <commandname>
-  docker login                                     // login to dockerhub
-  docker stats                                     // realtime stats of all containers
-  docker system df                                 // disk usage by docker
-  docker system prune                              // removes containers/images
+  $ docker version                                   // information of docker client-server
+  $ docker info                                      // information of containers + images + server
+  $ docker <command_name> --help                     // manual to <commandname>
+  $ docker login                                     // login to dockerhub
+  $ docker stats                                     // realtime stats of all containers
+  $ docker system df                                 // disk usage by docker
+  $ docker system prune                              // removes containers/images
 - Images
-  docker images -a                                 // list of images
-  docker pull <image_name>                         // pull image with default tag "latest" from dockerhub
-  docker pull <image_name>:<tag_name>              // pull image with tag "<tag_name>" from dockerhub
-  docker rmi <image_name>/<imageID>                // remove one or more images
+  $ docker images -a                                 // list of images
+  $ docker pull <image_name>                         // pull image with default tag "latest" from dockerhub
+  $ docker pull <image_name>:<tag_name>              // pull image with tag "<tag_name>" from dockerhub     ,  NOTE: use of ":"
+  $ docker build -t <image_name>:<tag_name> <PATH>   // build image from dockerfile located at PATH dir
+  $ docker build -t <image_name>:<tag_name> .        // build image from dockerfile located at current dir  ,  NOTE: use of "."
+  $ docker rmi <image_name>/<imageID>                // remove one or more images
 - Containers
-  docker ps                                        // lists currently running containers
-  docker ps -a                                     // list all containers
-  docker run <image_name>                          // run container from image <image_name>
-  docker run --name <customized_name> <image_name> // run container with <customized_name> from image <image_name>
-  docker start <customized_name>/<containerID>     // start container
-  docker stop <customized_name>/<containerID>      // stop container
-  docker pause <customized_name>/<containerID>     // pause running container
-  docker unpause <customized_name>/<containerID>   // resume paused container
-  docker stats <customized_name>/<containerID>     // stats for particular container
-  docker attach <customized_name>/<containerID>    // work over running container in new terminal
-  docker rm <customized_name>/<containerID>        // remove container
+  $ docker ps                                        // lists currently running containers
+  $ docker ps -a                                     // list all containers
+  $ docker run <image_name>                          // run container from image <image_name>
+  $ docker run <image_name>:<tag_name>               // run container from image <image_name> with tag <tag_name>
+  $ docker run --name <customized_name> <image_name> // run container with a <customized_name> from image <image_name>
+  $ docker start <customized_name>/<containerID>     // start container
+  $ docker stop <customized_name>/<containerID>      // stop container
+  $ docker pause <customized_name>/<containerID>     // pause running container
+  $ docker unpause <customized_name>/<containerID>   // resume paused container
+  $ docker stats <customized_name>/<containerID>     // stats for particular container
+  $ docker attach <customized_name>/<containerID>    // work over running container in new terminal
+  $ docker rm <customized_name>/<containerID>        // remove container
+  
+Docker Volume
+---------------
+- In absence of volumes data generated and used by container is stored within container, incase a container is deleted, entire data is also lost.
+- To have a persistent storage for data generated and used by containers we create VOLUMES, that are independent of container.
+  It allows for shared volume (data/storage) among different containers.
+  It allows to attach a volume to a container.
+- Create volume
+  $ docker volume create <VOL_NAME>
+- List volumes
+  $ docker volume ls
+- Info about a volume
+  $ docker volume inspect <VOL_NAME>
+- Remove a volume
+  $ docker volume rm <VOL_NAME>
+  $ docker volume prune                             // remove all unused volumes (not used by any container)
+- Example
+  $ docker run --name <customized_name> -p 9090:8080 -p 60000:50000 -v <VOL_NAME>:/var/jenkins_home jenkins      // using VOLUMES
+  $ docker run --name <customized_name> -p 9090:8080 -p 50000:50000 -v <PATH_to_DIR>:/var/jenkins_home jenkins   // using BIND MOUNTS
+  
+Docker Swarm
+--------------
+- A swarm is a group of machines that are running docker and joined into a cluster.
+- Docker swarm is a tool for container orchestration just like Kubernetes used for managing and controlling multiple docker containers a a single service.
+  It ensures health check of each container on each system.
+  Scaling containers up/down as per load.
+  Adding updates to containers.
+- Docker Machine
+  Docker Swarm requires docker-machine which enables us to make one machine as manager and other machines as worker for Docker Swarm.
+  
   
 Jenkins + Docker
 ------------------
@@ -363,6 +402,27 @@ Jenkins + Docker
   This will retain all data (plugins + credentials) even if Jenkins container is stopped.
   $ docker run --name <customized_name> -p 9090:8080 -p 50000:50000 -v <PATH_to_DIR>:/var/jenkins_home jenkins
   
+Docker Compose
+------------------
+- It is a tool for defining and running multi-container docker applications.
+  It uses yaml files for configuration and named as     docker-compose.yml
+  We can start/stop all services with a single command  $ docker compose up/down
+  We can scale selected services as and when required.
+- Install
+  $ python -m pip install -U docker-compose
+- Docker-Compose.yml
+  Create a file named as "docker-compose.yml"
+  Write a YAML file for configuration which has services: web: image: database: image:
+  REFERENCE : docker-compose documentation for image used available at docker hub
+- Check validity
+  $ docker-compose config
+- Run docker-compose.yml
+  $ docker-compose up -d                                // run docker-compose in detached mode to have terminal available for other work
+  $ docker-compose up -d --scale <service_name>=4       // scale a service (eg: database to have it's 4 instances or containers running)
+- Check running containers
+  $ docker-compose ps
+- Stop docker-compose
+  $ docker-compose down
 
 
 
