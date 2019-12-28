@@ -347,7 +347,7 @@ Docker architecture + commands
   $ docker images -a                                 // list of images
   $ docker pull <image_name>                         // pull image with default tag "latest" from dockerhub
   $ docker pull <image_name>:<tag_name>              // pull image with tag "<tag_name>" from dockerhub     ,  NOTE: use of ":"
-  $ docker build -t <image_name>:<tag_name> <PATH>   // build image from dockerfile located at PATH dir
+  $ docker build -t <image_name>:<tag_name> <PATH>   // build image from dockerfile located at PATH dir, -t: name and optional tag
   $ docker build -t <image_name>:<tag_name> .        // build image from dockerfile located at current dir  ,  NOTE: use of "."
   $ docker rmi <image_name>/<imageID>                // remove one or more images
 - Containers
@@ -383,17 +383,6 @@ Docker Volume
   $ docker run --name <customized_name> -p 9090:8080 -p 60000:50000 -v <VOL_NAME>:/var/jenkins_home jenkins      // using VOLUMES
   $ docker run --name <customized_name> -p 9090:8080 -p 50000:50000 -v <PATH_to_DIR>:/var/jenkins_home jenkins   // using BIND MOUNTS
   
-Docker Swarm
---------------
-- A swarm is a group of machines that are running docker and joined into a cluster.
-- Docker swarm is a tool for container orchestration just like Kubernetes used for managing and controlling multiple docker containers a a single service.
-  It ensures health check of each container on each system.
-  Scaling containers up/down as per load.
-  Adding updates to containers.
-- Docker Machine
-  Docker Swarm requires docker-machine which enables us to make one machine as manager and other machines as worker for Docker Swarm.
-  
-  
 Jenkins + Docker
 ------------------
 - Pull jenkins image from docker hub
@@ -401,13 +390,47 @@ Jenkins + Docker
 - Run jenkins image and expose port 9090 , 50000 of local to 8080 of docker server and 50000 of Jenkins API plus provide persistent storage to JENKINS_HOME.
   This will retain all data (plugins + credentials) even if Jenkins container is stopped.
   $ docker run --name <customized_name> -p 9090:8080 -p 50000:50000 -v <PATH_to_DIR>:/var/jenkins_home jenkins
+
+Docker Swarm
+--------------
+- A swarm is a group of machines (either physical or virtual) that are running docker and joined into a cluster.
+- Docker swarm is a tool for container orchestration just like Kubernetes used for managing and controlling multiple docker containers a a single service.
+  It ensures health check of each container on each system.
+  Scaling containers up/down as per load.
+  Adding updates to containers.
+- Docker Machine
+  docker-machine enables us to create Docker hosts either on local or remote and make one host as manager node and other host as worker node for Docker Swarm.
+  We can add one or more nodes as manager to act as backup in case any manager node opts-out. But there is only one leader at any time.
+  $ docker-machine create --driver hyperv <NODE_NAME>                  // WINDOWS
+  $ docker-machine create --driver virtualbox <NODE_NAME>              // MAC
+  $ docker-machine env <NODE_NAME>                                     // gives details about machine created
+  $ docker-machine ls                                                  // lists all docker machines with their details
+  $ docker-machine ssh <NODE_NAME>                                     // connect to <NODE_NAME>
+  $ docker-machine stop <NODE_NAME>                                    // stop/drain machine 
+  $ docker-machine rm <NODE_NAME>                                      // remove machine
+  
+  $ docker swarm init --advertise-addr <MANAGER_NODE_IP>               // NOTE : Write this command at MANAGER NODE cmd to let it know that it is a manager.
+  $ docker swarm join-token worker                                     // NOTE : Write this command at MANAGER NODE cmd to generate token command for a WORKER NODE cmd to join swarm as worker. Copy and run this in node cmd to act it as worker.
+  $ docker swarm join-token manager                                    // NOTE : Write this command at MANAGER NODE cmd to generate token command for a MANAGER NODE cmd to join swarm as manager. Copy and run this in node cmd to act it as manager.
+  $ docker swarm leave                                                 // to leave swarm (can be manager or worker node)
+  
+  $ docker node ls                                                     // NOTE : Write this command at MANAGER NODE cmd to have info about swarm
+  $ docker node update --availability drain <NODE_NAME>                // NOTE : Write this command at MANAGER NODE cmd to shutdown node of swarm.
+  
+  $ docker service create --replicas <NO_OF_NODES> -p 80:80 --name <customized_service_name> <IMAGE_NAME>    // NOTE : Write this command at MANAGER NODE cmd to replicate service on all nodes including manager.
+  $ docker service ps <customized_service_name>                        // to have info about <customized_service_name>
+  $ docker service scale <customized_service_name>=<NO_OF_REPLICAS>    // NOTE : Write this command at MANAGER NODE cmd to spin up/down a container on any random node of swarm
+  $ docker service update --image <IMAGE_NAME>:<TAG_NAME> <customized_service_name>     // updates service
+  $ docker service rm <customized_service_name>                                         // remove service
   
 Docker Compose
 ------------------
-- It is a tool for defining and running multi-container docker applications.
+- It is a tool for defining and running multi-container docker applications where multiple containers work together to provide required functionality.
   It uses yaml files for configuration and named as     docker-compose.yml
   We can start/stop all services with a single command  $ docker compose up/down
   We can scale selected services as and when required.
+- Docker Swarm runs multi-container applications, just like Compose does.
+  The key difference is that Swarm schedules and manages your containers across multiple machines, while Compose schedules and manages containers on a single host only.
 - Install
   $ python -m pip install -U docker-compose
 - Docker-Compose.yml
