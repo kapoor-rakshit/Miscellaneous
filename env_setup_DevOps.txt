@@ -283,15 +283,24 @@ Chef
 
 
 
-Dockerfile
+dockerfile
 ------------
 - A file (without any extension) with instructions to build image.
 - It uses   #   for comments.
-- FROM <base_image_name>                           // this can be "scratch" as per dockerhub documentation if we donot want any base image
-  MAINTAINER <name> <email_id>                     // best practice to specify maintainer
-  RUN echo "Hello World"                           // this will execute while building image
-  CMD ["echo", "Hello World"]                      // this will execute while running container from image
-
+- FROM <base_image_name>:<tag_name>                // this can be "scratch" as per dockerhub documentation if we donot want any base image
+  ENV <key>=<val>                                  // a key-val pair that can be accessed using <key> throughout dockerfile
+  LABEL maintainer=<email_id>                      // best practice to specify maintainer using LABEL as key-val pair
+  WORKDIR /usr/src/app                             // sets working directory for instructions (COPY, RUN,...) that follow it in dockerfile
+  ADD <src> <dest>                                 // works similar to COPY but support, use of URL instead of a local file <src>, extract tar file from source directly into destination.
+  COPY package*.json ./                            // copies files or directories from <src> (eg: package*.json) to <dest> (eg: ./)
+  RUN npm install                                  // this will execute while building image from dockerfile
+  COPY . ./                                        // bundle your app's entire source code inside the Docker image , NOTE: use of "."
+  EXPOSE 8080                                      // informs Docker that container listens on the specified network ports at runtime , however during runtime we can map machine port to this exposed port using -p flag
+  CMD ["node", "app.js"]                           // this will execute while running container from image
+  
+.dockerignore
+----------------
+- A .dockerignore is similar to .gitignore , which will ignore files to be added/copied to image
 
 Images + Containers
 ---------------------
