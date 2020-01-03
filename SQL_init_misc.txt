@@ -110,3 +110,55 @@ END CASE;
 END LOOP;
 
 
+
+
+/* CURSOR */
+/* REFERENCE : https://www.mysqltutorial.org/mysql-cursor */
+-- A cursor allows you to iterate a set of rows returned by a query and process each row individually. 
+-- Cursors can be used in stored procedures, stored functions, and triggers.
+-- Cursor is a Temporary Memory. It is Allocated by Database Server at Time of Performing DML operations on Table by User.
+-- MySQL cursor is read-only, non-scrollable and asensitive.
+   -- Read-only: you cannot update data in the underlying table through the cursor.
+   -- Non-scrollable: you can only fetch rows in the order determined by the SELECT statement. 
+                      You cannot fetch rows in the reversed order. In addition, you cannot skip rows or jump to a specific row in the result set.
+   -- Asensitive: There are two kinds of cursors: asensitive cursor and insensitive cursor. 
+                  An asensitive cursor points to the actual data, whereas an insensitive cursor uses a temporary copy of the data. 
+                  An asensitive cursor performs faster than an insensitive cursor because it does not have to make a temporary copy of data. 
+                  However, any change that made to the data from other connections will affect the data that is being used by an asensitive cursor, 
+                  therefore, it is safer if you do not update the data that is being used by an asensitive cursor.
+                  MySQL cursor is asensitive.
+-- Declare a cursor
+   mysql> DECLARE <cursor_variable> CURSOR FOR <SELECT_statement>;
+-- We must also declare a NOT FOUND handler to handle the situation when the cursor could not find any row.
+-- handler declaration must appear after variable and cursor declaration.
+   mysql> DECLARE <notFoundVar> INTEGER DEFAULT 0;
+   mysql> DECLARE CONTINUE HANDLER FOR NOT FOUND SET <notFoundVar> = 1;
+-- Open the cursor
+   mysql> OPEN <cursor_variable>;
+-- Retrieve the next row pointed by the cursor and move the cursor to the next row in the result set
+   mysql> FETCH <cursor_variable> INTO <variable>;
+-- Deactivate the cursor and release the memory associated with it
+   mysql> CLOSE <cursor_variable>;
+   
+   
+   
+
+/* SQL Injection */
+/* REFERENCE : https://www.w3schools.com/sql/sql_injection.asp */
+-- SQL injection is the placement of malicious code in SQL statements, via web page input.
+-- SQL injection is a code injection technique that might destroy your database.
+-- SQL injection usually occurs when you ask a user for input, like their username/userid, and instead of a name/id, 
+   the user gives you an SQL statement that you will unknowingly run on your database.
+-- SQL Injection Based on 1=1 is Always True.
+   Following statement got user-id as        105 OR 1=1        from user input and it was run to get access to all the user names and passwords in table.
+   mysql> SELECT * FROM Users WHERE UserId = 105 OR 1=1;
+-- SQL Injection Based on ""="" is Always True.
+   mysql> SELECT * FROM Users WHERE Name ="" or ""="" AND Pass ="" or ""="";
+-- SQL Injection Based on Batched SQL Statements
+   Following example got user-id as          105; DROP TABLE Suppliers      from user input
+   mysql> SELECT * FROM Users WHERE UserId = 105; DROP TABLE Suppliers;
+-- Use SQL Parameters for Protection against SQL Injection.
+   SQL parameters are values that are added to an SQL query at execution time, in a controlled manner.
+   The SQL engine checks each parameter to ensure that it is correct for its column and are treated literally, and not as part of the SQL to be executed.
+
+
