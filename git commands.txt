@@ -292,14 +292,18 @@ $ git merge <branch_name>                     // merge changes on a seperate bra
      The nomenclature comes from fact that Git uses three commits to generate merge commit: the two branch tips and their common ancestor.
 $ git merge --no-ff <branch_name>            // generates a merge commit (even if it was a fast-forward merge).
 
+
 - Resolving conflict
-If the two branches you're trying to merge both changed the same part of the same file, 
+If the two branches you're trying to merge both changed the same part of the same file,
+or if one developer deleted a file or content while another developer was modifying it.
 Git won't be able to figure out which version to use.
 When such a situation occurs, it stops right before the merge commit so that you can resolve the conflicts manually.
 When you encounter merge conflict, running '$ git status' command shows you which files need to be resolved.
 When Git encounters conflict during a merge, It will edit content of affected files with visual indicators that mark both sides of conflicted content. 
 These visual markers are: <<<<<<<, =======, and >>>>>>>. Content before ======= marker is receiving branch and part after is merging branch.
+$ git merge --abort                   // cancels merge and makes the receiving branch to state prior to merge process.
 Once identified conflicting sections, fix up the merge to your liking and exact same process as committing an ordinary snapshot. ie '$ git add' , '$ git commit'
+
 
 - Merge Selective Files
 $ git merge --no-ff --no-commit <branch_name>        // --no-commit option will stage files that have been merged by Git without actually committing them.
