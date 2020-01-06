@@ -249,10 +249,11 @@ Benefits of CD
 CM ( Configuration Management )
 --------------------------------------------
 - To establish and maintain integrity of products of software project.
-- It refers to discipline for evaluating, coordinating, approving or disapproving and implementing changes in artifacts that are used to construct and maintain software,
+- It refers to discipline for evaluating, coordinating, approving or disapproving and implementing changes in artifacts that are used to construct and maintain software.
 - An artifact is a piece of hardware or software or documentation.
-- It controls inevitable changes.
-- Without CM, team members can create versions without authority, use wrong version of artifact.
+- This makes use of IAC (Infrastructure as Code).
+- It controls changes , if a software upgrade or configuration caused glitch , it can be rolled back easily using CM tools.
+- Without CM, a common issue of code working on Dev environment and not working on Production environment may occur.
 - It allows to scale the system by having one control machine and others can be remote machines to scale to.
 
 Ansible
@@ -274,15 +275,39 @@ Ansible
 
 Chef
 ----------
-- A CM tool
-- Recipe is a configuration script used in Chef
-- Collection of scripts is called CookBook
+- Recipe is a configuration script used in Chef.
+- Chef is written in Ruby and recipes are written in Ruby too.
+- Collection of scripts (recipes) is called CookBook.
 - Tool with which scripts created, it is called Knife.
-- Three entities Chef Server, Workstation, Nodes.
-- Chef server is like a repository, Workstation is like development machine, Node is target system to which configuration needs to be applied.
+- It makes use of Pull based approach where nodes poll server and pull configurations.
+- Chef Architecture
+  Three entities Workstation, Chef Server, Nodes.
+  Workstation is like development machine or local chef repository from where configurations are sent to Chef Server.
+  Chef server is like remote repository or a mirror for Nodes which tells them (nodes) whether they are inline with configurations desired.
+  Nodes (chef clients) are target systems which pulls configuration from Chef Server that needs to be applied to them.
+- To install chef , download Chef Development Kit (CDK).
+
+Puppet
+----------
+- It makes use of Pull based approach.
+- Puppet Architecture
+  It has a Master-Slave architecture.
+  Nodes (slaves or agent) send data about itself to Puppet Master , ie it polls master.
+  This data is then compiled by Puppet master and configuration data is sent back to node.
+  Node then sends back a confirmation to Master that configuration is complete and it is visible on dashboard.
+- Resources are files, packages that define some aspect of system.
+  eg: <resource_type> { '<resource_name>' : <attribute> => '<value>' }
+- Classes are groups of resources. A resource defines a single file or package but a class describes everything needed to configure entire system.
+  eg: class <example_class> { ... }
+- Manifests are Puppet programs which have extensions as .pp
+- Modules are collection of manifests and data.
+  To add module to puppet , place it in   `/etc/puppet/modules`   directory
 
 
 
+
+CONTAINERIZATION
+-------------------------------------
 dockerfile
 ------------
 - A file (without any extension) with instructions to build image.
