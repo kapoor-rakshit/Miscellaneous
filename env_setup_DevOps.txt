@@ -60,8 +60,8 @@ Operations
            - Chef, Puppet, Ansible, Saltstack
       Containers
            - Docker
-      Monitoring
-           - Nagios
+      Monitoring and Log
+           - Nagios, Splunk
 
 
 CI workflow
@@ -234,7 +234,7 @@ CD enablers
 ----------------
 - Comprehensive configuration management
 - Containers
-- Continuous Testing
+- Continuous Testing/Monitoring
 
 Benefits of CD
 --------------------
@@ -302,6 +302,41 @@ Puppet
 - Manifests are Puppet programs which have extensions as .pp
 - Modules are collection of manifests and data.
   To add module to puppet , place it in   `/etc/puppet/modules`   directory
+  
+  
+
+
+LOG and MONITORING
+------------------------------------
+Nagios
+------------
+- It is a monitoring software application to monitor (health check) computer sysytems , networks and entire infrastructure.
+- It provides alerts over SMS, Phone, Email.
+- It can provide monitoring for 
+  server and network nodes, 
+  services (application and databases), 
+  ups backup system, 
+  bio metric identification system, 
+  temperature and humidity control system
+  cctv systems
+  storage subsystem (NAS-Network Attached Storage and SAN-Storage Area Network)
+- Nagios has two flavors
+  Core - Open Source
+  Xi   - Commercial
+- Attempt to ping the machines is considered as Soft state.
+  Attempt where an alert is generated is considered as Hard state.
+  
+Splunk
+------------
+- It is a tool for exploring/analyze real time logs.
+  It provides real time alerts/notifications.
+  It provides historical data analysis as well.
+  It provides real time server monitoring.
+- Splunk Components
+  forwarders which forward the logs to indexers/peer nodes.
+  indexers which store the logs but it cannot be used to search logs , so it forwards it to search heads/cluster members.
+  search heads provide search in these logs.
+  apart from this it has Deployment server, Cluster master, Deployer
 
 
 
