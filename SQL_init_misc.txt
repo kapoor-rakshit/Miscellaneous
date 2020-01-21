@@ -160,5 +160,73 @@ END LOOP;
 -- Use SQL Parameters for Protection against SQL Injection.
    SQL parameters are values that are added to an SQL query at execution time, in a controlled manner.
    The SQL engine checks each parameter to ensure that it is correct for its column and are treated literally, and not as part of the SQL to be executed.
+   
+   
+   
+   
+/* ANY and ALL operators */
+-- The ANY and ALL operators are used with a WHERE or HAVING clause.
+-- The operator must be a standard comparison operator (=, <>, !=, >, >=, <, or <=).
 
+-- The ANY operator returns true if any of the subquery values meet the <condition>.
+-- ANY compares a value to each value in a list or results from a query and evaluates to true if the result of an inner query contains at least one row.
+   mysql> SELECT <column_name(s)> FROM <table_name1> WHERE <column_name> <operator> ANY (SELECT <column_name> FROM <table_name2> WHERE <condition>);
+   
+-- The ALL operator returns true if all of the subquery values meet the <condition>.
+-- ALL operator is used to select all tuples of SELECT STATEMENT. It is also used to compare a value to every value in another value set or result from a subquery.
+   mysql> SELECT <column_name(s)> FROM <table_name1> WHERE <column_name> <operator> ALL (SELECT <column_name> FROM <table_name2> WHERE <condition>);
+   
+   
+   
+   
+/* SELECT INTO */
+-- The SELECT INTO statement copies data from one table into a NEW table.
+   mysql> SELECT * INTO <newtable> [IN <externaldb>] FROM <oldtable> WHERE <condition>;
+   
+/* INSERT INTO SELECT */
+-- The INSERT INTO SELECT statement copies data from one table and inserts it into ANOTHER EXISTING table.
+-- INSERT INTO SELECT requires that data types in source and target tables match.
+-- The existing records in the target table are unaffected.
+   mysql> INSERT INTO <table2> (column1, column2, column3) SELECT column1, column2, column3 FROM <table1> WHERE <condition>;
+   
+   
+   
+   
+/* CANDIDATE KEYS */
+-- COLUMNS eligible for being a PRIMARY KEY (with constraint UNIQUE and NOT NULL) are CANDIDATE KEYS.
+
+/* ALTERNATE KEYS */
+-- CANDIDATE KEYS which do not become PRIMARY KEY are ALTERNATE KEYS.
+
+/* COMPOSITE KEY */
+-- When two or more columns collectively are used to uniquely identify records it is a COMPOSITE KEY.
+
+/* FOREIGN KEY */
+-- A FOREIGN KEY is a field (or collection of fields) in one table that refers to the PRIMARY KEY in another table.
+-- The table containing the foreign key is called the child table, and the table containing the candidate key is called the referenced or parent table.
+-- The FOREIGN KEY constraint is used to prevent actions that would destroy links between tables.
+   -- It prevents invalid data from being inserted into the foreign key column of child table, because it has to be one of the values contained in the table it points to.
+   -- It prevents deletion from parent table as it has candidate key being referenced by child table containing FOREIGN KEY constraint. However deletion from child table is allowed.
+-- Examples
+   -- 1
+   -- The reference_option determines action which MySQL will take on child table when values in the parent key columns are deleted (ON DELETE) or updated (ON UPDATE) ie CASCADE (delete/update same as parent) | SET NULL (set NULL) | RESTRICT (reject)(default)
+   mysql> CREATE TABLE Orders (
+              OrderID int NOT NULL PRIMARY KEY,
+              OrderNumber int NOT NULL,
+              PersonID int,
+              CONSTRAINT <fk_PersonID> FOREIGN KEY (<PersonID>) REFERENCES <Persons>(<PersonID>)
+                         [ON DELETE reference_option]
+                         [ON UPDATE reference_option]
+          );
+   -- 2
+   -- ADD or DROP CONSTRAINT
+   -- To obtain the generated constraint name of a table, you use the    mysql> SHOW CREATE TABLE <table_name>;
+   mysql> ALTER TABLE <orders> ADD CONSTRAINT <fk_PersonID> FOREIGN KEY (<PersonID>) REFERENCES <Persons>(<PersonID>);
+   mysql> ALTER TABLE <orders> DROP FOREIGN KEY <fk_PersonID>;
+   
+   -- 3
+   -- Disabling/Enabling foreign key checks
+   mysql> SET foreign_key_checks = 0;
+   mysql> SET foreign_key_checks = 1;
+   
 
