@@ -200,6 +200,7 @@ END LOOP;
 
 /* COMPOSITE KEY */
 -- When two or more columns collectively are used to uniquely identify records it is a COMPOSITE KEY.
+   mysql> ALTER TABLE <persons> ADD CONSTRAINT <pk_person> PRIMARY KEY (<id>,<lastName>);
 
 /* FOREIGN KEY */
 -- A FOREIGN KEY is a field (or collection of fields) in one table that refers to the PRIMARY KEY in another table.
@@ -229,4 +230,70 @@ END LOOP;
    mysql> SET foreign_key_checks = 0;
    mysql> SET foreign_key_checks = 1;
    
+
+
+
+/* TRANSACTION, SAVEPOINT, ROLLBACK, COMMIT */
+-- By default, MySQL runs with autocommit mode enabled. each statement is atomic, as if it were surrounded by START TRANSACTION and COMMIT.
+   You cannot use ROLLBACK to undo the effect; however, if an error occurs during statement execution, the statement is rolled back.
+-- With START TRANSACTION, autocommit remains disabled until you end the transaction with COMMIT or ROLLBACK (ie rollback that does not name a savepoint)
+   The autocommit mode then reverts to its previous state.
+   
+-- The SAVEPOINT statement sets a named transaction savepoint with a name of identifier. 
+   If the current transaction has a savepoint with the same name, the old savepoint is deleted and a new one is set.
+-- The RELEASE SAVEPOINT <savepoint> statement removes the named savepoint from the set of savepoints of the current transaction. 
+   No commit or rollback occurs with this statement.
+-- All savepoints of the current transaction are deleted if you execute a COMMIT or a ROLLBACK (ie rollback that does not name a savepoint).
+   
+-- The ROLLBACK TO SAVEPOINT statement rolls back a transaction to the named savepoint without terminating the transaction.
+   Modifications that the current transaction made to rows after the savepoint was set are undone in the rollback.
+   
+-- Example
+   -- 1
+   mysql> START TRANSACTION;
+   mysql> SAVEPOINT <initial_save>;
+   mysql> <INSERT | UPDATE | DELETE ... operations performed on one or more tables>
+   mysql> ROLLBACK TO SAVEPOINT <initial_save>;
+   mysql> COMMIT;
+   
+   
+   
+   
+/* INDEXING */
+-- Indexes consist of rows and columns like tables but it stores data in a logically sorted manner.
+-- Indexes are used to retrieve data from the database more quickly than otherwise. 
+   Indexes are also used to enforce uniqueness in a table.
+   The users cannot see the indexes.
+-- Updating a table with indexes takes more time than updating a table without (because the indexes also need an update).
+   Indexes also consume adequate amount of disk space
+   So, only create indexes on columns that will be frequently searched against.
+-- Types of Indexes
+   -- 1. Clustered Index       - indexes can also be used to optimize sort operations (order by) and physically arrange related data closely together
+   -- 2. Non Clustered Index   - not clustered
+   -- 3. Primary Key Index     - primary key
+   -- 4. Unique Index          - unique constraint on index
+   -- 5. Full Text Index       - allows full text search ie creating an “index” for each “word” in the specified column.
+   -- 6. Normal Index          - Default Index
+-- Example
+   -- 1
+   -- Create an index on a combination of columns
+   mysql> CREATE INDEX <index_name> ON <table_name> (<column1>, <column2>, ...);
+   
+   -- 2
+   -- Create a unique index on a table. Duplicate values are not allowed for those combination of columns
+   mysql> CREATE UNIQUE INDEX <index_name> ON <table_name> (<column1>, <column2>, ...);
+   
+   -- 3
+   mysql> ALTER TABLE <table_name> DROP INDEX <index_name>;
+   
+   -- 4
+   -- Demonstrate optimization done by an Index
+   -- Say total rows are 10658 and with condition county='071' are 192
+   mysql> EXPLAIN SELECT * FROM <zipcodes_tab> WHERE <county>='071';      // when no index is made to table it will search from all rows (10658 rows) to select only <conditioned> rows 
+                                                                          // as MySQL optimizer didn’t find any keys to use.
+   mysql> CREATE INDEX <ind_county> ON <zipcodes_tab> (<county>);         // created index for `county` column
+   mysql> EXPLAIN SELECT * FROM <zipcodes_tab> WHERE <county>='071';      // this will search using INDEX condition (192 rows searched) and not WHERE condition , preventing search from all (10658) rows
+   mysql> EXPLAIN SELECT * FROM <zipcodes_tab> WHERE <county>='071' AND <zipcode>='06125';     // this will search from using INDEX condition for <county> AND WHERE condition for <zipcode> ie (192 rows searched)
+   mysql> CREATE INDEX <ind_county_zipcode> ON <zipcodes_tab> (<county>, <zipcode>);           // created COMPOSITE INDEX
+   mysql> EXPLAIN SELECT * FROM zipcodes_tab WHERE county='071' and zipcode='06125';           // this will search from using INDEX condition ie (1 row searched)
 
