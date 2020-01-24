@@ -112,6 +112,12 @@ END LOOP;
 
 
 
+/* BUILT-IN Functions */
+-- COALESCE(NULL, 'A', 'B', NULL)      : returns first non-null value in list of expressions or NULL if all the values in list are NULL.
+
+
+
+
 /* CURSOR */
 /* REFERENCE : https://www.mysqltutorial.org/mysql-cursor */
 -- A cursor allows you to iterate a set of rows returned by a query and process each row individually. 
@@ -268,12 +274,19 @@ END LOOP;
    Indexes also consume adequate amount of disk space
    So, only create indexes on columns that will be frequently searched against.
 -- Types of Indexes
-   -- 1. Clustered Index       - indexes can also be used to optimize sort operations (order by) and physically arrange related data closely together
-   -- 2. Non Clustered Index   - not clustered
-   -- 3. Primary Key Index     - primary key
-   -- 4. Unique Index          - unique constraint on index
-   -- 5. Full Text Index       - allows full text search ie creating an “index” for each “word” in the specified column.
-   -- 6. Normal Index          - Default Index
+   -- CLUSTERED INDEX or PHYSICAL INDEX
+      -- When you create a table with a PRIMARY KEY or UNIQUE KEY, MySQL automatically creates a special index named PRIMARY. 
+         The PRIMARY index is special because the index itself is stored together with the data in the same table, hence CLUSTERED.
+         Because a clustered index enforces the rows in sorted order physically, each table have only one clustered index.
+      -- 1. PRIMARY Key           - a primary key is itself an index with properties UNIQUE and NOT NULL
+      -- 2. UNIQUE Key            - UNIQUE property over column
+   -- NON-CLUSTERED INDEX or LOGICAL INDEX
+      -- Index is a separate data structure such as B-Tree that stores the key values used for faster lookups.
+         There can be more than one non-clustered index.
+      -- 1. Unique Index          - UNIQUE constraint on index
+      -- 2. Full Text Index       - allows full text search ie creating an “index” for each “word” in the specified column.
+      -- 3. Descending Index      - a regular index stored in reverse order.
+      -- 4. Normal Index          - Default/Simple/Regular Index without constraints
 -- Example
    -- 1
    -- Create an index on a combination of columns
@@ -287,13 +300,16 @@ END LOOP;
    mysql> ALTER TABLE <table_name> DROP INDEX <index_name>;
    
    -- 4
+   mysql> SHOW INDEXES FROM <table_name>;
+   
+   -- 5
    -- Demonstrate optimization done by an Index
-   -- Say total rows are 10658 and with condition county='071' are 192
-   mysql> EXPLAIN SELECT * FROM <zipcodes_tab> WHERE <county>='071';      // when no index is made to table it will search from all rows (10658 rows) to select only <conditioned> rows 
+   -- Say total rows are 10658 , with condition <county>='071' are 192 , with condition <county>='071' AND <zipcode>='06125' are 1
+   mysql> EXPLAIN SELECT * FROM <zipcodes_tab> WHERE <county>='071';      // when no index is made to table it will search from all rows (all 10658 rows searched from) to select only <conditioned> rows 
                                                                           // as MySQL optimizer didn’t find any keys to use.
    mysql> CREATE INDEX <ind_county> ON <zipcodes_tab> (<county>);         // created index for `county` column
-   mysql> EXPLAIN SELECT * FROM <zipcodes_tab> WHERE <county>='071';      // this will search using INDEX condition (192 rows searched) and not WHERE condition , preventing search from all (10658) rows
-   mysql> EXPLAIN SELECT * FROM <zipcodes_tab> WHERE <county>='071' AND <zipcode>='06125';     // this will search from using INDEX condition for <county> AND WHERE condition for <zipcode> ie (192 rows searched)
+   mysql> EXPLAIN SELECT * FROM <zipcodes_tab> WHERE <county>='071';      // this will search using INDEX condition (only 192 rows searched from) and not WHERE condition , preventing search from all (10658) rows
+   mysql> EXPLAIN SELECT * FROM <zipcodes_tab> WHERE <county>='071' AND <zipcode>='06125';     // this will search from using INDEX condition for <county> AND WHERE condition for <zipcode> ie (only 192 rows searched from)
    mysql> CREATE INDEX <ind_county_zipcode> ON <zipcodes_tab> (<county>, <zipcode>);           // created COMPOSITE INDEX
-   mysql> EXPLAIN SELECT * FROM zipcodes_tab WHERE county='071' and zipcode='06125';           // this will search from using INDEX condition ie (1 row searched)
+   mysql> EXPLAIN SELECT * FROM <zipcodes_tab> WHERE <county>='071' and <zipcode>='06125';           // this will search from using INDEX condition ie (only 1 row searched from)
 
