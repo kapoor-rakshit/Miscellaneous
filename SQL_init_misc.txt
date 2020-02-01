@@ -115,6 +115,10 @@ END LOOP;
 /* BUILT-IN Functions */
 -- COALESCE(NULL, 'A', 'B', NULL)      : returns first non-null value in list of expressions or NULL if all the values in list are NULL.
 
+-- CURRENT_DATE()                      : returns "YYYY-MM-DD" (string)
+-- CURRENT_TIME()                      : returns "HH-MM-SS" (string)
+-- CURRENT_TIMESTAMP()                 : returns "YYYY-MM-DD HH-MM-SS" (string)
+
 
 
 
@@ -209,7 +213,8 @@ END LOOP;
    mysql> ALTER TABLE <persons> ADD CONSTRAINT <pk_person> PRIMARY KEY (<id>,<lastName>);
 
 /* FOREIGN KEY */
--- A FOREIGN KEY is a field (or collection of fields) in one table that refers to the PRIMARY KEY in another table.
+-- A FOREIGN KEY is a field (or collection of fields) in one table that refers to the PRIMARY KEY | UNIQUE constraint column in another table.
+   NOTE : If that column of parent table do not have either PRIMARY KEY or UNIQUE constraint , foreign key constraint creation fails.
 -- The table containing the foreign key is called the child table, and the table containing the candidate key is called the referenced or parent table.
 -- The FOREIGN KEY constraint is used to prevent actions that would destroy links between tables.
    -- It prevents invalid data from being inserted into the foreign key column of child table, because it has to be one of the values contained in the table it points to.
