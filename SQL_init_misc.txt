@@ -113,7 +113,11 @@ END LOOP;
 
 
 /* BUILT-IN Functions */
--- COALESCE(NULL, 'A', 'B', NULL)      : returns first non-null value in list of expressions or NULL if all the values in list are NULL.
+-- COALESCE(NULL, 'A', 'B', NULL)        : returns first non-null value in list of expressions or NULL if all values in list are NULL.
+
+-- SUBSTR(string, start, chars_required) : extracts a substring from a string, If omitted 'chars_required', whole string will be returned (from start position)
+   SUBSTRING(string, start, chars_required)
+   MID("SQL Tutorial", -5, chars_required): -ve value traverse from end
 
 -- CURRENT_DATE()                      : returns "YYYY-MM-DD" (string)
 -- CURRENT_TIME()                      : returns "HH-MM-SS" (string)
