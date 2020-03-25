@@ -126,6 +126,42 @@ END LOOP;
 
 
 
+/* CONSTRAINTS */
+/* Following are constraints used in MySQL on a table column */
+/* NOTE : To obtain the generated constraint name of a table, we use
+          mysql> SHOW CREATE TABLE <table_name>;
+*/
+-- PRIMARY KEY
+   mysql> ALTER TABLE <persons> ADD CONSTRAINT <pk_person> PRIMARY KEY (<column_1>,<column_2>);
+   mysql> ALTER TABLE <persons> DROP PRIMARY KEY;
+  
+-- FOREIGN KEY
+   mysql> ALTER TABLE <orders> ADD CONSTRAINT <fk_PersonID> FOREIGN KEY (<PersonID>) REFERENCES <Persons>(<PersonID>);
+   mysql> ALTER TABLE <orders> DROP FOREIGN KEY <fk_PersonID>;
+   
+-- UNIQUE
+   mysql> ALTER TABLE <persons> ADD CONSTRAINT <uc_person> UNIQUE (<column_1>,<column_2>);
+   mysql> ALTER TABLE <persons> DROP INDEX <uc_person>;
+   
+-- NOT NULL
+   /* following command will provide a new column definition, so we can add/remove existing datatype/constraints as well  */
+   mysql> ALTER TABLE <table_name> MODIFY COLUMN <column> VARCHAR(100) UNIQUE NOT NULL;
+   /* OR */
+   mysql> ALTER TABLE <table_name> ALTER COLUMN <column> VARCHAR(100) UNIQUE NOT NULL;
+   /* OR */
+   mysql> ALTER TABLE <table_name> CHANGE <old_column_name> <new_column_name> VARCHAR(100) UNIQUE;
+   
+-- DEFAULT
+   mysql> ALTER TABLE <persons> ALTER <column> SET DEFAULT 'Sandnes';
+   mysql> ALTER TABLE <persons> ALTER <column> DROP DEFAULT;
+   
+-- CHECK
+   mysql> ALTER TABLE <persons> ADD CONSTRAINT <chk_personage> CHECK (column_1>=18 AND column_2='Sandnes');
+   mysql> ALTER TABLE <persons> DROP CHECK <chk_personage>;
+   
+
+
+
 /* CURSOR */
 /* REFERENCE : https://www.mysqltutorial.org/mysql-cursor */
 -- A cursor allows you to iterate a set of rows returned by a query and process each row individually. 
@@ -244,7 +280,7 @@ END LOOP;
    -- Disabling/Enabling foreign key checks
    mysql> SET foreign_key_checks = 0;
    mysql> SET foreign_key_checks = 1;
-   
+
 
 
 
