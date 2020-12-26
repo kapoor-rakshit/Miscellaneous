@@ -58,6 +58,8 @@ string.replace("oldstr","newstr",3)    # no. of occurrence of oldstr to be repla
 a.extend(b)                           # append elements of b list to list a     [23,45,56]
 a.append(b)                           # append list b as an element to list a   [23,[45,56]]
 a.pop()                               # remove last element
+a.pop(0)                              # remove element at specified index
+a.insert(0,9025)                      # add element(9025) at specified index(0)
 a.remove(elem)                        # remove specific element elem
 
 
@@ -76,4 +78,11 @@ reload(modulename)     # reload a module, useful when a module is edited but to 
 
 # misc.
 # use asterisk (*) symbol to repeat    eg:    print("thank you" * 3)     prints the str "3" times
+
+
+#json
+import json
+dictFromJSON = json.loads(d)   # similar to JSON.parse()
+JSONfromDict = json.dumps(s)   # similar to JSON.stringify()
+
 
