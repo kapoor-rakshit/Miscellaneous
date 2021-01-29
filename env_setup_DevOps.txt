@@ -343,6 +343,30 @@ Splunk
 
 CONTAINERIZATION
 -------------------------------------
+installation of DOCKER
+-------------------------
+> Installing on Windows 10 (Pro or Enterprise)
+  install "Docker for Windows" from the Docker Store , https://www.docker.com/docker-windows
+  
+> Installing on Windows 7, 8, or 10 Home Edition
+  Microsoft's OS features for Docker and Hyper-V don't work in these older versions, 
+  and "Windows 10 Home" edition doesn't have Hyper-V, so you'll need to install the Docker Toolbox , https://docs.docker.com/toolbox/overview/
+  which is a slightly different approach to using Docker with a VirtualBox VM. 
+  This means Docker will be running in a Virtual Machine that sits behind the IP of your OS, and uses NAT to access the internet.
+  NOTE : We might have to change HOSTNAME when using toolbox.
+  
+> Installing on Mac
+  install "Docker for Mac" from the Docker Store , https://www.docker.com/docker-mac
+   
+> Installing on Linux
+  NOTE : Do *NOT* use your built in default packages like apt/yum install docker.io because those packages are old and not Official Docker-Built packages.
+  use the Docker's automated script to add their repository and install all dependencies: $> curl -sSL https://get.docker.com/ | sh
+  OR install in manual method by following instructions on Docker Store for distribution , https://store.docker.com/editions/community/docker-ce-server-ubuntu
+  
+> Browser a.k.a. PWD
+  use play-with-docker.com ,  http://play-with-docker.com/   which will run one or more Docker instances inside your browser, 
+  and give you a terminal to use it with. But it's only limitation really is it's time bombed to 4 hours, at which time it'll delete your servers.
+
 dockerfile
 ------------
 - A file (without any extension) with instructions to build image.
