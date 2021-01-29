@@ -418,9 +418,6 @@ Docker architecture + commands
 - Docker has a client (Command Line) - server (Docker Daemon) architecture.
   server has containers which respond to REST API request or Command from terminal coming from either same or different machine as of server
   client and server together form Docker Engine.
-- Install
-  $ sudo apt-get update
-  $ sudo apt-get install docker
 - Add user to docker group to avoid writing "sudo" before every command
   $ sudo usermod -a -G docker <username>
   "Relogin to system for this to take effect"
@@ -432,30 +429,36 @@ Docker architecture + commands
   $ docker version                                   // information of docker client-server
   $ docker info                                      // information of containers + images + server
   $ docker <command_name> --help                     // manual to <commandname>
-  $ docker login                                     // login to dockerhub
+  $ docker login                                     // login to dockerhub(default)    or   $ docker login my.registry.com:8000
   $ docker stats                                     // realtime stats of all containers
   $ docker system df                                 // disk usage by docker
   $ docker system prune                              // removes containers/images
 - Images
-  $ docker images -a                                 // list of images
-  $ docker pull <image_name>                         // pull image with default tag "latest" from dockerhub
+  $ docker images -a                                 // list of all images , (default(without -a) hides intermediate images)
+                                                     // images have intermediate layers that increase reusability, decrease disk usage, speed up build by cache. 
+  $ docker pull <image_name>                         // pull image with default tag "latest" from registry/dockerhub
   $ docker pull <image_name>:<tag_name>              // pull image with tag "<tag_name>" from dockerhub     ,  NOTE: use of ":"
   $ docker build -t <image_name>:<tag_name> <PATH>   // build image from dockerfile located at PATH dir, -t: name and optional tag
-  $ docker build -t <image_name>:<tag_name> .        // build image from dockerfile located at current dir  ,  NOTE: use of "."
-  $ docker rmi <image_name>/<imageID>                // remove one or more images
+  $ docker build -t <image_name>:<tag_name> .        // build image from dockerfile located at current dir,  NOTE: use of "."
+  $ docker rmi <image_name>/<imageID>                // remove one or more images from the local image store
+  $ docker tag <image_name>:<tag_name> <new_image_name>:<new_tag_name>     // Retag a local image with a new image name and tag name
+  $ docker push <image_name>:<tag_name>              // Push an image to a registry
 - Containers
   $ docker ps                                        // lists currently running containers
   $ docker ps -a                                     // list all containers
   $ docker run <image_name>                          // run container from image <image_name>
   $ docker run <image_name>:<tag_name>               // run container from image <image_name> with tag <tag_name>
   $ docker run --name <customized_name> <image_name> // run container with a <customized_name> from image <image_name>
-  $ docker start <customized_name>/<containerID>     // start container
-  $ docker stop <customized_name>/<containerID>      // stop container
+  $ docker start <customized_name>/<containerID>     // start container with any one of <customized_name> or <containerID>
+  $ docker stop <customized_name>/<containerID>      // stop container through SIGTERM
+  $ docker kill <customized_name>                    // Stop a running container through SIGKILL
   $ docker pause <customized_name>/<containerID>     // pause running container
   $ docker unpause <customized_name>/<containerID>   // resume paused container
   $ docker stats <customized_name>/<containerID>     // stats for particular container
   $ docker attach <customized_name>/<containerID>    // work over running container in new terminal
   $ docker rm <customized_name>/<containerID>        // remove container
+  $ docker logs --tail 100 <customized_name>         // Print the last 100 lines of a container’s logs
+  $ docker exec -it <customized_name> bash           // Create new bash process inside running container and (-it)connect it to terminal
   
 Docker Volume
 ---------------
