@@ -367,25 +367,6 @@ installation of DOCKER
   use play-with-docker.com ,  http://play-with-docker.com/   which will run one or more Docker instances inside your browser, 
   and give you a terminal to use it with. But it's only limitation really is it's time bombed to 4 hours, at which time it'll delete your servers.
 
-dockerfile
-------------
-- A file (without any extension) with instructions to build image.
-- It uses   #   for comments.
-- FROM <base_image_name>:<tag_name>                // this can be "scratch" as per dockerhub documentation if we donot want any base image
-  ENV <key>=<val>                                  // a key-val pair that can be accessed using <key> throughout dockerfile
-  LABEL maintainer=<email_id>                      // best practice to specify maintainer using LABEL as key-val pair
-  WORKDIR /usr/src/app                             // sets working directory for instructions (COPY, RUN,...) that follow it in dockerfile
-  ADD <src> <dest>                                 // works similar to COPY but support, use of URL instead of a local file <src>, extract tar file from source directly into destination.
-  COPY package*.json ./                            // copies files or directories from <src> (eg: package*.json) to <dest> (eg: ./)
-  RUN npm install                                  // this will execute while building image from dockerfile
-  COPY . ./                                        // bundle your app's entire source code inside the Docker image , NOTE: use of "."
-  EXPOSE 8080                                      // informs Docker that container listens on the specified network ports at runtime , however during runtime we can map machine port to this exposed port using -p flag
-  CMD ["node", "app.js"]                           // this will execute while running container from image
-  
-.dockerignore
-----------------
-- A .dockerignore is similar to .gitignore , which will ignore files to be added/copied to image
-
 Images + Containers
 ---------------------
 - It packages application and it's dependencies together in form of a container (run time instance of docker image)
@@ -405,12 +386,40 @@ Virtualization vs Containerization
 - In containerization we have Container Engine (Docker Engine) which uses containers.
   Each of continers (app plus libs) uses memory as per application needs from OS resulting in efficient use of HOST platform.
   It can run on any machine that has Docker installed which prevents need to configure and build app multiple times on different platforms.
+  Containers are processes that are shared OS processes. This is verified by `$ docker top <container_name>` and `$ ps aux`, both show same UID | PID etc..
 
 How are containers created ?
 -----------------------------
 - Docker file (Dockerfile) which contains commands are used to create Docker image and that image will contain all project codes.
 - Docker image can be used to spin "N" number of containers each with modifications to underlying image.
 - Docker image is uploaded on Docker Hub and is pulled on staging env or testing env where docker containers are spun and code can run.
+- What happens when we     `$ docker run <image_name>` ?
+  - Look for image locally i.e. in image cache, if not then
+        - Look for image in remote image repository i.e. hub.docker.com (default) or another configured registry
+        - Downloads it from registry
+  - Creates new container and prepares to starts it.
+  - Gives it virtual IP on private network inside docker engine
+  - Opens port as specified with option -p OR --publish <LOCAL_PORT>:<SERVICE_PORT>
+  - Starts container by using `CMD ["COMMANDs"]` as written in image's dockerfile
+
+dockerfile
+------------
+- A file (without any extension) with instructions to build image.
+- It uses   #   for comments.
+- FROM <base_image_name>:<tag_name>                // this can be "scratch" as per dockerhub documentation if we donot want any base image
+  ENV <key>=<val>                                  // a key-val pair that can be accessed using <key> throughout dockerfile
+  LABEL maintainer=<email_id>                      // best practice to specify maintainer using LABEL as key-val pair
+  WORKDIR /usr/src/app                             // sets working directory for instructions (COPY, RUN,...) that follow it in dockerfile
+  ADD <src> <dest>                                 // works similar to COPY but support, use of URL instead of a local file <src>, extract tar file from source directly into destination.
+  COPY package*.json ./                            // copies files or directories from <src> (eg: package*.json) to <dest> (eg: ./)
+  RUN npm install                                  // this will execute while building image from dockerfile
+  COPY . ./                                        // bundle your app's entire source code inside the Docker image , NOTE: use of "."
+  EXPOSE 8080                                      // informs Docker that container listens on the specified network ports at runtime , however during runtime we can map machine port to this exposed port using -p flag
+  CMD ["node", "app.js"]                           // this will execute while running container from image
+  
+.dockerignore
+----------------
+- A .dockerignore is similar to .gitignore , which will ignore files to be added/copied to image
 
 Docker architecture + commands
 --------------------------------
@@ -430,6 +439,7 @@ Docker architecture + commands
   $ docker info                                      // information of containers + images + server
   $ docker <command_name> --help                     // manual to <commandname>
   $ docker login                                     // login to dockerhub(default)    or   $ docker login my.registry.com:8000
+  $ docker logout                                    // Log out from a Docker registry
   $ docker stats                                     // realtime stats of all containers
   $ docker system df                                 // disk usage by docker
   $ docker system prune                              // removes containers/images
@@ -449,16 +459,18 @@ Docker architecture + commands
   $ docker run <image_name>                          // run container from image <image_name>
   $ docker run <image_name>:<tag_name>               // run container from image <image_name> with tag <tag_name>
   $ docker run --name <customized_name> <image_name> // run container with a <customized_name> from image <image_name>
+  $ docker run --detach <image_name>                 // --detach runs container in background of terminal. It does not receive input, display output, but returns control back to terminal
   $ docker start <customized_name>/<containerID>     // start container with any one of <customized_name> or <containerID>
   $ docker stop <customized_name>/<containerID>      // stop container through SIGTERM
   $ docker kill <customized_name>                    // Stop a running container through SIGKILL
   $ docker pause <customized_name>/<containerID>     // pause running container
   $ docker unpause <customized_name>/<containerID>   // resume paused container
   $ docker stats <customized_name>/<containerID>     // stats for particular container
-  $ docker attach <customized_name>/<containerID>    // work over running container in new terminal
   $ docker rm <customized_name>/<containerID>        // remove container
   $ docker logs --tail 100 <customized_name>         // Print the last 100 lines of a container’s logs
-  $ docker exec -it <customized_name> bash           // Create new bash process inside running container and (-it)connect it to terminal
+  $ docker attach <customized_name>/<containerID>    // Attach local standard input, output, error streams i.e. terminal to running container
+  $ docker exec -it <customized_name> bash           // Run a command(eg: bash) in running container and (-it)connect it to terminal
+  $ docker top <customized_name>                     // lists processes running within container, UID | PID etc.. match with OS's `$ ps aux`
   
 Docker Volume
 ---------------
