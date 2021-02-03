@@ -440,12 +440,17 @@ Docker architecture + commands
   $ docker <command_name> --help                     // manual to <commandname>
   $ docker login                                     // login to dockerhub(default)    or   $ docker login my.registry.com:8000
   $ docker logout                                    // Log out from a Docker registry
-  $ docker stats                                     // realtime stats of all containers
+  $ docker stats                                     // live performance, realtime stats of all containers
   $ docker system df                                 // disk usage by docker
   $ docker system prune                              // removes containers/images
-- Images
-  $ docker images -a                                 // list of all images , (default(without -a) hides intermediate images)
-                                                     // images have intermediate layers that increase reusability, decrease disk usage, speed up build by cache. 
+  $ docker network ls                                // shows list of networks
+  $ docker network inspect <NETWORK_NAME>            // shows details of <NETWORK_NAME> like containers attached to it etc..
+  $ docker network create <NETWORK_NAME>             // create new network with default driver "bridge", use --driver to specify DRIVER
+  $ docker network connect <NETWORK> <CONTAINER>     // attach already running container to network
+  $ docker network disconnect <NETWORK> <CONTAINER>  // remove container from network
+  
+- Images                                             // NOTE : images have intermediate layers to increase reusability,decrease disk usage,speed build by cache.
+  $ docker images -a                                 // list of all images , (default(without -a) hides intermediate images) 
   $ docker pull <image_name>                         // pull image with default tag "latest" from registry/dockerhub
   $ docker pull <image_name>:<tag_name>              // pull image with tag "<tag_name>" from dockerhub     ,  NOTE: use of ":"
   $ docker build -t <image_name>:<tag_name> <PATH>   // build image from dockerfile located at PATH dir, -t: name and optional tag
@@ -453,24 +458,28 @@ Docker architecture + commands
   $ docker rmi <image_name>/<imageID>                // remove one or more images from the local image store
   $ docker tag <image_name>:<tag_name> <new_image_name>:<new_tag_name>     // Retag a local image with a new image name and tag name
   $ docker push <image_name>:<tag_name>              // Push an image to a registry
+  
 - Containers
   $ docker ps                                        // lists currently running containers
   $ docker ps -a                                     // list all containers
   $ docker run <image_name>                          // run container from image <image_name>
   $ docker run <image_name>:<tag_name>               // run container from image <image_name> with tag <tag_name>
   $ docker run --name <customized_name> <image_name> // run container with a <customized_name> from image <image_name>
-  $ docker run --detach <image_name>                 // --detach runs container in background of terminal. It does not receive input, display output, but returns control back to terminal
+  $ docker run --detach <image_name>                 // --detach runs container in background. It does not receive input,display output,but returns control back to terminal
+  $ docker run --network <NETWORK_NAME> <image>      // attach spun up container to this <NETWORK_NAME>
   $ docker start <customized_name>/<containerID>     // start container with any one of <customized_name> or <containerID>
   $ docker stop <customized_name>/<containerID>      // stop container through SIGTERM
   $ docker kill <customized_name>                    // Stop a running container through SIGKILL
   $ docker pause <customized_name>/<containerID>     // pause running container
   $ docker unpause <customized_name>/<containerID>   // resume paused container
-  $ docker stats <customized_name>/<containerID>     // stats for particular container
   $ docker rm <customized_name>/<containerID>        // remove container
-  $ docker logs --tail 100 <customized_name>         // Print the last 100 lines of a container’s logs
   $ docker attach <customized_name>/<containerID>    // Attach local standard input, output, error streams i.e. terminal to running container
-  $ docker exec -it <customized_name> bash           // Run a command(eg: bash) in running container and (-it)connect it to terminal
+  $ docker logs --tail 100 <customized_name>         // Print the last 100 lines of a container’s task logs
+  $ docker exec -it <customized_name> bash           // Run command(eg: bash) in already running container, (-i)keep connected to terminal (-t)allocate pseudo TTY
+  $ docker run -it --name <custom_name> <image> bash // Run new container, change default command(eg: bash), NOTE: quitting here(eg: bash) will STOP container too
   $ docker top <customized_name>                     // lists processes running within container, UID | PID etc.. match with OS's `$ ps aux`
+  $ docker inspect <customized_name>                 // show metadata for container (startup config, volumes, networking etc.)
+  $ docker stats <customized_name>/<containerID>     // live performance stats for particular container
   
 Docker Volume
 ---------------
