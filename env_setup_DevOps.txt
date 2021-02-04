@@ -369,13 +369,13 @@ installation of DOCKER
 
 Images + Containers
 ---------------------
-- It packages application and it's dependencies together in form of a container (run time instance of docker image)
+- Images package application and it's dependencies together in form of a container (run time instance of docker image)
 - Containers are used by a container engine (Docker Engine) which is there on host OS.
 - RAM consumed by containers is very less than that required by VM (virtual machine).
 - Easily run applications containers , no need to reboot entire VM.
 - Docker Images are light weight templates and shared via Docker Hub (online repository) or Import/Export.
 - An unused image means that it has not been assigned or used in a container i.e. command "docker ps -a" will not show unused image.
-- A dangling image means that you've created the new build of the image, but it wasn't given a new name. 
+- A dangling image means that you've created the new image, but it wasn't given a new name. 
   So the old images you have becomes the "dangling image" and command "docker images -a" will show "<none>" as their name.
 
 Virtualization vs Containerization
@@ -402,20 +402,21 @@ How are containers created ?
   - Opens port as specified with option -p OR --publish <LOCAL_PORT>:<SERVICE_PORT>
   - Starts container by using `CMD ["COMMANDs"]` as written in image's dockerfile
 
-dockerfile
+Dockerfile
 ------------
 - A file (without any extension) with instructions to build image.
 - It uses   #   for comments.
+  It uses   \   for break line of long instruction.
 - FROM <base_image_name>:<tag_name>                // this can be "scratch" as per dockerhub documentation if we donot want any base image
-  ENV <key>=<val>                                  // a key-val pair that can be accessed using <key> throughout dockerfile
+  ENV <key> <val>                                  // a key-val pair that can be accessed using ${key} throughout dockerfile
   LABEL maintainer=<email_id>                      // best practice to specify maintainer using LABEL as key-val pair
   WORKDIR /usr/src/app                             // sets working directory for instructions (COPY, RUN,...) that follow it in dockerfile
   ADD <src> <dest>                                 // works similar to COPY but support, use of URL instead of a local file <src>, extract tar file from source directly into destination.
-  COPY package*.json ./                            // copies files or directories from <src> (eg: package*.json) to <dest> (eg: ./)
+  COPY package*.json ./                            // copies files or directories from <src> (eg: package*.json) to <dest> (eg: ./) WORKDIR
   RUN npm install                                  // this will execute while building image from dockerfile
-  COPY . ./                                        // bundle your app's entire source code inside the Docker image , NOTE: use of "."
-  EXPOSE 8080                                      // informs Docker that container listens on the specified network ports at runtime , however during runtime we can map machine port to this exposed port using -p flag
-  CMD ["node", "app.js"]                           // this will execute while running container from image
+  COPY . ./                                        // bundle your app's entire source code inside Docker image, NOTE: use of "." for current and "./" for WORKDIR
+  EXPOSE 8080 4200 7200                            // informs Docker that container listens on specified ports at runtime,however during runtime we have to map machine port to exposed port using -p flag
+  CMD ["node", "app.js"]                           // this will execute while running container from image, there can be only one CMD,incase multiple,last wins
   
 .dockerignore
 ----------------
@@ -450,18 +451,22 @@ Docker architecture + commands
   $ docker network disconnect <NETWORK> <CONTAINER>  // remove container from network
   
 - Images                                             // NOTE : images have intermediate layers to increase reusability,decrease disk usage,speed build by cache.
-  $ docker images -a                                 // list of all images , (default(without -a) hides intermediate images) 
-  $ docker pull <image_name>                         // pull image with default tag "latest" from registry/dockerhub
+  $ docker images -a        | docker image ls -a     // list of all images , (default(without -a) hides intermediate images) 
+  $ docker pull <image_name>                         // pull image with default tag "latest" from registry/dockerhub OR update image to latest version/tag
   $ docker pull <image_name>:<tag_name>              // pull image with tag "<tag_name>" from dockerhub     ,  NOTE: use of ":"
   $ docker build -t <image_name>:<tag_name> <PATH>   // build image from dockerfile located at PATH dir, -t: name and optional tag
   $ docker build -t <image_name>:<tag_name> .        // build image from dockerfile located at current dir,  NOTE: use of "."
+  $ docker build -t <image_name>:<tag_name> -f <SOME_FILE_NAME> .          // -f (--file) specifies dockerfile name other than (Dockerfile)(default)
   $ docker rmi <image_name>/<imageID>                // remove one or more images from the local image store
-  $ docker tag <image_name>:<tag_name> <new_image_name>:<new_tag_name>     // Retag a local image with a new image name and tag name
+  $ docker tag <image_name>:<tag_name> <new_image_name>:<new_tag_name>     // a new image created with same IMAGE_ID but with new image name and new tag name
   $ docker push <image_name>:<tag_name>              // Push an image to a registry
+  $ docker image history <image_name>:<tag_name>     // what all changes have been made to <image>
+  $ docker image inspect <image_name>:<tag_name>     // fine details of image like how it is made, exposed ports, CMD command etc..
+  $ docker image prune                               // clean up just "dangling" images | -a option, will remove all images you're not using
   
 - Containers
   $ docker ps                                        // lists currently running containers
-  $ docker ps -a                                     // list all containers
+  $ docker ps -a           | docker container ls -a  // list all containers
   $ docker run <image_name>                          // run container from image <image_name>
   $ docker run <image_name>:<tag_name>               // run container from image <image_name> with tag <tag_name>
   $ docker run --name <customized_name> <image_name> // run container with a <customized_name> from image <image_name>
