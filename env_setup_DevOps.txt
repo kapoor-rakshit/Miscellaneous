@@ -486,30 +486,30 @@ Docker architecture + commands
   $ docker inspect <customized_name>                 // show metadata for container (startup config, volumes, networking etc.)
   $ docker stats <customized_name>/<containerID>     // live performance stats for particular container
   
-Docker Volume
----------------
+Docker Volume | BIND MOUNTS
+------------------------------
 - In absence of volumes data generated and used by container is stored within container, incase a container is deleted, entire data is also lost.
 - To have a persistent storage for data generated and used by containers we create VOLUMES, that are independent of container.
   It allows for shared volume (data/storage) among different containers.
   It allows to attach a volume to a container.
-- Create volume
-  $ docker volume create <VOL_NAME>
-- List volumes
-  $ docker volume ls
-- Info about a volume
-  $ docker volume inspect <VOL_NAME>
-- Remove a volume
-  $ docker volume rm <VOL_NAME>
+- BIND MOUNTS : This is what is used when you are trying to map the files from a directory on the host into a directory in the container.
+- Looking through README.md or Dockerfile of official image (eg: mysql, postgresql) on docker hub, find database path documented or VOLUME stanza.
+- $ docker volume create <VOL_NAME>                 // Create volume
+  $ docker volume ls                                // List volumes
+  $ docker volume inspect <VOL_NAME>                // Info about a volume
+  $ docker volume rm <VOL_NAME>                     // Remove a volume
   $ docker volume prune                             // remove all unused volumes (not used by any container)
+  $ docker run --detach --name <customized_name> -p 9090:8080 -v <CREATE_OR_USE_VOLUME-NAME>:<CONTAINER_PATH> <image>          // using VOLUMES
+  $ docker run --detach --name <customized_name> -p 9090:8080 -v <PATH_to_DIR>:<CONTAINER_PATH> <image>                        // using BIND MOUNTS
 - Example
-  $ docker run --name <customized_name> -p 9090:8080 -p 60000:50000 -v <VOL_NAME>:/var/jenkins_home jenkins      // using VOLUMES
-  $ docker run --name <customized_name> -p 9090:8080 -p 50000:50000 -v <PATH_to_DIR>:/var/jenkins_home jenkins   // using BIND MOUNTS
+  $ docker run --detach --name <customized_name> -p 9090:8080 -p 60000:50000 -v jenkins-volume:/var/jenkins_home jenkins      // using VOLUMES
+  $ docker run --detach --name <customized_name> -p 9090:8080 -p 50000:50000 -v ${pwd}:/var/jenkins_home jenkins              // using BIND MOUNTS
   
 Jenkins + Docker
 ------------------
 - Pull jenkins image from docker hub
   $ docker pull jenkins
-- Run jenkins image and expose port 9090 , 50000 of local to 8080 of docker server and 50000 of Jenkins API plus provide persistent storage to JENKINS_HOME.
+- Run jenkins image and expose port 9090 and port 50000 of local to 8080 of docker server and 50000 of Jenkins API + provide persistent storage to JENKINS_HOME.
   This will retain all data (plugins + credentials) even if Jenkins container is stopped.
   $ docker run --name <customized_name> -p 9090:8080 -p 50000:50000 -v <PATH_to_DIR>:/var/jenkins_home jenkins
 
