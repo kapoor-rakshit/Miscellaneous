@@ -1,8 +1,7 @@
-
 NOTE  :  PLEASE MAKE SURE THAT PATH var is having value for git ((eg:- D:\Git\cmd)) in ACCOUNT or SYSTEM VARIABLES
 
-
 GIT ENV  or  Git's "three trees"
+=====================================
 WORKING TREE is what is actually in the files that you are currently working on.
      It is representative of the immediate changes made to content in files and directories.
 INDEX is a staging area where the new commit is prepared.
@@ -19,6 +18,7 @@ NOTE : $ git add <path> <path> <path>      , updates the index from the working 
      
      
 GIT add
+================
 $ git add .
 $ git add -A
 $ git add --all                                  // Stage All (modified, new, deleted) files
@@ -30,19 +30,16 @@ $ git add --ignore-removal                       // Stage (modified, new) files 
 
 
 GIT rm/mv
+===============
 $ git rm <file_path>                             // delete file from WORKING TREE and STAGE (INDEX) plus update INDEX.
-
 $ git mv <current_file_path> <new_file_path>     // move file in WORKING TREE plus update INDEX.
 
 
-
-
-Create a new repository on GitHub.   (github.com) 
+Create a new repository on GitHub.   (github.com)
+==========================================================
 To avoid errors, do not initialize the new repository with README, license, or gitignore files. 
 You can add these files after your project has been pushed to GitHub.
-
 Open Git Shell on Windows platform      (can be downloaded from official site)
-
 Change the current working directory to your local project.
 
 Initialize the local directory as a Git repository.
@@ -57,7 +54,6 @@ $ git commit -m "First commit"            // -m   :  message
 In the Command prompt, add the URL for the remote repository where your local repository will be pushed.
 This command will map remote repository at <remote_repo_url> to a ref in your local repo under <remote_name> (eg:- origin)
 use the <remote_name> on the command line in lieu of the whole URL.
-
 $ git remote add <--remote_name--> <--remote repository URL-->
 
 Verifies the new remote URL
@@ -67,13 +63,10 @@ Push the changes in your local repository to GitHub.   eg:- $ git push origin ma
 $ git push <remote_name> <branch_name>
 
 
-
-
-Adding a file to a repository.
+Adding a file to a repository
+===================================
 On your computer, move the file you'd like to upload to GitHub into the local directory that was created when you cloned the repository.
-
 Open Git Bash.
-
 Change the current working directory to your local repository.
 
 Stage the file for commit to your local repository. Mind the '.'
@@ -86,9 +79,8 @@ Push the changes in your local repository to GitHub.
 $ git push <remote_name> <branch_name>
 
 
-
-
 GIT IGNORE
+=================
 # Reference : https://git-scm.com/docs/gitignore
 
 # A gitignore file specifies intentionally untracked files that Git should ignore. Files already tracked by Git are not affected.
@@ -108,13 +100,12 @@ GIT IGNORE
 # A leading "**" followed by a slash means match in all directories
 # A trailing "/**" matches everything inside
 # A slash followed by two consecutive asterisks then a slash matches zero or more directories
-
+Eg:
 ngproj/reference_screenshots/
 
 
-
-
 Cloning a repository
+===========================
 Change the current working directory to the location where you want the cloned directory to be made.
 
 NOTE : 'git clone' will automatically configure your repo with a remote pointed to the Git URL you cloned it from. 
@@ -127,21 +118,16 @@ $ git clone <--https://github.com/YOUR-USERNAME/YOUR-REPOSITORY-->
 NOTE : Git’s design includes everything in each copy of a repository, every clone gets not only the files but every revision of every
 file ever committed. Fortunately, Git supports the notion of a “shallow clone”, which is a more succinctly meaningful way of describing
 a local repository with history truncated to a particular depth during the clone operation with "--depth" argument.
-
 $ git clone --depth 1 <--https://github.com/jq/jq.git-->       // clone with a history truncated to the specified number of commits of all branches
 
 Clone only specific BRANCH
 $ git clone -b <branch> <remote_repo_URL>                     // clone a branch with history/commits of all branches
-
 $ git clone -b <branch> --single-branch <remote_repo_URL>     // add --single-branch to prevent fetching history/commits of all branches
 
 
-
-
-
 Working with branches
+=========================
 Each time that you want to commit a bug or a feature, you need to create a branch for it, which will be a copy of your master branch.
-
 Create the branch on your local machine and switch in this branch
 This will give you a new branch with the same state as branch currently we are on.
 $ git checkout -b [new_branch]
@@ -180,10 +166,8 @@ Every time we execute git pull or git fetch commands, we update remote tracking 
 $ git branch --all
 
 
-
-
-
 Working with remotes
+==========================
 list the shortnames of each remote handle you’ve specified.
 If you’ve cloned your repository, you should at least see origin — that is the default name Git gives to the server you cloned from
 $ git remote
@@ -201,9 +185,8 @@ Removing remote
 $ git remote remove <remote_name>
 
 
-
-
 GIT stash
+===============
 Git has an area called the stash where you can temporarily store a snapshot of your changes without committing them to the repository.
 It’s separate from the working directory, the staging area, or the repository.
 This functionality is useful when you’ve made changes to a branch that you aren’t ready to commit,
@@ -242,9 +225,8 @@ clear the entire stash
 $ git stash clear
 
 
-
-
 GIT PULL REQUEST (PR)
+========================
 Contributions are made by developer community through pull requests,
 which request that a project accept changes you have made to its code repository.
      Create a copy of the repository on Github/Bitbucket/Gitlab ie Fork the Repository
@@ -257,9 +239,8 @@ which request that a project accept changes you have made to its code repository
      Make sure to update and rebase your local code with Original repository (from where forked) while waiting to have PR reviewed.
 
 
-
-
 GIT fetch
+===============
 On its own, git fetch updates all the remote tracking branches in local repository
 No changes are actually reflected on any of the local working branches
 This makes fetching a safe way to review commits before integrating them with your local repository
@@ -277,9 +258,8 @@ Once the branch has been created we can switch to that brach.
 $ git fetch <remote_name> pull/ID/head:BRANCHNAME
 
 
-
-
 GIT merge
+================
 Without any arguments, git merge will merge the corresponding remote tracking branch to the local working branch.
 $ git merge
 $ git merge <branch_name>                     // merge changes on a seperate branch to current branch
@@ -292,7 +272,6 @@ $ git merge <branch_name>                     // merge changes on a seperate bra
      The nomenclature comes from fact that Git uses three commits to generate merge commit: the two branch tips and their common ancestor.
 $ git merge --no-ff <branch_name>            // generates a merge commit (even if it was a fast-forward merge).
 
-
 - Resolving conflict
 If the two branches you're trying to merge both changed the same part of the same file,
 or if one developer deleted a file or content while another developer was modifying it.
@@ -301,9 +280,8 @@ When such a situation occurs, it stops right before the merge commit so that you
 When you encounter merge conflict, running '$ git status' command shows you which files need to be resolved.
 When Git encounters conflict during a merge, It will edit content of affected files with visual indicators that mark both sides of conflicted content. 
 These visual markers are: <<<<<<<, =======, and >>>>>>>. Content before ======= marker is receiving branch and part after is merging branch.
-$ git merge --abort                   // cancels merge and makes the receiving branch to state prior to merge process.
 Once identified conflicting sections, fix up the merge to your liking and exact same process as committing an ordinary snapshot. ie '$ git add' , '$ git commit'
-
+$ git merge --abort                   // cancels merge and makes the receiving branch to state prior to merge process.
 
 - Merge Selective Files
 $ git merge --no-ff --no-commit <branch_name>        // --no-commit option will stage files that have been merged by Git without actually committing them.
@@ -313,10 +291,16 @@ $ git diff --cached <file_path>                     // Changes between the STAGE
       $ git checkout <branch_name> <file_path>      // CASE 2 : retain version in <branch_name>, overwrite file automerged by Git.
 $ git commit -m "commit merged selective files"     // Commit your changes
 
-
+- GIT SQUASH
+All individual commits from feature branch will be combined into a single commit.
+All changes will be combined just as a normal merge - but by using --squash option, instead of a merge commit being automatically created,
+you're left with local changes in your working copy which you have to manually commit yourself later.
+The main commit history, therefore, will only show a single commit, once committed.
+$ git merge --squash <feature_branch>
 
 
 GIT cherry-pick
+===================
 Cherry picking is the act of picking a commit from a branch and applying it to another.
 It enables arbitrary Git commits to be picked by reference and appended to the current working HEAD.
 Usage : 
@@ -341,9 +325,8 @@ $ git cherry-pick -edit <SHAid>                      // Prompt for a commit mess
 $ git cherry-pick --no-commit <SHAid>                // Instead of making new commit it will move contents of target commit into working directory of current branch.
 
 
-
-
 GIT rebase
+===============
 Rebasing is an alternative to merging. 
 Instead of creating a new commit that combines the two branches, it moves the commits of one of the branches on top of the other.
 
@@ -371,9 +354,8 @@ $ git rebase <upstream> <branch>      // eg : git rebase master topic
 				      // When rebase exits, <branch> will remain the checked-out branch.
 
 
-
-
 GIT pull
+============
 git pull is a combination command, equal to git fetch + git merge.
 If you have uncommitted changes, the merge part of the git pull command will fail and your local branch will be untouched.
 Thus, you should always commit your changes in a branch before pulling new commits from a remote repository.
@@ -403,9 +385,8 @@ Limit pull to specified commit history
 $ git pull --depth 1 <remote_name> <branch_name>
 
 
-
-
 GIT reset
+===============
 Unstage a file
 If you moved a file into the staging area with git add ,  but no longer want it to be part of a commit,
 you can use git reset to unstage that file:
@@ -434,9 +415,8 @@ NOTE : if we directly use $ git push to push the changes, it will not update rem
        we need to add a -f option to force pushing the changes        $ git push -f
 
 
-
-
 GIT revert
+==============
 Git revert is a safer alternative to git reset in regards to losing work.
     git reset , removes the commit from the commit history, 
     git revert, appends a new commit with the resulting inverse content.
@@ -454,9 +434,8 @@ NOTE : If we revert a commit at an arbitrary point in the history it will have H
      : $ git checkout <branch_name> <file_path> , updates particular file(s) in current branch with content from <branch_name> specified
 
 
-
-
 GIT CONFIG
+===============
 configure username and email with which user want to push commits as The Git username is not the same as GitHub username.
 GitHub uses the email address set in local Git configuration to associate commits pushed from the command line with GitHub account.
 
@@ -474,9 +453,8 @@ $ git config --global --unset user.name                 // REMOVE key-value from
 $ git config --list                                     // Describes the .config file
 
 
-
-
 GIT log
+================
 it displays all of the commits in a respository’s history
 displays each commit's    Secure Hash Algorithm (SHA) | author | date | commit message
 Navigating Git Log
@@ -499,9 +477,8 @@ $ git log <SHAid>                                // display commit with <SHAid> 
 $ git log --graph --oneline                      // view git log as a graph
 
 
-
-
 GIT bisect
+================
 Use a binary search algorithm to find which commit in your project’s history introduced a bug.
 You use it by first telling it a "bad" commit that is known to contain the bug, and a "good" commit that is known to be before the bug was introduced.
 Then git bisect picks a commit between those two endpoints and asks you whether the selected commit is "good" or "bad".
@@ -534,9 +511,8 @@ You can use the terms "old" and "new", respectively, in place of "good" and "bad
 (But note that you cannot mix "good" and "bad" with "old" and "new" in a single session.)
 
 
-
-
 GIT blame
+===============
 examine specific points of a file's history and get context as to who the last author was that modified the line.
 git blame only operates on individual files. A file-path is required for any useful output.
 $ git blame <file_path>                          // Id | Author | Timestamp | Line Number | Line Content
@@ -553,9 +529,8 @@ $ git blame -M <file_path>                       // -M option detects moved or c
 $ git blame -C <file_path>                       // -C option detects lines that were moved or copied from other files. 
                                                  // This will report original author of lines instead of last author that moved or copied lines.
 
-
-
 GIT status
+=================
 Show the WORKING TREE and INDEX (staging area) status.
 Changes which have been staged, which haven’t, and which files aren’t being tracked by Git.
 git status command does not show you any information regarding the committed project history. For this, you need to use git log.
@@ -564,8 +539,8 @@ $ git status -v                                 // verbose output
 $ git status -s                                 // short-format output
 
 
-
 GIT diff
+=================
 By default git diff will show you changes since the last commit ie WORKING TREE and STAGE.
 $ git diff                                         // the @@ symbol, that means beginning of a new chunk or set of modifications
 					           // @@ -34,6 +34,8 @@ , 6 lines have been extracted starting from line number 34. 8 lines have been added starting at line number 34.
@@ -584,6 +559,4 @@ $ git diff <branch1> <branch2>
 
 Compare a specific file across branches
 $ git diff <branch1> <branch2> <path_of_file>      // pass path of the file as the third argument to git diff
-
-
 
