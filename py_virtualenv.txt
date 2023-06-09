@@ -25,6 +25,8 @@ Now check your installation
 Create a virtual environment
  $ virtualenv <virtualenv_name>                     // LINUX
  > virtualenv <virtualenv_name>                     // WINDOWS
+   OR
+   python -m venv <virtualenv_name>
  
 If you want to create a virtualenv for specific python interpreter version
  $ virtualenv -p /usr/bin/python3 <virtualenv_name>
