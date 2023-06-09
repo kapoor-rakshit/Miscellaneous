@@ -151,6 +151,8 @@ $ git branch -m [old-name] [new-name]          # Rename your local branch
 $ git push origin :[old_name]                  # Delete old-name remote branch
 $ git push origin -u [new-name]                # Reset the upstream branch for the new-name local branch
 
+$ git branch -M main			       # -M is  --move --force  rename branch from master(default branch) to main
+
 Delete a branch on your local filesystem
 $ git branch -d [name_of_your_new_branch]
 
