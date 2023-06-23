@@ -347,6 +347,8 @@ installation of DOCKER
 -------------------------
 > Installing on Windows 10 (Pro or Enterprise)
   install "Docker for Windows" from the Docker Store , https://www.docker.com/docker-windows
+  OR
+  install "Docker Desktop" , https://www.docker.com/products/docker-desktop/
   
 > Installing on Windows 7, 8, or 10 Home Edition
   Microsoft's OS features for Docker and Hyper-V don't work in these older versions, 
@@ -370,6 +372,8 @@ installation of DOCKER
 Images + Containers
 ---------------------
 - Images package application and it's dependencies together in form of a container (run time instance of docker image)
+- Containers are sealed, self-contained units of software that have everything needed to run a service.
+- If server is running two containers. One of them is based on RedHat Linux, The other container can run any operating system, i.e. not necessarily same.
 - Containers are used by a container engine (Docker Engine) which is there on host OS.
 - RAM consumed by containers is very less than that required by VM (virtual machine).
 - Easily run applications containers , no need to reboot entire VM.
@@ -481,10 +485,15 @@ Docker architecture + commands
   $ docker attach <customized_name>/<containerID>    // Attach local standard input, output, error streams i.e. terminal to running container
   $ docker logs --tail 100 <customized_name>         // Print the last 100 lines of a container’s task logs
   $ docker exec -it <customized_name> bash           // Run command(eg: bash) in already running container, (-i)keep connected to terminal (-t)allocate pseudo TTY
-  $ docker run -it --name <custom_name> <image> bash // Run new container, change default command(eg: bash), NOTE: quitting here(eg: bash) will STOP container too
+  $ docker run -it --name <custom_name> <image>:<tag> bash
+                                                     // Run new container,change default command(eg: bash), NOTE: quitting here(eg: bash) will STOP container too
   $ docker top <customized_name>                     // lists processes running within container, UID | PID etc.. match with OS's `$ ps aux`
   $ docker inspect <customized_name>                 // show metadata for container (startup config, volumes, networking etc.)
   $ docker stats <customized_name>/<containerID>     // live performance stats for particular container
+  $ docker commit <containerID>                      // create new image from changes in container,after exit,which otherwise lost on new container from old image
+    $ docker tag <output_hash> <new_image_name>      // <output_hash>: output of `$ docker commit` command
+   OR
+  $ docker commit <container-NAME> <new_image_name>  // does task for both commit and tag in one go
   
 Docker Volume | BIND MOUNTS
 ------------------------------
