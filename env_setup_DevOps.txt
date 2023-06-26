@@ -474,7 +474,9 @@ Docker architecture + commands
   $ docker run <image_name>                          // run container from image <image_name>
   $ docker run <image_name>:<tag_name>               // run container from image <image_name> with tag <tag_name>
   $ docker run --name <customized_name> <image_name> // run container with a <customized_name> from image <image_name>
-  $ docker run --detach <image_name>                 // --detach runs container in background. It does not receive input,display output,but returns control back to terminal
+  $ docker run --detach <image_name>                 // --detach|-d runs container in background. It does not receive input,display output,but returns control back to terminal
+  $ docker attach <customized_name>/<containerID>    // Attach local standard input, output, error streams i.e. terminal to running container
+                                                     // NOTE: To detach from container, but not stop container(exit) , USE CTRL+p then CTRL+q
   $ docker run --network <NETWORK_NAME> <image>      // attach spun up container to this <NETWORK_NAME>
   $ docker start <customized_name>/<containerID>     // start container with any one of <customized_name> or <containerID>
   $ docker stop <customized_name>/<containerID>      // stop container through SIGTERM
@@ -482,11 +484,13 @@ Docker architecture + commands
   $ docker pause <customized_name>/<containerID>     // pause running container
   $ docker unpause <customized_name>/<containerID>   // resume paused container
   $ docker rm <customized_name>/<containerID>        // remove container
-  $ docker attach <customized_name>/<containerID>    // Attach local standard input, output, error streams i.e. terminal to running container
   $ docker logs --tail 100 <customized_name>         // Print the last 100 lines of a container’s task logs
   $ docker exec -it <customized_name> bash           // Run command(eg: bash) in already running container, (-i)keep connected to terminal (-t)allocate pseudo TTY
   $ docker run -it --name <custom_name> <image>:<tag> bash
                                                      // Run new container,change default command(eg: bash), NOTE: quitting here(eg: bash) will STOP container too
+  $ docker run -p <OUTSIDE-PORT>:<INSIDE-PORT>       // Expose port by mapping to specified ports
+  $ docker run -p <INSIDE-PORT>                      // Single arg is only INSIDE-PORT and let docker decide OUTSIDE-PORT
+  $ docker port <container_name>                     // Info about port mappings list  INSIDE -> OUTSIDE
   $ docker top <customized_name>                     // lists processes running within container, UID | PID etc.. match with OS's `$ ps aux`
   $ docker inspect <customized_name>                 // show metadata for container (startup config, volumes, networking etc.)
   $ docker stats <customized_name>/<containerID>     // live performance stats for particular container
@@ -518,7 +522,8 @@ Jenkins + Docker
 ------------------
 - Pull jenkins image from docker hub
   $ docker pull jenkins
-- Run jenkins image and expose port 9090 and port 50000 of local to 8080 of docker server and 50000 of Jenkins API + provide persistent storage to JENKINS_HOME.
+- Run jenkins image and expose port 9090(OUTSIDE),port 50000(OUTSIDE) to 8080(INSIDE) of docker server and 50000(INSIDE) of Jenkins API
+  + provide persistent storage to JENKINS_HOME.
   This will retain all data (plugins + credentials) even if Jenkins container is stopped.
   $ docker run --name <customized_name> -p 9090:8080 -p 50000:50000 -v <PATH_to_DIR>:/var/jenkins_home jenkins
 
