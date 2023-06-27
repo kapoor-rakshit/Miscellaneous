@@ -456,21 +456,27 @@ Docker architecture + commands
   
 - Images                                             // NOTE : images have intermediate layers to increase reusability,decrease disk usage,speed build by cache.
   $ docker images -a        | docker image ls -a     // list of all images , (default(without -a) hides intermediate images) 
+  $ docker search <image_name>                       // on terminal, to search an image on Docker registry.
   $ docker pull <image_name>                         // pull image with default tag "latest" from registry/dockerhub OR update image to latest version/tag
-  $ docker pull <image_name>:<tag_name>              // pull image with tag "<tag_name>" from dockerhub     ,  NOTE: use of ":"
+  $ docker pull <image_name>:<tag_name>              // NOTE: use of ":" | pull image with tag "<tag_name>" from dockerhub
   $ docker build -t <image_name>:<tag_name> <PATH>   // build image from dockerfile located at PATH dir, -t: name and optional tag
-  $ docker build -t <image_name>:<tag_name> .        // build image from dockerfile located at current dir,  NOTE: use of "."
+  $ docker build -t <image_name>:<tag_name> .        // NOTE: use of "." | build image from dockerfile located at current dir
   $ docker build -t <image_name>:<tag_name> -f <SOME_FILE_NAME> .          // -f (--file) specifies dockerfile name other than (Dockerfile)(default)
-  $ docker rmi <image_name>/<imageID>                // remove one or more images from the local image store
+  $ docker rmi <image_name>:<tag_name>/<imageID>     // remove one or more images from the local image store
   $ docker tag <image_name>:<tag_name> <new_image_name>:<new_tag_name>     // a new image created with same IMAGE_ID but with new image name and new tag name
   $ docker push <image_name>:<tag_name>              // Push an image to a registry
   $ docker image history <image_name>:<tag_name>     // what all changes have been made to <image>
   $ docker image inspect <image_name>:<tag_name>     // fine details of image like how it is made, exposed ports, CMD command etc..
   $ docker image prune                               // clean up just "dangling" images | -a option, will remove all images you're not using
+  $ docker commit <containerID>                      // create new image from changes in container,after exit,which otherwise lost on new container from old image
+    $ docker tag <output_hash> <new_image_name>      // <output_hash>: output of `$ docker commit` command
+    OR
+  $ docker commit <container-NAME-OR-ID> <new_image_name>  // does task for both commit and tag in one go
   
 - Containers
   $ docker ps                                        // lists currently running containers
   $ docker ps -a           | docker container ls -a  // list all containers
+  $ docker ps -l                                     // displays only the last container to exit.
   $ docker run <image_name>                          // run container from image <image_name>
   $ docker run <image_name>:<tag_name>               // run container from image <image_name> with tag <tag_name>
   $ docker run --name <customized_name> <image_name> // run container with a <customized_name> from image <image_name>
@@ -494,10 +500,6 @@ Docker architecture + commands
   $ docker top <customized_name>                     // lists processes running within container, UID | PID etc.. match with OS's `$ ps aux`
   $ docker inspect <customized_name>                 // show metadata for container (startup config, volumes, networking etc.)
   $ docker stats <customized_name>/<containerID>     // live performance stats for particular container
-  $ docker commit <containerID>                      // create new image from changes in container,after exit,which otherwise lost on new container from old image
-    $ docker tag <output_hash> <new_image_name>      // <output_hash>: output of `$ docker commit` command
-   OR
-  $ docker commit <container-NAME> <new_image_name>  // does task for both commit and tag in one go
   
 Docker Volume | BIND MOUNTS
 ------------------------------
@@ -505,6 +507,7 @@ Docker Volume | BIND MOUNTS
 - To have a persistent storage for data generated and used by containers we create VOLUMES, that are independent of container.
   It allows for shared volume (data/storage) among different containers.
   It allows to attach a volume to a container.
+- Ephemeral volumes exist as long as the container is using them, but they evaporate when no container is using them.
 - BIND MOUNTS : This is what is used when you are trying to map the files from a directory on the host into a directory in the container.
 - Looking through README.md or Dockerfile of official image (eg: mysql, postgresql) on docker hub, find database path documented or VOLUME stanza.
 - $ docker volume create <VOL_NAME>                 // Create volume
@@ -512,11 +515,13 @@ Docker Volume | BIND MOUNTS
   $ docker volume inspect <VOL_NAME>                // Info about a volume
   $ docker volume rm <VOL_NAME>                     // Remove a volume
   $ docker volume prune                             // remove all unused volumes (not used by any container)
-  $ docker run --detach --name <customized_name> -p 9090:8080 -v <CREATE_OR_USE_VOLUME-NAME>:<CONTAINER_PATH> <image>          // using VOLUMES
-  $ docker run --detach --name <customized_name> -p 9090:8080 -v <PATH_to_DIR>:<CONTAINER_PATH> <image>                        // using BIND MOUNTS
+  $ docker run --detach --name <customized_name> -p 9090:8080 -v <PATH_to_HOST_DIR>:<CONTAINER's_PATH> <image>                // mapping VOLUMES or BIND MOUNTS
 - Example
-  $ docker run --detach --name <customized_name> -p 9090:8080 -p 60000:50000 -v jenkins-volume:/var/jenkins_home jenkins      // using VOLUMES
-  $ docker run --detach --name <customized_name> -p 9090:8080 -p 50000:50000 -v ${pwd}:/var/jenkins_home jenkins              // using BIND MOUNTS
+  $ docker run --detach --name <customized_name> -p 9090:8080 -p 60000:50000 -v jenkins-volume:/var/jenkins_home jenkins      // mapping VOLUME STANZA of JENKINS
+  $ docker run --detach --name <customized_name> -p 9090:8080 -p 50000:50000 -v ${pwd}:/var/jenkins_home jenkins              // mapping BIND MOUNTS
+  $ docker run -v <ephemeral-volume-name> ubuntu bash                               // creates EPHEMERAL volume and deletes it when no container is using it
+    $ docker run --volumes-from <already-running-container-ID-OR-NAME> <image_name> // inherits volume from <already-running-container-ID-OR-NAME>,
+    // NOTE: now even if <already-running-container-ID-OR-NAME> exits, volume retains, but if both exits, then not retained as not in use by any
   
 Jenkins + Docker
 ------------------
