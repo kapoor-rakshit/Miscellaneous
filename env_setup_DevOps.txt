@@ -411,16 +411,37 @@ Dockerfile
 - A file (without any extension) with instructions to build image.
 - It uses   #   for comments.
   It uses   \   for break line of long instruction.
-- FROM <base_image_name>:<tag_name>                // this can be "scratch" as per dockerhub documentation if we donot want any base image
-  ENV <key> <val>                                  // a key-val pair that can be accessed using ${key} throughout dockerfile
+- Each line of a Dockerfile makes a new, independent image based on the previous line's image.
+- FROM node:18                                     // which image to start running from, NOTE: it can also be a local image
+  FROM <base_image_name>:<tag_name>                // this can be "scratch" as per dockerhub documentation if we donot want any base image
+  ENV <key>=<val>                                  // a key-val pair that can be accessed using ${key} throughout dockerfile
   LABEL maintainer=<email_id>                      // best practice to specify maintainer using LABEL as key-val pair
-  WORKDIR /usr/src/app                             // sets working directory for instructions (COPY, RUN,...) that follow it in dockerfile
-  ADD <src> <dest>                                 // works similar to COPY but support, use of URL instead of a local file <src>, extract tar file from source directly into destination.
+  WORKDIR /usr/src/app                             // sets working directory for instructions (COPY, RUN,...) that follow in Dockerfile, Just like cd(change dir)
+  ADD <src> <dest>                                 // works similar to COPY but, supports use of URL instead of a local file <src>
+                                                      + automatically uncompresses .tar/.tar.gz file specified as source into destination.
   COPY package*.json ./                            // copies files or directories from <src> (eg: package*.json) to <dest> (eg: ./) WORKDIR
-  RUN npm install                                  // this will execute while building image from dockerfile
+  RUN apt-get -y update
+  RUN npm install                                  // RUN: this will execute while building image from dockerfile
   COPY . ./                                        // bundle your app's entire source code inside Docker image, NOTE: use of "." for current and "./" for WORKDIR
   EXPOSE 8080 4200 7200                            // informs Docker that container listens on specified ports at runtime,however during runtime we have to map machine port to exposed port using -p flag
+  ENTRYPOINT ["top", "-H"]                         // args to `$ docker run <image>` will be appended after elements of `ENTRYPOINT []`,
+                                                   // args to `$ docker run <image>` override elements in `CMD []` | Only last ENTRYPOINT in Dockerfile effects.
   CMD ["node", "app.js"]                           // this will execute while running container from image, there can be only one CMD,incase multiple,last wins
+
+splitted Dockerfile
+------------------------
+# This Dockerfile split into named parts and copied to the same path, which preserves the ability to have a reproducible build.
+# It creates two images, one with <image_name> in `$docker build -t <image_name> .`  and  other with alpine(here in example)
+# known as multiproject Docker files, They copy artifacts from an earlier stage to a later stage. They include multiple FROM statements.
+FROM ubuntu:16.04 as builder
+RUN apt-get update
+RUN apt-get -y install curl
+RUN curl https://google.com | wc -c > google-size
+
+FROM alpine
+COPY --from=builder /google-size /google-size
+ENTRYPOINT echo google is this big; cat google-size
+
   
 .dockerignore
 ----------------
