@@ -19,6 +19,19 @@ Service Models
     This is CLOUD COMPUTING.
 
 
+Cloud Native
+----------------
+Cloud native is an approach that uses technologies such as containers, Kubernetes, immutable infrastructure, and microservices
+to develop scalable applications that are built to run in the cloud.
+There are three key elements to any cloud-native architecture:
+- It is containerized.
+  Each part (applications, processes, etc.) is packaged in its own container. This facilitates reproducibility, transparency, and resource isolation.
+- It is dynamically managed.
+  Containers are actively orchestrated to optimize resource utilization.
+- It is microservices-oriented.
+  Applications are segmented into microservices, which significantly increases their overall agility and maintainability.
+
+
 Deployment Models
 -------------------------
 1. Public Cloud
