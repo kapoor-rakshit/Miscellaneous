@@ -12,9 +12,11 @@ Service Models
 
 2. PaaS  ( Platform as a Service )           ( Eg: Heroku , Google App Engine )
     manage Application and Data by user , others like Runtime, Middleware, OS, Servers, Storage etc... are maintained by vendor
+    This is CLOUD HOSTING.
 
 3. IaaS   ( Infrastructure as a Service )    ( Eg: AWS EC2 , Google Compute Engine (GCE) )
-    manage Application, Data, Runtime, Middleware, OS by user , others like Servers, Storage etc... are maintained by vendor
+    manage Application, Data, Runtime, Middleware, OS by user , others like Servers, Storage etc... are maintained by vendor.
+    This is CLOUD COMPUTING.
 
 
 Deployment Models
