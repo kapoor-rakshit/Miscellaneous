@@ -1,1 +1,268 @@
+Installation of DOCKER
+-------------------------
+> Installing on Windows 10 (Pro or Enterprise)
+  install "Docker for Windows" from the Docker Store , https://www.docker.com/docker-windows
+  OR
+  install "Docker Desktop" , https://www.docker.com/products/docker-desktop/
+  
+> Installing on Windows 7, 8, or 10 Home Edition
+  Microsoft's OS features for Docker and Hyper-V don't work in these older versions, 
+  and "Windows 10 Home" edition doesn't have Hyper-V, so you'll need to install the Docker Toolbox , https://docs.docker.com/toolbox/overview/
+  which is a slightly different approach to using Docker with a VirtualBox VM. 
+  This means Docker will be running in a Virtual Machine that sits behind the IP of your OS, and uses NAT to access the internet.
+  NOTE : We might have to change HOSTNAME when using toolbox.
+  
+> Installing on Mac
+  install "Docker for Mac" from the Docker Store , https://www.docker.com/docker-mac
+   
+> Installing on Linux
+  NOTE : Do *NOT* use your built in default packages like apt/yum install docker.io because those packages are old and not Official Docker-Built packages.
+  use the Docker's automated script to add their repository and install all dependencies: $> curl -sSL https://get.docker.com/ | sh
+  OR install in manual method by following instructions on Docker Store for distribution , https://store.docker.com/editions/community/docker-ce-server-ubuntu
+  
+> Browser a.k.a. PWD
+  use play-with-docker.com ,  http://play-with-docker.com/   which will run one or more Docker instances inside your browser, 
+  and give you a terminal to use it with. But it's only limitation really is it's time bombed to 4 hours, at which time it'll delete your servers.
 
+
+Images + Containers
+---------------------
+- Images package application and it's dependencies together in form of a container (run time instance of docker image)
+- Containers are sealed, self-contained units of software that have everything needed to run a service.
+- If server is running two containers. One of them is based on RedHat Linux, The other container can run any operating system, i.e. not necessarily same.
+- Containers are used by a container engine (Docker Engine) which is there on host OS.
+- RAM consumed by containers is very less than that required by VM (virtual machine).
+- Easily run applications containers , no need to reboot entire VM.
+- Docker Images are light weight templates and shared via Docker Hub (online repository) or Import/Export.
+- An unused image means that it has not been assigned or used in a container i.e. command "docker ps -a" will not show unused image.
+- A dangling image means that you've created the new image, but it wasn't given a new name. 
+  So the old images you have becomes the "dangling image" and command "docker images -a" will show "<none>" as their name.
+
+
+How are containers created ?
+-----------------------------
+- Docker file (Dockerfile) which contains commands are used to create Docker image and that image will contain all project codes.
+- Docker image can be used to spin "N" number of containers each with modifications to underlying image.
+- Docker image is uploaded on Docker Hub and is pulled on staging env or testing env where docker containers are spun and code can run.
+- What happens when we     `$ docker run <image_name>` ?
+  - Look for image locally i.e. in image cache, if not then
+        - Look for image in remote image repository i.e. hub.docker.com (default) or another configured registry
+        - Downloads it from registry
+  - Creates new container and prepares to starts it.
+  - Gives it virtual IP on private network inside docker engine
+  - Opens port as specified with option -p OR --publish <LOCAL_PORT>:<SERVICE_PORT>
+  - Starts container by using `CMD ["COMMANDs"]` as written in image's dockerfile
+
+
+Dockerfile
+------------
+- A file (without any extension) with instructions to build image.
+- It uses   #   for comments.
+  It uses   \   for break line of long instruction.
+- Each line of a Dockerfile makes a new, independent image based on the previous line's image.
+- FROM node:18                                     // which image to start running from, NOTE: it can also be a local image
+  FROM <base_image_name>:<tag_name>                // this can be "scratch" as per dockerhub documentation if we donot want any base image
+  ENV <key>=<val>                                  // a key-val pair that can be accessed using ${key} throughout dockerfile
+  LABEL maintainer=<email_id>                      // best practice to specify maintainer using LABEL as key-val pair
+  WORKDIR /usr/src/app                             // sets working directory for instructions (COPY, RUN,...) that follow in Dockerfile, Just like cd(change dir)
+  ADD <src> <dest>                                 // works similar to COPY but, supports use of URL instead of a local file <src>
+                                                      + automatically uncompresses .tar/.tar.gz file specified as source into destination.
+  COPY package*.json ./                            // copies files or directories from <src> (eg: package*.json) to <dest> (eg: ./) WORKDIR
+  RUN apt-get -y update
+  RUN npm install                                  // RUN: this will execute while building image from dockerfile
+  COPY . ./                                        // bundle your app's entire source code inside Docker image, NOTE: use of "." for current and "./" for WORKDIR
+  EXPOSE 8080 4200 7200                            // informs Docker that container listens on specified ports at runtime,however during runtime we have to map machine port to exposed port using -p flag
+  ENTRYPOINT ["top", "-H"]                         // args to `$ docker run <image>` will be appended after elements of `ENTRYPOINT []`,
+                                                   // args to `$ docker run <image>` override elements in `CMD []` | Only last ENTRYPOINT in Dockerfile effects.
+  CMD ["node", "app.js"]                           // this will execute while running container from image, there can be only one CMD,incase multiple,last wins
+
+Splitted Dockerfile
+------------------------
+# This Dockerfile split into named parts and copied to the same path, which preserves the ability to have a reproducible build.
+# It creates two images, one with <image_name> in `$docker build -t <image_name> .`  and  other with alpine(here in example)
+# known as multiproject Docker files, They copy artifacts from an earlier stage to a later stage. They include multiple FROM statements.
+FROM ubuntu:16.04 as builder
+RUN apt-get update
+RUN apt-get -y install curl
+RUN curl https://google.com | wc -c > google-size
+
+FROM alpine
+COPY --from=builder /google-size /google-size
+ENTRYPOINT echo google is this big; cat google-size
+
+  
+.dockerignore
+----------------
+- A .dockerignore is similar to .gitignore , which will ignore files to be added/copied to image
+
+
+Docker architecture + commands
+--------------------------------
+- Docker is written in Go programming language.
+- Docker has a client (Command Line) - server (Docker Daemon) architecture.
+  server has containers which respond to REST API request or Command from terminal coming from either same or different machine as of server
+  client and server together form Docker Engine.
+- Add user to docker group to avoid writing "sudo" before every command
+  $ sudo usermod -a -G docker <username>
+  "Relogin to system for this to take effect"
+- Start
+  $ sudo service docker start                        // start docker service                        
+- Stop
+  $ sudo service docker stop                         // stop docker service
+- Misc. commands
+  $ docker version                                   // information of docker client-server
+  $ docker info                                      // information of containers + images + server
+  $ docker <command_name> --help                     // manual to <commandname>
+  $ docker login                                     // login to dockerhub(default)    or   $ docker login my.registry.com:8000
+  $ docker logout                                    // Log out from a Docker registry
+  $ docker stats                                     // live performance, realtime stats of all containers
+  $ docker system df                                 // disk usage by docker
+  $ docker system prune                              // removes containers/images
+  $ docker network ls                                // shows list of networks
+  $ docker network inspect <NETWORK_NAME>            // shows details of <NETWORK_NAME> like containers attached to it etc..
+  $ docker network create <NETWORK_NAME>             // create new network with default driver "bridge", use --driver to specify DRIVER
+  $ docker network connect <NETWORK> <CONTAINER>     // attach already running container to network
+  $ docker network disconnect <NETWORK> <CONTAINER>  // remove container from network
+
+
+Images
+-------------------                                  // NOTE : images have intermediate layers to increase reusability,decrease disk usage,speed build by cache.
+  $ docker images -a        | docker image ls -a     // list of all images , (default(without -a) hides intermediate images) 
+  $ docker search <image_name>                       // on terminal, to search an image on Docker registry.
+  $ docker pull <image_name>                         // pull image with default tag "latest" from registry/dockerhub OR update image to latest version/tag
+  $ docker pull <image_name>:<tag_name>              // NOTE: use of ":" | pull image with tag "<tag_name>" from dockerhub
+  $ docker build -t <image_name>:<tag_name> <PATH>   // build image from dockerfile located at PATH dir, -t: name and optional tag
+  $ docker build -t <image_name>:<tag_name> .        // NOTE: use of "." | build image from dockerfile located at current dir
+  $ docker build -t <image_name>:<tag_name> -f <SOME_FILE_NAME> .          // -f (--file) specifies dockerfile name other than (Dockerfile)(default)
+  $ docker rmi <image_name>:<tag_name>/<imageID>     // remove one or more images from the local image store
+  $ docker tag <image_name>:<tag_name> <new_image_name>:<new_tag_name>     // a new image created with same IMAGE_ID but with new image name and new tag name
+  $ docker push <image_name>:<tag_name>              // Push an image to a registry
+  $ docker image history <image_name>:<tag_name>     // what all changes have been made to <image>
+  $ docker image inspect <image_name>:<tag_name>     // fine details of image like how it is made, exposed ports, CMD command etc..
+  $ docker image prune                               // clean up just "dangling" images | -a option, will remove all images you're not using
+  $ docker commit <containerID>                      // create new image from changes in container,after exit,which otherwise lost on new container from old image
+    $ docker tag <output_hash> <new_image_name>      // <output_hash>: output of `$ docker commit` command
+    OR
+  $ docker commit <container-NAME-OR-ID> <new_image_name>  // does task for both commit and tag in one go
+
+
+Containers
+--------------------
+  $ docker ps                                        // lists currently running containers
+  $ docker ps -a           | docker container ls -a  // list all containers
+  $ docker ps -l                                     // displays only the last container to exit.
+  $ docker run <image_name>                          // run container from image <image_name>
+  $ docker run <image_name>:<tag_name>               // run container from image <image_name> with tag <tag_name>
+  $ docker run --name <customized_name> <image_name> // run container with a <customized_name> from image <image_name>
+  $ docker run --detach <image_name>                 // --detach|-d runs container in background. It does not receive input,display output,but returns control back to terminal
+  $ docker attach <customized_name>/<containerID>    // Attach local standard input, output, error streams i.e. terminal to running container
+                                                     // NOTE: To detach from container, but not stop container(exit) , USE CTRL+p then CTRL+q
+  $ docker run --network <NETWORK_NAME> <image>      // attach spun up container to this <NETWORK_NAME>
+  $ docker start <customized_name>/<containerID>     // start container with any one of <customized_name> or <containerID>
+  $ docker stop <customized_name>/<containerID>      // stop container through SIGTERM
+  $ docker kill <customized_name>                    // Stop a running container through SIGKILL
+  $ docker pause <customized_name>/<containerID>     // pause running container
+  $ docker unpause <customized_name>/<containerID>   // resume paused container
+  $ docker rm <customized_name>/<containerID>        // remove container
+  $ docker logs --tail 100 <customized_name>         // Print the last 100 lines of a container’s task logs
+  $ docker exec -it <customized_name> bash           // Run command(eg: bash) in already running container, (-i)keep connected to terminal (-t)allocate pseudo TTY
+  $ docker run -it --name <custom_name> <image>:<tag> bash
+                                                     // Run new container,change default command(eg: bash), NOTE: quitting here(eg: bash) will STOP container too
+  $ docker run -p <OUTSIDE-PORT>:<INSIDE-PORT>       // Expose port by mapping to specified ports
+  $ docker run -p <INSIDE-PORT>                      // Single arg is only INSIDE-PORT and let docker decide OUTSIDE-PORT
+  $ docker port <container_name>                     // Info about port mappings list  INSIDE -> OUTSIDE
+  $ docker top <customized_name>                     // lists processes running within container, UID | PID etc.. match with OS's `$ ps aux`
+  $ docker inspect <customized_name>                 // show metadata for container (startup config, volumes, networking etc.)
+  $ docker stats <customized_name>/<containerID>     // live performance stats for particular container
+  $ docker run --restart=always <image_name>         // restart container, even if it exits
+
+
+Docker Volume | BIND MOUNTS
+------------------------------
+- In absence of volumes data generated and used by container is stored within container, incase a container is deleted, entire data is also lost.
+- To have a persistent storage for data generated and used by containers we create VOLUMES, that are independent of container.
+  It allows for shared volume (data/storage) among different containers.
+  It allows to attach a volume to a container.
+- Ephemeral volumes exist as long as the container is using them, but they evaporate when no container is using them.
+- BIND MOUNTS : This is what is used when you are trying to map the files from a directory on the host into a directory in the container.
+- Looking through README.md or Dockerfile of official image (eg: mysql, postgresql) on docker hub, find database path documented or VOLUME stanza.
+- $ docker volume create <VOL_NAME>                 // Create volume
+  $ docker volume ls                                // List volumes
+  $ docker volume inspect <VOL_NAME>                // Info about a volume
+  $ docker volume rm <VOL_NAME>                     // Remove a volume
+  $ docker volume prune                             // remove all unused volumes (not used by any container)
+  $ docker run --detach --name <customized_name> -p 9090:8080 -v <PATH_to_HOST_DIR>:<CONTAINER's_PATH> <image>                // mapping VOLUMES or BIND MOUNTS
+- Example
+  $ docker run --detach --name <customized_name> -p 9090:8080 -p 60000:50000 -v jenkins-volume:/var/jenkins_home jenkins      // mapping VOLUME STANZA of JENKINS
+  $ docker run --detach --name <customized_name> -p 9090:8080 -p 50000:50000 -v ${pwd}:/var/jenkins_home jenkins              // mapping BIND MOUNTS
+  $ docker run -v <ephemeral-volume-name> ubuntu bash                               // creates EPHEMERAL volume and deletes it when no container is using it
+    $ docker run --volumes-from <already-running-container-ID-OR-NAME> <image_name> // inherits volume from <already-running-container-ID-OR-NAME>,
+    // NOTE: now even if <already-running-container-ID-OR-NAME> exits, volume retains, but if both exits, then not retained as not in use by any
+  
+Jenkins + Docker
+------------------
+- Pull jenkins image from docker hub
+  $ docker pull jenkins
+- Run jenkins image and expose port 9090(OUTSIDE),port 50000(OUTSIDE) to 8080(INSIDE) of docker server and 50000(INSIDE) of Jenkins API
+  + provide persistent storage to JENKINS_HOME.
+  This will retain all data (plugins + credentials) even if Jenkins container is stopped.
+  $ docker run --name <customized_name> -p 9090:8080 -p 50000:50000 -v <PATH_to_DIR>:/var/jenkins_home jenkins
+
+
+Docker Swarm
+--------------
+- A swarm is a group of machines (either physical or virtual) that are running docker and joined into a cluster.
+- Docker swarm is a tool for container orchestration just like Kubernetes used for managing and controlling multiple docker containers a a single service.
+  It ensures health check of each container on each system.
+  Scaling containers up/down as per load.
+  Adding updates to containers.
+- Docker Machine
+  docker-machine enables us to create Docker hosts either on local or remote and make one host as manager node and other host as worker node for Docker Swarm.
+  We can add one or more nodes as manager to act as backup in case any manager node opts-out. But there is only one leader at any time.
+  $ docker-machine create --driver hyperv <NODE_NAME>                  // WINDOWS
+  $ docker-machine create --driver virtualbox <NODE_NAME>              // MAC
+  $ docker-machine env <NODE_NAME>                                     // gives details about machine created
+  $ docker-machine ls                                                  // lists all docker machines with their details
+  $ docker-machine ssh <NODE_NAME>                                     // connect to <NODE_NAME>
+  $ docker-machine stop <NODE_NAME>                                    // stop/drain machine 
+  $ docker-machine rm <NODE_NAME>                                      // remove machine
+  
+  $ docker swarm init --advertise-addr <MANAGER_NODE_IP>               // NOTE : Write this command at MANAGER NODE cmd to let it know that it is a manager.
+  $ docker swarm join-token worker                                     // NOTE : Write this command at MANAGER NODE cmd to generate token command for a WORKER NODE cmd to join swarm as worker. Copy and run this in node cmd to act it as worker.
+  $ docker swarm join-token manager                                    // NOTE : Write this command at MANAGER NODE cmd to generate token command for a MANAGER NODE cmd to join swarm as manager. Copy and run this in node cmd to act it as manager.
+  $ docker swarm leave                                                 // to leave swarm (can be manager or worker node)
+  
+  $ docker node ls                                                     // NOTE : Write this command at MANAGER NODE cmd to have info about swarm
+  $ docker node update --availability drain <NODE_NAME>                // NOTE : Write this command at MANAGER NODE cmd to shutdown node of swarm.
+  
+  $ docker service create --replicas <NO_OF_NODES> -p 80:80 --name <customized_service_name> <IMAGE_NAME>    // NOTE : Write this command at MANAGER NODE cmd to replicate service on all nodes including manager.
+  $ docker service ps <customized_service_name>                        // to have info about <customized_service_name>
+  $ docker service scale <customized_service_name>=<NO_OF_REPLICAS>    // NOTE : Write this command at MANAGER NODE cmd to spin up/down a container on any random node of swarm
+  $ docker service update --image <IMAGE_NAME>:<TAG_NAME> <customized_service_name>     // updates service
+  $ docker service rm <customized_service_name>                                         // remove service
+
+
+Docker Compose
+------------------
+- It is a tool for defining and running multi-container docker applications where multiple containers work together to provide required functionality.
+  It uses yaml files for configuration and named as     docker-compose.yml
+  We can start/stop all services with a single command  $ docker compose up/down
+  We can scale selected services as and when required.
+- Docker Swarm runs multi-container applications, just like Compose does.
+  The key difference is that Swarm schedules and manages your containers across multiple machines,
+  while Compose schedules and manages containers on a single host only.
+- Install
+  $ python -m pip install -U docker-compose
+- Docker-Compose.yml
+  Create a file named as "docker-compose.yml"
+  Write a YAML file for configuration which has services: web: image: database: image:
+  REFERENCE : docker-compose documentation for image used available at docker hub
+- Check validity
+  $ docker-compose config
+- Run docker-compose.yml
+  $ docker-compose up -d                                // run docker-compose in detached mode to have terminal available for other work
+  $ docker-compose up -d --scale <service_name>=4       // scale a service (eg: database to have it's 4 instances or containers running)
+- Check running containers
+  $ docker-compose ps
+- Stop docker-compose
+  $ docker-compose down
