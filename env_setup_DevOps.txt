@@ -521,6 +521,7 @@ Docker architecture + commands
   $ docker top <customized_name>                     // lists processes running within container, UID | PID etc.. match with OS's `$ ps aux`
   $ docker inspect <customized_name>                 // show metadata for container (startup config, volumes, networking etc.)
   $ docker stats <customized_name>/<containerID>     // live performance stats for particular container
+  $ docker run --restart=always <image_name>         // restart container, even if it exits
   
 Docker Volume | BIND MOUNTS
 ------------------------------
@@ -592,7 +593,8 @@ Docker Compose
   We can start/stop all services with a single command  $ docker compose up/down
   We can scale selected services as and when required.
 - Docker Swarm runs multi-container applications, just like Compose does.
-  The key difference is that Swarm schedules and manages your containers across multiple machines, while Compose schedules and manages containers on a single host only.
+  The key difference is that Swarm schedules and manages your containers across multiple machines,
+  while Compose schedules and manages containers on a single host only.
 - Install
   $ python -m pip install -U docker-compose
 - Docker-Compose.yml
@@ -610,4 +612,24 @@ Docker Compose
   $ docker-compose down
 
 
+KUBERNETES or K8S
+---------------------
+PODS group containers together.
+SERVICES make PODS available to others.
+`$ kubectl` command used for scripting operations on K8S
+
+
+EC2 CONTAINER SERVICE (ECS)
+--------------------------------
+TASK DEFINITIONS, are set of containers that run together, just like PODS in K8S.
+TASKS, when container actually starts running now.
+SERVICES, ensure that task is running all time and expose it to NETWORK.
+
+
+AWS FARGATE
+----------------
+KUBERNETES ENGINE by GOOGLE CLOUD
+----------------------------------------
+AZURE KUBERNETES SERVICE (AKS) by MICROSOFT
+---------------------------------------------
 
