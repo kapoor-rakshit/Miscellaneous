@@ -562,3 +562,40 @@ $ git diff <branch1> <branch2>
 Compare a specific file across branches
 $ git diff <branch1> <branch2> <path_of_file>      // pass path of the file as the third argument to git diff
 
+
+GIT SUBMODULES
+====================
+While working on one project, you need to use another project from within it.
+Eg: A project that you’re developing separately and using in multiple parent projects. A common issue arises in these scenarios:
+    You want to be able to treat the two projects as separate(keep commits separate) yet still be able to use one from within the other.
+Git Submodules allow you to keep a Git repository as a subdirectory of another Git repository.
+This lets you clone another repository into your project and keep your commits separate.
+
+$ git submodule add https://github.com/<user>/<repo-name>                    // Adds `<repo-name>` as subdirectory  AND  `.gitmodules` configuration file
+$ git config -f .gitmodules submodule.SUBMODULE_NAME.branch BRANCH_NAME      // Make submodule to track a specific branch
+.gitmodules
+----------------
+[submodule "submodule_1"]
+	path = submodule_1
+	url = https://github.com/<user>/<repo-name-1>
+	branch = branch_name
+[submodule "submodule_2"]
+	path = submodule_2
+	url = https://github.com/<user>/<repo-name-2>
+	branch = branch_name
+
+$ git add .
+$ git commit -m 'Added submodule'
+$ git push origin master
+$ git clone https://github.com/<user>/<MAIN-PROJECT>
+  OR
+$ git pull <remote_name> <branch_name>
+
+$ git submodule sync --recursive                        // sync: updates local config for any changes, --recursive: update nested submodules too
+$ git submodule init                                    // init: initialize local configuration file
+$ git submodule update --remote --recursive             // update: fetch data from that project and checkout at appropriate commit from superproject
+                                                        // --remote: pull(fetch+merge) submodule with latest changes
+$ git add .
+$ git diff-index --quiet HEAD || git commit -m 'remote submodules updated'
+$ git push <remote_name> HEAD:<branch_name>
+
