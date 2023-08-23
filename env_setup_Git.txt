@@ -556,6 +556,8 @@ $ git diff <branch1> <branch2>
 Compare a specific file across branches
 $ git diff <branch1> <branch2> <path_of_file>      // pass path of the file as the third argument to git diff
 
+$ git diff-index --quiet HEAD			   // diff-index: compares HEAD and files on filesystem(Working Tree)
+						   // --quiet: Disable output but returns 1 if differences and 0 means no differences
 
 GIT SUBMODULES
 ====================
