@@ -583,6 +583,7 @@ $ git config -f .gitmodules submodule.SUBMODULE_NAME.branch BRANCH_NAME      // 
 $ git add .
 $ git commit -m 'Added submodule'
 $ git push <remote_name> <branch_name>
+
 $ git clone https://github.com/<user>/<MAIN-PROJECT>
   OR
 $ git pull <remote_name> <branch_name>
