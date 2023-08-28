@@ -81,27 +81,23 @@ $ git push <remote_name> <branch_name>
 
 GIT IGNORE
 =================
-# Reference : https://git-scm.com/docs/gitignore
-
+# REFERENCE : https://git-scm.com/docs/gitignore
 # A gitignore file specifies intentionally untracked files that Git should ignore. Files already tracked by Git are not affected.
 # Each line in a gitignore file specifies a pattern. 
 # A line starting with # serves as a comment. Put a backslash ("\#") in front of the first hash for patterns that begin with a hash.
 # Trailing spaces are ignored unless they are quoted with backslash ("\ ")
 # An optional prefix "!" which negates the pattern
-
 # If the pattern ends with a slash, it will find match with directory but NOT match a regular file.
 
 # "*" matches anything except "/"
+# A leading "**" followed by a slash means match in all directories , eg: **/node_modules
 # "?" matches any one character except "/"
 # "[]" matches one character in a selected range
 
 # A leading slash matches the beginning of the pathname.
-
-# A leading "**" followed by a slash means match in all directories
 # A trailing "/**" matches everything inside
-# A slash followed by two consecutive asterisks then a slash matches zero or more directories
-Eg:
-ngproj/reference_screenshots/
+# A slash followed by two consecutive asterisks then a slash matches zero or more directories , eg: solr/**/data  i.e.  solr/ANY-DIRS/data
+Eg: ngproj/reference_screenshots/
 
 
 Cloning a repository
