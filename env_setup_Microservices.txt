@@ -1,0 +1,50 @@
+Microservices Architecture
+============================
+
+Web Socket
+============
+
+Long Polling
+==============
+
+Rate Limiting
+===============
+
+Scaling - Horizontal / Vertical
+=================================
+
+Data Partioning
+=================
+
+Service Discovery
+===================
+
+Circuit Breaker Pattern
+=========================
+
+MapReduce
+===========
+
+Message Queues
+================
+
+Load Balancers
+================
+
+Web Authentication and Security
+=================================
+
+Indexing
+==========
+
+CAP Theorem
+=============
+
+Deployment Types - Rolling / Blue Green / Canary
+==================================================
+
+Caching + Edge Caching
+========================
+
+A/B Testing
+=============
