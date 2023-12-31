@@ -1,2 +1,91 @@
 REFERENCE : https://medium.com/@sandeep4.verma/system-design-scalable-url-shortener-service-like-tinyurl-106f30f23a82
 System Design for TinyURL, Hotel Booking etc.
+
+1. Features
+=============
+- How long a life of service would be ? Will data ever expire ?
+- Can a user create data of his/her choice or will it always be service generated ?
+  If user is allowed to create custom data what would be the maximum size of data ?
+- How many requests are expected per month ?
+- Do we expect service to provide metrics/analytics ?
+
+2. Requirements
+======================
+2.a. Functional Requirements
+     - SPECIFIC TO SYSTEM/SERVICE TO BE DESIGNED
+2.b. Non-Functional Requirements
+     - Service should be up and running all the time
+     - Service should be fast and should not degrade at any point of time (Even during peak loads)
+     - Service should expose REST API’s so that it can be integrated with third party applications
+
+3. Traffic and System Capacity
+=================================
+3.a. Traffic
+     - Assuming a read/write ratio. eg:- 200:1
+     - Assuming data generated per month = 100 million
+     - Calculate data generated per seconds = 100 million /(30 days * 24 hours * 3600 seconds ) ~ 40 DATA/second
+     - With 200:1 read/write ratio, number of read operations = 40 DATA/s * 200 = 8000 DATA/s
+3.b. Storage
+     - Assuming lifetime of service to be 100 years and with 100 million DATA creation per month,
+       total number of data points/objects in system will be = 100 million/month * 100 (years) * 12 (months) = 120 billion
+     - Assuming size of each data object (like name, price, created date etc.) to be 500 bytes long,
+       then total require storage = 120 billion * 500 bytes = 60TB
+3.c. Memory
+     - Following Pareto Principle, better known as the 80:20 rule for caching. (80% requests are for 20% data in a day)
+     - Since we get requests of 8000 DATA/s, we will be getting 700 million requests per day:
+       8000/s * 86400 seconds = ~700 million/day
+     - To cache 20% of these requests, we will need ~70GB of memory.
+       0.2 * 700 million * 500 bytes = ~70GB
+
+4. High Level Design
+=======================
+- Number of WebServers to prevent single point of failure (SPOF)
+  Add a load balancer in front of WebServers.
+- Added cache system to reduce load on the database.
+- Sharded the database to handle huge object data because
+  single database might not be sufficient for 60 TB of storage and high load of 8000/s read requests
+
+5. Algorithm REST Endpoints
+=============================
+- GET, POST, PUT, DELETE, PATCH
+
+6. Database Schema
+====================
+6.a. Data Related to user
+     - User ID, Name, Email, Creation Date
+6.b. Data Related to SYSTEM/SERVICE
+
+7. Database choice
+====================
+7.a. Relational databases(RDBMs) like MySQL, Postgres
+     - RDBMs is efficient to check if data exists in DB and handle concurrent writes (two different keys having same value)
+       use of putIfAbsent(DATA) or INSERT-IF-NOT-EXIST conditions
+     - But RDBMs are difficult to scale
+7.b. “NoSQL”-style databases like MongoDB, BigTable, Cassandra
+     - NoSQL can leverage it's scaling power.
+     - But these systems are eventually consistent (old information is returned sometimes, as it gets replicated across architecture)
+
+8. Cache
+==============
+- Before hitting backend storage, application servers can quickly check if cache has desired data.
+- Cache eviction policy can be used when the cache is full, and we want to replace data with a newer data.
+  Least Recently Used (LRU) can be used. Under this policy, we discard the least recently used data first.
+- Whenever there is a cache miss, our servers would be hitting a backend database.
+  Whenever this happens, we can update the cache and pass the new entry to all the cache replicas.
+
+9. Load Balancer (LB)
+========================
+- We can add a Load balancing layer at three places in our system:
+  Between Clients and Application servers
+  Between Application Servers and database servers
+  Between Application Servers and Cache servers
+- Round Robin approach distributes incoming requests equally among backend servers.
+  If any server is dead, LB will take it out of rotation and will stop sending any traffic to it.
+- A problem with Round Robin LB is that we don’t take the server load into consideration.
+  If a server is overloaded or slow, LB will not stop sending new requests to that server.
+  To handle this, another LB solution can be used that periodically queries backend server about its load & adjusts traffic based on that.
+
+10. Analytics
+===================
+- We can push data to a Kafka queue and perform analytics in real time.
+
