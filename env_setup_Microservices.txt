@@ -29,12 +29,56 @@ This request-response model can be inefficient for real-time applications, such 
 chat applications, online gaming, and financial trading platforms, where data needs to be updated in real-time.
 REFER: CODE SAMPLE IN   `angular`   REPOSITORY's   `misc`
 
-Long Polling
-==============
+Server Sent Events or EventSource
+====================================
 
+
+Polling - Long / Short
+=========================
+Polling is the simplest way of having persistent connection with server,
+that doesn’t use any specific protocol like WebSocket or Server Sent Events.
+- Regular Polling or Short Polling
+  Regular requests are sent to server: “Hello, I’m here, do you have any information for me?”. For example, once every 10 seconds.
+  In response, server takes notice to itself that client is online, and then sends a packet of messages it got till that moment.
+  It has some downsides:
+  - Messages are passed with a delay up to N seconds (here 10 seconds, between requests).
+  - Even if there are no messages, the server is bombed with requests every N seconds,
+    even if the user switched somewhere else or is asleep. That’s quite a load performance-wise.
+- Long Polling
+  A request is sent to the server. The server doesn’t close the connection until it has a message to send.
+  When a message appears – the server responds to the request with it.
+  The browser makes a new request immediately.
+  Only when a message is delivered, the connection is closed and reestablished.
+  If the connection is lost, because of, say, a network error, the browser immediately sends a new request.
+  CODE SAMPLE for long polling where subscribe function makes fetch, then waits for response, handles it and calls itself again:
+  async function subscribe() {
+    let response = await fetch("/subscribe");
+    if (response.status == 502) {
+      // Status 502 is a connection timeout error,
+      // may happen when the connection was pending for too long, and the remote server or a proxy closed it
+      // let's reconnect
+      await subscribe();
+    } else if (response.status != 200) {
+      // An error - let's show it
+      showMessage(response.statusText);
+      // Reconnect in one second
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      await subscribe();
+    } else {
+      // Get and show the message
+      let message = await response.text();
+      showMessage(message);
+      // Call subscribe() again to get the next message
+      await subscribe();
+    }
+  }
+  subscribe();
 
 Rate Limiting
 ===============
+It is a technique used in applications to control and manage the rate at which requests are processed by individual services.
+The primary objective of implementing rate limiting in microservices is to prevent overloading, maintain service stability and
+availability, and mitigate potential security threats, such as Denial of Service (DoS) attacks.
 
 Scaling - Horizontal / Vertical
 =================================
