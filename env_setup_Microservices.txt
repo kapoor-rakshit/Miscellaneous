@@ -20,7 +20,7 @@ Microservices Architecture
   - Monitoring health and performance, as well as automation and orchestration
   - Security
 
-Web Socket
+WebSocket
 ============
 WebSockets are a technology that allow for real-time communication between a client and server.
 They provide a bi-directional communication, without the need for the client to constantly request data from the server.
@@ -31,26 +31,47 @@ REFER: CODE SAMPLE IN   `angular`   REPOSITORY's   `misc`
 
 Server Sent Events or EventSource
 ====================================
-
+Similar to WebSocket, the connection is persistent.
+But there are several important differences:
+- WebSocket
+  Both client and server can exchange messages | Binary and text data | WebSocket protocol (wss:// or ws://) | Manual code for reconnect
+- EventSource
+  Only server sends data | Only text | Regular HTTP (https:// or http://) | Supports auto-reconnect
+The server can set recommended delay using `retry:` in response (in milliseconds). There’s no way to set it from JavaScript.
+The server may specify custom events using `event:` (default type is message). event name, must precede data:
+CODE SAMPLE:
+- SERVER
+  retry: 15000
+  event: join
+  data: {"KEY1": "VAL1", "KEY2": "VAL2"}                              // join event
+  data: {"KEY1": "VAL1", "KEY2": "VAL2", "KEY3": "VAL3"}              // message event
+  event: leave
+  data: {"KEY1": "VAL1"}                                              // leave event
+- JS
+  let eventSource = new EventSource("https://another-site.com/events");
+  eventSource.onmessage = function(event) {                           // onmessage: similar to WebWorker
+    console.log("New message", event.data);
+  };
+  eventSource.close();
 
 Polling - Long / Short
 =========================
 Polling is the simplest way of having persistent connection with server,
 that doesn’t use any specific protocol like WebSocket or Server Sent Events.
-- Regular Polling or Short Polling
+A.Regular Polling or Short Polling
   Regular requests are sent to server: “Hello, I’m here, do you have any information for me?”. For example, once every 10 seconds.
   In response, server takes notice to itself that client is online, and then sends a packet of messages it got till that moment.
   It has some downsides:
   - Messages are passed with a delay up to N seconds (here 10 seconds, between requests).
   - Even if there are no messages, the server is bombed with requests every N seconds,
     even if the user switched somewhere else or is asleep. That’s quite a load performance-wise.
-- Long Polling
+B.Long Polling
   A request is sent to the server. The server doesn’t close the connection until it has a message to send.
   When a message appears – the server responds to the request with it.
   The browser makes a new request immediately.
   Only when a message is delivered, the connection is closed and reestablished.
   If the connection is lost, because of, say, a network error, the browser immediately sends a new request.
-  CODE SAMPLE for long polling where subscribe function makes fetch, then waits for response, handles it and calls itself again:
+  CODE SAMPLE for long polling, where subscribe function makes fetch, then waits for response, handles it and calls itself again:
   async function subscribe() {
     let response = await fetch("/subscribe");
     if (response.status == 502) {
@@ -79,12 +100,21 @@ Rate Limiting
 It is a technique used in applications to control and manage the rate at which requests are processed by individual services.
 The primary objective of implementing rate limiting in microservices is to prevent overloading, maintain service stability and
 availability, and mitigate potential security threats, such as Denial of Service (DoS) attacks.
+Rate limiting can be applied at different levels, such as API gateway, load balancer, or even on an individual microservice level.
+There are different approaches to implementing rate limiting, some of the popular ones being:
+- Fixed Window: In this approach, fixed number of requests are allowed per predefined time window (e.g., 1000 requests per minute).
+  The disadvantage of this approach is that it can lead to uneven distribution of requests and, in some cases, cause service overload.
+- Sliding Window: Rate limit is gradually adjusted based on number of requests received in a recent time window.
+  This approach offers better control over the rate of incoming requests.
+- Token Bucket: In this method, tokens are generated at a specific rate and added to a bucket.
+  Each incoming request consumes a token from the bucket. If there are no tokens available, the request is denied.
+  This technique allows for short bursts of requests while maintaining an overall balanced rate
 
 Scaling - Horizontal / Vertical
 =================================
 
-Data Partioning
-=================
+Data Partioning / Sharding
+=============================
 
 Service Discovery
 ===================
