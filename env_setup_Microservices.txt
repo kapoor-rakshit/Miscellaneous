@@ -1,11 +1,37 @@
 Microservices Architecture
 ============================
+  Client <---> Load Balancers <---> Application Servers <---> Cache <---> Sharded Databases
+- It is an approach to design and implement applications in which large application is built from modular components or services.
+- Each module supports a specific task or business goal and uses a well-defined communications interface,
+  such as an application programming interface (API), to communicate with other modules and services.
+- It is a departure from applications that were coded into a single executable application i.e. monolithic
+  Each service can be isolated, rebuilt, tested, redeployed and managed independently.
+  eg: if program isn't properly generating reports we can test, restart, patch, redeploy that service only, independent of other services.
+- Typical characteristics of microservices design and architecture include:
+  - Unique components (individual components for specific function)
+  - Decentralized (few dependencies and requires frequent and extensive communication between components)
+  - Resilient (fault tolerance)
+  - API-based (APIs and API gateways for communication between components and other applications)
+  - Data separation (each service accesses its own database or storage volume)
+  - Automation (automation and orchestration technologies for component deployment and scaling)
+- Challenges of a microservices architecture:
+  - Unnecessary complexity
+  - Performance issues from Network congestion, latency, network management, control can require multiple load-balancing instances
+  - Monitoring health and performance, as well as automation and orchestration
+  - Security
 
 Web Socket
 ============
+WebSockets are a technology that allow for real-time communication between a client and server.
+They provide a bi-directional communication, without the need for the client to constantly request data from the server.
+In traditional web applications, the client sends a request to the server, which then responds with the requested data.
+This request-response model can be inefficient for real-time applications, such as
+chat applications, online gaming, and financial trading platforms, where data needs to be updated in real-time.
+REFER: CODE SAMPLE IN   `angular`   REPOSITORY's   `misc`
 
 Long Polling
 ==============
+
 
 Rate Limiting
 ===============
@@ -30,6 +56,17 @@ Message Queues
 
 Load Balancers
 ================
+- When a microservices function requires more computing power,
+  only that microservice is scaled by adding more instances of that service through load balancer to share network traffic.
+- We can add a Load balancing layer at three places in our system:
+  Between Clients and Application servers
+  Between Application Servers and database servers
+  Between Application Servers and Cache servers
+- Round Robin approach distributes incoming requests equally among backend servers.
+  If any server is dead, LB will take it out of rotation and will stop sending any traffic to it.
+- A problem with Round Robin LB is that we don’t take the server load into consideration.
+  If a server is overloaded or slow, LB will not stop sending new requests to that server.
+  To handle this, another LB solution can be used that periodically queries backend server about its load & adjusts traffic based on that.
 
 Web Authentication and Security
 =================================
