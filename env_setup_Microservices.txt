@@ -159,12 +159,34 @@ There are two types of Service Discovery
 
 Circuit Breaker Pattern
 =========================
+If there are many callers to unresponsive service, we can run out of critical resources (CPU, threads) leading to cascading failures across multiple systems.
+In a microservice system, failing fast is critical. If there are failures in the Microservice ecosystem, then you need to fail fast by opening the circuit.
+This ensures that no additional calls are made to the failing service so that we return an exception immediately.
+This pattern also monitors the system for failures and, once things are back to normal, the circuit is closed to allow normal functionality.
+It can have three states:
+- When no. of consecutive failures crosses threshold, circuit breaker trips,
+  and for duration of timeout period all attempts to invoke remote service will fail immediately. (Open)
+- After the timeout expires the circuit breaker allows a limited number of test requests to pass through (Half-Open)
+- If those requests succeed the circuit breaker resumes normal operation. (Closed)
+  Otherwise, if there is a failure the timeout period begins again.
 
 MapReduce
 ===========
+MapReduce is a programming model used for efficient processing in parallel over large data-sets in a distributed manner.
+The data is first split and then combined to produce the final result.
 
 Message Queues
 ================
+Message queues allow microservices to communicate asynchronously and reliably. Eg: Kafka, RabbitMQ
+A message queue, is a queue that routes messages from sender to receiver, (from service A to service B) following FIFO (First In, First Out) policy.
+This approach decouples sender and receiver, allowing each service to operate independently without being tightly coupled to others.
+Messages can be stored in a queue when the receiving service is not immediately available to process them, helping with reduction of load on services
+Two main message queue models:
+- Point-to-point (P2P)
+  a message published by producer is received only by one consumer.
+- Publish-subscribe (Pub/Sub)
+  a single or multiple producers broadcast messages to multiple consumers.
+  eg: placing order on website, information needs to be processed and sent to services, like inventory management, payment processing, shipping logistics.
 
 Load Balancers
 ================
@@ -188,6 +210,15 @@ Indexing
 
 CAP Theorem
 =============
+The CAP theorem states that it is not possible to guarantee all three of the desirable properties.
+As a result, database systems prioritize only two properties at a time.: consistency, availability, and partition tolerance.
+- Consistency
+  all clients see same data at same time, no matter path of their request. This is critical for applications that do frequent updates.
+- Availability
+  all functioning application components will return a valid response, even if they are down.
+- Partition Tolerance
+  application will operate even during a network failure that results in lost or delayed messages between services.
+  This comes into play for applications that integrate with a large number of distributed, independent components.
 
 Deployment Types - Rolling / Blue Green / Canary
 ==================================================
