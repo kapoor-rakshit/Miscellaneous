@@ -112,12 +112,50 @@ There are different approaches to implementing rate limiting, some of the popula
 
 Scaling - Horizontal / Vertical
 =================================
+- Horizontal scaling involves adding more machines or nodes to a system. It involves scaling out.
+  Horizontal scaling is typically used to handle increasing amounts of traffic or workload.
+- Vertical scaling involves adding more power (CPU, RAM, storage, etc.) to an existing machine. It involves scaling up.
+  Vertical scaling is typically used to handle resource-intensive tasks or applications that require more processing power.
 
-Data Partioning / Sharding
-=============================
+Data Partitioning / Sharding
+==============================
+- Partitioning is an optimization technique­ in databases where a single­ table is divided into smaller se­gments called partitions.
+  It is within a single database instance. It is then used with join queries.
+- Sharding involves fragmenting the­ extensive datase­t into smaller, self-contained se­gments known as shards.
+  These shards are­ then allocated to separate­ servers or nodes, facilitating paralle­lism in data processing.
+  As a result, query re­sponse times are improve­d, high traffic loads can be accommodated.
 
 Service Discovery
 ===================
+In case of a micro-service architecture that is deployed in cloud, there will be a lot of microservice components for different services.
+Every microservice can scale differently based on the demands.
+Eg: The Order service might have 4 or 5 instances and Billing Service might have 2 or 3 instances running.
+With each instance having a dynamic network address because of multiple factors like Autoscaling, Upgrade, Failure, Deployments, etc.
+it is extremely difficult to locate these services and communicate with them.
+Before server connects to other server it needs to know IP address and port number where this particular application is running in server. 
+This problem leads to the solution in the form of a design pattern called Service Discovery.
+We need service discovery to find the hosts and IP info and
+If multiple hosts are available then the load balancer helps to pick one whoever has less load and make a call in a load-balanced way.
+Eg: Whenever Service-A and Service-B start off, they register themselves inside the discovery service's service registry.
+    Service Registry is a database containing network locations of each service's instances.
+    Service-A wants to connect to Service-B.
+    Now the load balancer once get the request, it is gonna do a query with the discovery service that,
+    hey, can you tell me what instances are there for Service-B?
+    Now the load balancer finds out that there are this many instances available where Service-B has been deployed.
+    Load Balancer is going to dispatch to one of the servers by looking into Service Registry.
+    It can take all four instances of Service-B and whoever has less load then to balance the load, it can send the request to there.
+There are two types of Service Discovery
+- Client-Side Service Discovery like Zookeeper, Consul
+  Eg: Service-A wants to connect to Service-B then Service-A is asking directly to Discovery Service and
+      Discovery Service is providing the URLs or the port number of all instances of Service-B.
+      There is no load balancer and client(Service-A) is doing load balancing and calling the Service-B instance by itself.
+  Advantage: it saves an extra hop that we would’ve had with a dedicated load balancer.
+  Disadvantage: because the Service Consumer must implement the load balancing logic.
+- Server-Side Service Discovery like NGINX, AWS ELB
+  The default scenario explained above. Here Service-A(Client) doesn’t talk to the Discovery Service directly.
+  It calls another server (Load Balancer) which helps to discover Service-B URL info.
+  Advantage: load Balancer does the job of load balancing.
+  Disadvantage: set up and operate the Load Balancer.
 
 Circuit Breaker Pattern
 =========================
