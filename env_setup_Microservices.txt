@@ -204,9 +204,37 @@ Load Balancers
 
 Web Authentication and Security
 =================================
+The API gateway is a single endpoint entry for all requests.
+Instead of having access to multiple services, a client sends a request to the API gateway, responsible for routing it to downstream service.
+It is thus an excellent candidate to enforce authentication concerns.
+- Stateful authentication
+  The server creates a session for the user after successfully authenticating. The session id is then stored as a cookie in the user's browser and
+  the user session store in the cache or database. When the client tries to access the server with a given session id,
+  the server attempts to load the user session context for the session store, checks if the session is valid, and
+  decides if the client has to access the desired resource or rejects the request.
+- Stateless authentication
+  It stores the user session on the client-side. A cryptographic algorithm signs the user session to ensure the session data’s integrity and authority.
+  Each time client requests a resource from server, server is responsible for verifying the token claims sent as a cookie.
+  Since the user session is stored on the client-side, this approach frees the overhead to maintain the user session state.
+  JWT
+  The JWT(JSON Web Token) token is a signed JSON object that contains a list of claims which allow the receiver to validate the sender's identity.
+  The purpose of using the JWT token is for a stateless authentication mechanism.
+  JWT Structure  , eg: eyJhbGciOiJI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIM5MDIyfQ.SflKxwRJSMyJV_adQssw5c
+  The JSON Web token is composed of three parts separated by periods:
+  - header: contains the algorithm used for signing.
+  - payload: is session data that also refers to ‘claims’. There are two types of claims:
+    - reserved claims that are recommended to use while generating the JWT token.
+    - custom claims
+  - signature: is calculated by encoding the header and the payload using Base64 encoded.
+    Then the encode64 is signed using a secret key and cryptographic algorithms specified in the header section.
+    The signature is used to verify the token has not changed or modified.
 
 Indexing
 ==========
+Indexing improves database performance by minimizing number of disc visits required to fulfill a query.
+It is a data structure technique used to locate and quickly access data in databases. Several database fields are used to generate indexes.
+The main key or candidate key of the table is duplicated in the first column, which is the Search key.
+The second column is Data Reference or Pointer which contains set of pointers holding address of disk block where that particular key value can be found.
 
 CAP Theorem
 =============
@@ -222,9 +250,34 @@ As a result, database systems prioritize only two properties at a time.: consist
 
 Deployment Types - Rolling / Blue Green / Canary
 ==================================================
-
-Caching + Edge Caching
-========================
+- Rolling Deployment
+  It updates running instances of an application with new release.
+  All nodes in a target environment are incrementally updated with the service or artifact version in integer N batches.
+  Since nodes are updated in batches, rolling deployments require services to support both new and old versions of an artifact.
+  Verification of an application deployment at every incremental change also makes this deployment slow.
+- Blue-Green Deployment
+  It involves maintaining two microservice variations simultaneously in production.
+  One microservice version (the green microservice) is visible to the user and gets traffic.
+  The other one (the blue microservice) remains idle for developers to make updates.
+  A microservice remains in blue state until it passes tests and is ready to go out. After passing all tests, microservices move to green state.
+  There’s no downtime during development and deployment because there’s always another stable variation serving production traffic.
+  In addition, if new deployment isn’t working correctly, we can quickly roll back to previous variation (i.e., the blue microservice).
+- Canary Deployment
+  It includes releasing microservice with new version to only small percentage of load first and seeing if it works as expected.
+  As microservice passes through rigorous testing, it gradually encounters larger workloads.
+  If canaries aren’t functioning correctly, traffic may be routed to a stable version while the problem is investigated and debugged.
+  The canary deployment strategy releases only one microservice at a time.
+  Microservices with higher criticality and risks involved can be made available before others.
+  It improves availability by detecting problems early, before a critical microservice is exposed to the entire system.
 
 A/B Testing
 =============
+A/B Testing is used to test two application versions at same time.
+By splitting traffic 50/50 between two versions of an application/website, to determine which version is more popular, faster, a better fit, etc.
+A/B testing directs traffic randomly between the two versions, and logs, traces, and monitoring are used to define the results.
+
+Edge Caching
+================
+Edge caching is a caching technique that stores frequently accessed data closer to the end-users on servers closer to them,
+rather than being stored in a central data center.
+Edge caching is used to reduce latency that can occur when data is transmitted over long distances, which slows down application performance.
