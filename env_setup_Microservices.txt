@@ -20,6 +20,23 @@ Microservices Architecture
   - Monitoring health and performance, as well as automation and orchestration
   - Security
 
+Branching Models
+====================
+1. Gitflow
+-------------------
+- Two main branches that live forever: master and develop.
+- Multiple types of rather long lived branches (no defined time about how long these will last, could be days, or weeks — until finished).
+  Also Release and Hotfix branches
+- Author advises to always merge branches with the --no-ff flag (no fast forward) to preserve the knowledge of the existence of the merge.
+  Advice to not fast forward makes the project history unclean and very hard to read.
+2. Trunk Based Development (TBD)
+-------------------------------------
+- Master becomes a protected branch where you can only merge to but not push to.
+- All merges get tested and reviewed via pull requests.
+- Master (the trunk) deploys to an environment where it is thoroughly tested against every possible component, if it fails, it gets repaired.
+- Features or fixes are implemented in short lived branches that are also tested. These branches are merged once a day after tests pass.
+  If a feature is not finished it gets turned off with feature toggles before merging back to the main branch to be picked up again later.
+
 WebSocket
 ============
 WebSockets are a technology that allow for real-time communication between a client and server.
