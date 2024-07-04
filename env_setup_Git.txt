@@ -390,7 +390,7 @@ $ git reset HEAD <FILE-NAME>
 $ git reset HEAD .                             // unstage all files from index (staging area), NOTE : use of '.'
 
 Reset a branch to a prior commit
-It basically rewinds the state of your branch to specified <COMMIT> , synatx : $ git reset <MODE> <COMMIT>
+It basically rewinds the state of your branch to the specified <COMMIT> , synatx : $ git reset <MODE> <COMMIT>
 $ git reset 
 $ git reset --mixed HEAD
 
@@ -421,7 +421,8 @@ Git revert is a safer alternative to git reset in regards to losing work.
 This prevents Git from losing history, which is important for the integrity of your revision history and for reliable collaboration.
 git revert undoes a single commit to it's parent and keep all the original commits.
 
-$ git revert HEAD                       // passed in the HEAD ref.  or  any commit SHAid
+$ git revert HEAD                       // passed in the HEAD ref.  or  any commit <SHA-ID>
+$ git revert -m 1 <SHA-ID>              // reverting a MERGE commit, requires additional flag to specify PARENT number to revert to
 
 NOTE : If we revert a commit at an arbitrary point in the history it will have HEAD point to this reverted operation commit.
        To have HEAD point to specific commit after revert use     $ git cherry-pick <commit_SHAid>
