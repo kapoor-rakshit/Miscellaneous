@@ -425,10 +425,11 @@ $ git revert HEAD                       // passed in the HEAD ref.  or  any comm
 $ git revert -m 1 <SHA-ID>              // reverting a MERGE commit, requires additional flag to specify PARENT number to revert to
 
 NOTE : If we revert a commit at an arbitrary point in the history it will have HEAD point to this reverted operation commit.
-       To have HEAD point to specific commit after revert use     $ git cherry-pick <commit_SHAid>
-       
-     : $ git checkout HEAD <file_path>     , updates particular file(s) in current branch with content from HEAD or any <SHA> commit ID specified
-     : $ git checkout <branch_name> <file_path> , updates particular file(s) in current branch with content from <branch_name> specified
+       To have HEAD point to specific commit after revert use     $ git cherry-pick <commit_SHAid> 
+
+Revert particular file(s) to certain commit
+$ git checkout <SHA-ID> -- <file_path>   , updates particular file(s) in current branch with content from HEAD or any <SHA> commit ID specified
+$ git checkout <branch_name> <file_path> , updates particular file(s) in current branch with content from <branch_name> specified
 
 
 GIT CONFIG
