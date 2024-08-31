@@ -428,6 +428,7 @@ NOTE : If we revert a commit at an arbitrary point in the history it will have H
        To have HEAD point to specific commit after revert use     $ git cherry-pick <commit_SHAid> 
 
 Revert particular file(s) to certain commit
+$ git log --oneline <file_path>          , see all commits that modified this particular file
 $ git checkout <SHA-ID> -- <file_path>   , updates particular file(s) in current branch with content from HEAD or any <SHA> commit ID specified
 $ git checkout <branch_name> <file_path> , updates particular file(s) in current branch with content from <branch_name> specified
 
@@ -462,6 +463,7 @@ to quit the log, use q
 $ git log
 $ git log --all                                  // asks for the logs of all refs, basically branches and tags.
 $ git log --oneline                              // one commit per line | the first seven characters of the SHA | commit message
+  git log --oneline <file_path>
 $ git log --stat                                 // files modified in each commit | number of lines added/removed | summary line with total number of files and lines changed
 $ git log --patch   or   $ git log -p            // files you modified | location of lines you added/removed | specific changes you made
 $ git log --author=<--AUTHOR-->                  // particular author
