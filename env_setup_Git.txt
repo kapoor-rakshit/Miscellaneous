@@ -596,3 +596,35 @@ $ git add .
 $ git diff-index --quiet HEAD || git commit -m 'remote submodules updated'
 $ git push <remote_name> HEAD:<branch_name>
 
+
+GITHUB WORKFLOWS
+=======================
+1. Validation check for PRs
+- Create a YML file under following directory in your repository
+- .github/workflows/validate-pr-branch.yml
+Eg:
+name: Validate PR Branch Name
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  validate-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate PR source branch
+        run: |
+          branch_name="${GITHUB_HEAD_REF}"
+          echo "🔍 Checking PR branch: $branch_name"
+
+          if [[ ! "$branch_name" =~ ^NAME/(NAME_master|NAME_develop|NAME_release-[0-9]+\.[0-9]+\.[0-9]+|feature/NAME_[a-zA-Z0-9_]+|bugfix/NAME_[a-zA-Z0-9_]+)$ ]]; then
+            echo "❌ Invalid PR branch name: $branch_name"
+            echo "✅ Allowed examples:"
+            echo "   - NAME/NAME_master"
+            echo "   - NAME/NAME_develop"
+            echo "   - NAME/NAME_release-1.0.0"
+            echo "   - NAME/feature/NAME_123branchprotectionrules"
+            echo "   - NAME/bugfix/NAME_54321"
+            exit 1
+          fi
