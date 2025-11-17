@@ -1,15 +1,12 @@
-# commandline arguments
+# sys module
+# A. commandline arguments
 import sys
-
 naam, arg1, arg2 = sys.argv     # first val in argv is filename, and remaining values are supplied by user
 arg2 = sys.argv[2]              # 2 index arg in argv
-
 print(naam)
 print(arg1)
 print(arg2)
-
-
-# sys module
+# B.
 sys.platform                  # platform details
 sys.getwindowsversion()       # windows version
 sys.version                   # python version
@@ -23,8 +20,12 @@ sys.modules                   # all loaded modules
 
 
 # os module
+import os
 os.name                      # name of operating system (not for Windows)
 os.environ                   # dict for env variables
+os.environ['VARIABLE_KEY'] = 'variable_value'       # sets environ variable value
+os.environ['VARIABLE_KEY']                          # read environ variable's value, if variable is not found, gives a KeyError
+os.environ.get('VARIABLE_KEY', 'default_value')     # read environ variable's value, if variable is not found, `default_value` is returned
 os.getcwd()
 os.rename('test.py','flasktest.py')    #rename(currentname,newname)
 os.listdir()
